@@ -23,10 +23,17 @@
   <header class="masthead">
     <span class="wordmark">Omer&nbsp;Kilic</span>
     <nav aria-label="Sections">
+      <a href="#news">Recent</a>
       <a href="#research">Research</a>
       <a href="#industry">Industry</a>
       <a href="#capabilities">Capabilities</a>
       <a href="#contact">Contact</a>
+      <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch colour theme">
+        <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4">
+          <circle cx="8" cy="8" r="3.3"/>
+          <path d="M8 .9v2.1M8 13v2.1M.9 8h2.1M13 8h2.1M2.9 2.9l1.5 1.5M11.6 11.6l1.5 1.5M13.1 2.9l-1.5 1.5M4.4 11.6l-1.5 1.5"/>
+        </svg>
+      </button>
     </nav>
   </header>
 
@@ -36,19 +43,39 @@
     <section class="hero" aria-labelledby="hero-heading">
       <span class="hero-name">Aerospace Engineering · Rutgers University</span>
       <h1 id="hero-heading">I make unsteady aerodynamic simulation <em>fast</em> and <em>differentiable</em>.</h1>
-      <p class="hero-sub">
-        Fast multipole methods and discrete-vortex wake models, verified against theory
-        and dropped into production research codes. Plus two months inside a fighter
-        aerodynamics group and six years running my own contracting company.
-      </p>
-      <div class="actions">
-        <a class="btn" href="Omer_Kilic_CV.pdf">
-          Curriculum vitae
-          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M8 1.5v10m0 0L4.5 8M8 11.5 11.5 8M2 14h12"/>
-          </svg>
-        </a>
-        <a class="u" href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a>
+      <div class="hero-cols">
+        <div>
+          <p class="hero-sub">
+            Fast multipole methods and discrete-vortex wake models, verified against theory
+            and dropped into production research codes. Plus two months inside a fighter
+            aerodynamics group and six years running my own contracting company.
+          </p>
+
+          <p class="availability">
+            Looking for a <strong>Summer 2027 aerospace internship</strong> in aerodynamics,
+            simulation or flight sciences. Happy to talk.
+          </p>
+
+          <div class="actions">
+            <a class="btn" href="Omer_Kilic_CV.pdf">
+              Curriculum vitae
+              <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M8 1.5v10m0 0L4.5 8M8 11.5 11.5 8M2 14h12"/>
+              </svg>
+            </a>
+            <a class="u" href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a>
+          </div>
+        </div>
+
+        <!-- Drop a square photo at media/portrait.jpg. Without one this block removes itself. -->
+        <aside class="portrait">
+          <img src="media/portrait.jpg" alt="Omer Kilic" width="640" height="640"
+               onerror="this.closest('.portrait').hidden = true">
+          <p class="meta">
+            North Jersey, USA<br>
+            <a class="u" href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a>
+          </p>
+        </aside>
       </div>
 
       <!-- a shed vortex wake: what the research is actually about -->
@@ -92,6 +119,52 @@
           <dd class="cap">GPA, B.S. Aerospace Engineering, Rutgers University</dd>
         </div>
       </dl>
+    </section>
+
+    <!-- ================================================== recent -->
+    <section class="section" id="news" aria-labelledby="news-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">00</span>
+          <h2 class="label" id="news-heading">Recent</h2>
+        </div></div>
+        <div class="section-body">
+          <ol class="news reveal">
+            <li>
+              <span class="when num">Sep 2026</span>
+              <span class="what">Launched the research hub for the Bio-Inspired Micro Aerial Vehicles group,
+                <a class="u" href="https://flapping-wings.vercel.app">flapping-wings.vercel.app</a>.</span>
+            </li>
+            <li>
+              <span class="when num">Aug 2026</span>
+              <span class="what">Joined <strong>Turkish Aerospace (TUSA&#350;)</strong> through the YTB T&uuml;rkiye
+                programme: KAAN store separation, a first-principles flight-dynamics study, and a
+                T129 rotor-blade manufacturing and balancing report.</span>
+            </li>
+            <li>
+              <span class="when num">Jun 2026</span>
+              <span class="what">Presented the closed-form resolution of the quadrupole coupling term and the
+                five-operator FMM pipeline to the group.</span>
+            </li>
+            <li>
+              <span class="when num">Spring 2026</span>
+              <span class="what">Joined Prof. Denda&rsquo;s flapping-wing group as an <strong>Aresty Research Scholar</strong>,
+                and was admitted by special faculty permission to the graduate course
+                <em>Flying Insects and Flapping Robots</em>.</span>
+            </li>
+            <li>
+              <span class="when num">2025</span>
+              <span class="what">Graduated from Bergen Community College with a 3.90 GPA and transferred into
+                Aerospace Engineering at <strong>Rutgers</strong>.</span>
+            </li>
+            <li>
+              <span class="when num">Summer 2025</span>
+              <span class="what">Research intern at the <strong>NJIT Gor Laboratory</strong>, running Monte Carlo
+                simulations of helium in zirconium nanovoids.</span>
+            </li>
+          </ol>
+        </div>
+      </div>
     </section>
 
     <!-- ================================================== 01 research -->
@@ -355,6 +428,26 @@
     <button type="button" id="lightbox-close">Close</button>
   </div>
 </dialog>
+
+<script>
+  // Explicit theme choice, remembered. No choice means follow the system.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    if (stored === 'light' || stored === 'dark') root.setAttribute('data-theme', stored);
+
+    btn.addEventListener('click', function () {
+      var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var current = root.getAttribute('data-theme') || (dark ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
 
 <script>
   // Render the artifact registry into each entry, then wire a single lightbox.
