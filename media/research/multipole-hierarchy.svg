@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320" font-family="Helvetica, Arial, sans-serif">
+  <style>
+    .lbl{font-size:15px;font-weight:bold;fill:#1f2328}
+    .sub{font-size:13px;fill:#57606a}
+    .pos{fill:#c0392b}.neg{fill:#1f6feb}
+  </style>
+  <text x="20" y="28" font-size="18" font-weight="bold" fill="#1f2328">Multipole expansion: a far source ≈ a few moments</text>
+  <text x="20" y="50" class="sub">Expanding 1/|R−r| for |R| ≫ |r| gives terms that fall off faster and faster:</text>
+
+  <!-- four columns -->
+  <!-- Monopole -->
+  <g transform="translate(95,170)">
+    <circle cx="0" cy="0" r="13" class="pos"/>
+    <text x="0" y="60" text-anchor="middle" class="lbl">Monopole</text>
+    <text x="0" y="80" text-anchor="middle" class="sub">~ 1/R</text>
+    <text x="0" y="100" text-anchor="middle" class="sub" fill="#1e7e34">= 0 for a loop</text>
+  </g>
+  <!-- Dipole -->
+  <g transform="translate(270,170)">
+    <circle cx="-15" cy="0" r="12" class="pos"/>
+    <circle cx="15" cy="0" r="12" class="neg"/>
+    <text x="0" y="60" text-anchor="middle" class="lbl">Dipole</text>
+    <text x="0" y="80" text-anchor="middle" class="sub">~ 1/R²</text>
+    <text x="0" y="100" text-anchor="middle" class="sub" fill="#1e7e34">= area-vector</text>
+  </g>
+  <!-- Quadrupole -->
+  <g transform="translate(455,170)">
+    <circle cx="-15" cy="-15" r="11" class="pos"/>
+    <circle cx="15" cy="-15" r="11" class="neg"/>
+    <circle cx="-15" cy="15" r="11" class="neg"/>
+    <circle cx="15" cy="15" r="11" class="pos"/>
+    <text x="0" y="60" text-anchor="middle" class="lbl">Quadrupole</text>
+    <text x="0" y="80" text-anchor="middle" class="sub">~ 1/R³</text>
+  </g>
+  <!-- Octupole -->
+  <g transform="translate(645,170)">
+    <circle cx="-15" cy="-15" r="9" class="pos"/>
+    <circle cx="15" cy="-15" r="9" class="neg"/>
+    <circle cx="-15" cy="15" r="9" class="neg"/>
+    <circle cx="15" cy="15" r="9" class="pos"/>
+    <circle cx="-15" cy="-15" r="9" class="pos" transform="translate(6,6)" opacity="0.45"/>
+    <circle cx="15" cy="15" r="9" class="neg" transform="translate(6,6)" opacity="0.45"/>
+    <text x="3" y="60" text-anchor="middle" class="lbl">Octupole</text>
+    <text x="3" y="80" text-anchor="middle" class="sub">~ 1/R⁴</text>
+  </g>
+
+  <!-- arrow of decreasing importance -->
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#57606a"/></marker></defs>
+  <line x1="80" y1="285" x2="700" y2="285" stroke="#57606a" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="390" y="305" text-anchor="middle" class="sub">decreasing contribution far from the source  →  truncate after a few terms (this is what makes FMM fast)</text>
+</svg>

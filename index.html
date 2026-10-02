@@ -1,39 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ömer Kılıç - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic — Computational Aerodynamics</title>
+<meta name="description" content="Aerospace engineering student at Rutgers. I make unsteady aerodynamic simulation fast and differentiable: fast multipole methods, discrete-vortex wake models, gradient-based design.">
+<meta name="author" content="Omer Kilic">
+<meta property="og:title" content="Omer Kilic — Computational Aerodynamics">
+<meta property="og:description" content="Fast multipole methods, discrete-vortex wake models and differentiable simulation for flapping-wing and fixed-wing aerodynamics.">
+<meta property="og:type" content="profile">
+<meta name="theme-color" content="#1E3A5F">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231E3A5F'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23FBFAF8' stroke-width='1.6' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>document.documentElement.className += " js";</script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Omer Kilic</h1>
-        <p>Software Developer | AI & Cybersecurity Enthusiast</p>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="projects.html">Projects</a>
-            <a href="contact.html">Contact</a>
-        </nav>
-    </header>
 
-    <section class="hero">
-        <h2>Hi, I'm Omer 👋</h2>
-        <p>I build AI-powered applications, cybersecurity solutions, and full-stack projects.</p>
-        <a href="projects.html" class="btn">View My Projects</a>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="shell">
+
+  <header class="masthead">
+    <span class="wordmark">Omer&nbsp;Kilic</span>
+    <nav aria-label="Sections">
+      <a href="#research">Research</a>
+      <a href="#industry">Industry</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ================================================== hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <span class="hero-name">Aerospace Engineering · Rutgers University</span>
+      <h1 id="hero-heading">I make unsteady aerodynamic simulation <em>fast</em> and <em>differentiable</em>.</h1>
+      <p class="hero-sub">
+        Fast multipole methods and discrete-vortex wake models, verified against theory
+        and dropped into production research codes. Plus two months inside a fighter
+        aerodynamics group and six years running my own contracting company.
+      </p>
+      <div class="actions">
+        <a class="btn" href="Omer_Kilic_CV.pdf">
+          Curriculum vitae
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path d="M8 1.5v10m0 0L4.5 8M8 11.5 11.5 8M2 14h12"/>
+          </svg>
+        </a>
+        <a class="u" href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a>
+      </div>
+
+      <!-- a shed vortex wake: what the research is actually about -->
+      <svg class="wake" viewBox="0 0 700 200" role="img" aria-label="A flapping wing shedding a trail of vortex rings.">
+        <ellipse class="wing" cx="36" cy="102" rx="22" ry="3.4" transform="rotate(-18 36 102)"/>
+        <g>
+          <ellipse class="ring" cx="70"  cy="100"   rx="32" ry="11" transform="rotate(-16.0 70 100)"   style="--o:.52; animation-delay:40ms"/>
+          <ellipse class="ring" cx="108" cy="111.5" rx="32" ry="11" transform="rotate(-14.9 108 111.5)" style="--o:.49; animation-delay:80ms"/>
+          <ellipse class="ring" cx="146" cy="119.6" rx="32" ry="11" transform="rotate(-13.8 146 119.6)" style="--o:.46; animation-delay:120ms"/>
+          <ellipse class="ring" cx="184" cy="121.9" rx="32" ry="11" transform="rotate(-12.7 184 121.9)" style="--o:.43; animation-delay:160ms"/>
+          <ellipse class="ring" cx="222" cy="117.8" rx="32" ry="11" transform="rotate(-11.6 222 117.8)" style="--o:.40; animation-delay:200ms"/>
+          <ellipse class="ring" cx="260" cy="108.4" rx="32" ry="11" transform="rotate(-10.5 260 108.4)" style="--o:.38; animation-delay:240ms"/>
+          <ellipse class="ring" cx="298" cy="96.5"  rx="32" ry="11" transform="rotate(-9.4 298 96.5)"   style="--o:.35; animation-delay:280ms"/>
+          <ellipse class="ring" cx="336" cy="85.8"  rx="32" ry="11" transform="rotate(-8.3 336 85.8)"   style="--o:.32; animation-delay:320ms"/>
+          <ellipse class="ring" cx="374" cy="79.1"  rx="32" ry="11" transform="rotate(-7.2 374 79.1)"   style="--o:.29; animation-delay:360ms"/>
+          <ellipse class="ring" cx="412" cy="78.6"  rx="32" ry="11" transform="rotate(-6.1 412 78.6)"   style="--o:.26; animation-delay:400ms"/>
+          <ellipse class="ring" cx="450" cy="84.5"  rx="32" ry="11" transform="rotate(-5.0 450 84.5)"   style="--o:.23; animation-delay:440ms"/>
+          <ellipse class="ring" cx="488" cy="94.9"  rx="32" ry="11" transform="rotate(-3.9 488 94.9)"   style="--o:.20; animation-delay:480ms"/>
+          <ellipse class="ring" cx="526" cy="106.9" rx="32" ry="11" transform="rotate(-2.8 526 106.9)"  style="--o:.17; animation-delay:520ms"/>
+          <ellipse class="ring" cx="564" cy="117.0" rx="32" ry="11" transform="rotate(-1.7 564 117)"    style="--o:.14; animation-delay:560ms"/>
+          <ellipse class="ring" cx="602" cy="121.6" rx="32" ry="11" transform="rotate(-0.6 602 121.6)"  style="--o:.11; animation-delay:600ms"/>
+          <ellipse class="ring" cx="640" cy="119.4" rx="32" ry="11" transform="rotate(0.5 640 119.4)"   style="--o:.08; animation-delay:640ms"/>
+        </g>
+      </svg>
+
+      <dl class="evidence reveal">
+        <div>
+          <dt class="num">35&times;</dt>
+          <dd class="cap">Solver speedup on the group's 3-D wake code: 1,783 s to 50 s</dd>
+        </div>
+        <div>
+          <dt class="num">86</dt>
+          <dd class="cap">Automated test groups behind the method, verified against direct summation</dd>
+        </div>
+        <div>
+          <dt class="num">6-DOF</dt>
+          <dd class="cap">Store-separation trajectory analysis delivered at Turkish Aerospace</dd>
+        </div>
+        <div>
+          <dt class="num">4.00</dt>
+          <dd class="cap">GPA, B.S. Aerospace Engineering, Rutgers University</dd>
+        </div>
+      </dl>
     </section>
 
-    <section class="experience">
-        <h2>Experience</h2>
-        <ul>
-            <li><strong>AI-Powered Cybersecurity Threat Detection</strong> - Built a network security system using Machine Learning.</li>
-            <li><strong>Smart Traffic Management System</strong> - Developed an AI + IoT solution for real-time traffic optimization.</li>
-            <li><strong>Electrical Contractor Business Website</strong> - Designed and launched an SEO-optimized business site.</li>
-        </ul>
+    <!-- ================================================== 01 research -->
+    <section class="section" id="research" aria-labelledby="research-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">01</span>
+          <h2 class="label" id="research-heading">Research</h2>
+        </div></div>
+        <div class="section-body">
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Aresty Research Assistant <span class="where">· Flapping-Wing Aerodynamics, Rutgers MAE</span></h3>
+              <span class="meta num">2026 &ndash; Present</span>
+            </div>
+            <p class="meta sub">PI: Prof. Mitsunori Denda · Bio-Inspired Micro Aerial Vehicles · <a class="u" href="https://insectflight.rutgers.edu">insectflight.rutgers.edu</a></p>
+            <ul class="points">
+              <li>Built a <strong>Fast Multipole Method</strong> in Julia for a discrete-vortex flapping-wing solver and dropped it into the group's MATLAB 3-D wake code as a replacement velocity kernel; with vectorized exact evaluation, cut a 15-step simulation from <strong>1,783 s to 50 s</strong>.</li>
+              <li>Derived multipole expansions for vortex rings and polygonal panels and built the full FMM pipeline with <strong>a-priori far-field error bounds</strong>, verified against direct summation across 86 automated test groups.</li>
+              <li>Made the solver <strong>differentiable</strong> through automatic differentiation for gradient-based flapping-stroke design, and characterized the horizon over which gradients remain reliable.</li>
+              <li>Authored a ten-part FMM tutorial series and the group's seminar material; built and maintain the lab's hub, <a class="u" href="https://flapping-wings.vercel.app">flapping-wings.vercel.app</a>.</li>
+            </ul>
+            <div class="artifacts" data-artifacts="research"></div>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <footer>
-        <p>Find me on <a href="https://github.com/kevinomerkilic">GitHub</a> | <a href="#">LinkedIn</a> | <a href="#">Email</a></p>
-    </footer>
+    <!-- ================================================== 02 industry -->
+    <section class="section" id="industry" aria-labelledby="industry-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">02</span>
+          <h2 class="label" id="industry-heading">Industry</h2>
+        </div></div>
+        <div class="section-body">
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Engineering Intern <span class="where">· Turkish Aerospace Industries (TUSA&#350;), Ankara</span></h3>
+              <span class="meta num">Aug &ndash; Sep 2026</span>
+            </div>
+            <p class="meta sub">YTB Türkiye Internship Program · selected via technical interview · UAV Manufacturing &amp; KAAN Aerodynamics</p>
+            <ul class="points">
+              <li>Ran <strong>KAAN store-separation</strong> aerodynamic studies end to end and reported the results: geometry preparation, meshing, solver execution, <strong>6-DOF trajectory analysis</strong>, post-processing; observed scaled-store wind-tunnel tests across multiple configurations.</li>
+              <li>Delivered a first-principles flight-dynamics analysis of the KAAN fighter: derived the <strong>6-DOF Newton&ndash;Euler equations of motion</strong>, stability derivatives and spin behaviour, and documented how the aerodynamic database and surrogate models are built.</li>
+              <li>Delivered a technical report on <strong>T129 ATAK main-rotor blade</strong> manufacturing and balancing to evaluate production approaches for AKSUNGUR UAV propeller blades: master tooling, tolerances, CG control, and gram-scale tip trim-mass corrections with their moment-arm effect on rotor vibration.</li>
+              <li>Documented the design-to-production data chain (composite manufacturing, Teamcenter routing, NX/Fibersim ply data, NCR/MRB) across the AKSUNGUR, ANKA-3, Super &#350;im&#351;ek and AYAZ programmes, analyzing process consistency.</li>
+            </ul>
+            <div class="artifacts" data-artifacts="tusas"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================== 03 computational science -->
+    <section class="section" id="computational" aria-labelledby="comp-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">03</span>
+          <h2 class="label" id="comp-heading">Computational Science</h2>
+        </div></div>
+        <div class="section-body">
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Research Intern <span class="where">· Computational Nanomechanics, NJIT Gor Laboratory</span></h3>
+              <span class="meta num">Summer 2025</span>
+            </div>
+            <ul class="points">
+              <li>Ran <strong>Grand Canonical Monte Carlo</strong> simulations of helium confined in zirconium nanovoids at 573&nbsp;K and 973&nbsp;K on the Mezcal cluster, establishing thermodynamic baselines against the nuclear-irradiation literature.</li>
+              <li>Built Python and Jupyter workflows automating the runs, equilibrium assessment, and density- and pressure-versus-chemical-potential analysis.</li>
+            </ul>
+            <div class="artifacts" data-artifacts="njit"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================== 04 built and run -->
+    <section class="section" id="built" aria-labelledby="built-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">04</span>
+          <h2 class="label" id="built-heading">Built and Run</h2>
+        </div></div>
+        <div class="section-body">
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Founder &amp; Electrical Technician <span class="where">· Hi Tech Electrical Contractors Inc., NJ</span></h3>
+              <span class="meta num">2020 &ndash; Present</span>
+            </div>
+            <ul class="points">
+              <li>Electrician since 2020; incorporated the company in 2023 and operate it while studying full time: panel upgrades, branch-circuit wiring, NEC-compliant installations, fault diagnostics. Home Depot Pro Referral partner with <strong>22 verified five-star reviews</strong> (5.0/5.0).</li>
+            </ul>
+            <div class="artifacts" data-artifacts="hitech"></div>
+          </article>
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Electric Vehicle Conversion <span class="where">· Bergen Community College STEM Research Center</span></h3>
+              <span class="meta num">2024 &ndash; 2025</span>
+            </div>
+            <ul class="points">
+              <li>Converted a 1998 Chevrolet to an electric drivetrain and developed a <strong>CAN bus</strong> sensor-monitoring and fault-diagnostic system.</li>
+            </ul>
+            <div class="artifacts" data-artifacts="ev"></div>
+          </article>
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Environmental Service Volunteer <span class="where">· USDA 3SP Scholarship Program, Bergen Community College</span></h3>
+              <span class="meta num">2024</span>
+            </div>
+            <ul class="points">
+              <li>Completed a semester of environmental service: campus tree planting and invasive-species removal, under a $3,000 USDA 3SP scholarship.</li>
+            </ul>
+            <div class="artifacts" data-artifacts="service"></div>
+          </article>
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Rutgers Propulsion Lab (AIAA) <span class="where">· Member</span></h3>
+              <span class="meta num">2026 &ndash; Present</span>
+            </div>
+            <ul class="points">
+              <li>Contributed CAD models for structural components for student rocket development; investigated paraffin-based hybrid rocket fuels.</li>
+            </ul>
+            <div class="artifacts" data-artifacts="propulsion"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================== 05 capabilities -->
+    <section class="section" id="capabilities" aria-labelledby="cap-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">05</span>
+          <h2 class="label" id="cap-heading">Capabilities</h2>
+        </div></div>
+        <div class="section-body">
+          <dl class="skills reveal">
+            <div>
+              <dt>Aerodynamics &amp; numerics</dt>
+              <dd>Fast multipole method, discrete-vortex methods, unsteady wake modelling, multipole expansions, 6-DOF store-separation trajectory analysis, flight dynamics and stability derivatives, CFD meshing and post-processing</dd>
+            </div>
+            <div>
+              <dt>Scientific computing</dt>
+              <dd>Julia, Python (NumPy, Pandas, Matplotlib, Jupyter), MATLAB, C++, Git, LaTeX and Typst</dd>
+            </div>
+            <div>
+              <dt>Optimization &amp; verification</dt>
+              <dd>Automatic differentiation, gradient-based design optimization, Monte Carlo and GCMC, surrogate and reduced-order modelling, numerical verification, error analysis and convergence study</dd>
+            </div>
+            <div>
+              <dt>Design &amp; manufacturing</dt>
+              <dd>SolidWorks, composites manufacturing, rotor and propeller balancing, GD&amp;T, NX/Fibersim, NCR/MRB</dd>
+            </div>
+            <div>
+              <dt>Test &amp; instrumentation</dt>
+              <dd>Wind-tunnel testing, sensor monitoring and diagnostics, CAN bus, NEC code compliance</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================== 06 education -->
+    <section class="section edu" id="education" aria-labelledby="edu-heading">
+      <div class="section-grid">
+        <div class="rail"><div class="rail-inner">
+          <span class="rail-no num">06</span>
+          <h2 class="label" id="edu-heading">Education</h2>
+        </div></div>
+        <div class="section-body">
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Rutgers University <span class="where">· B.S. Aerospace Engineering</span></h3>
+              <span class="meta num">Expected May 2028</span>
+            </div>
+            <p>GPA 4.00/4.00 · Aresty Research Scholar · Richard Peters &amp; Cecilia Santiago Peters Endowed Scholar. Graduate course by special faculty permission: <em>16:650:605 Flying Insects and Flapping Robots</em>.</p>
+          </article>
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Bergen Community College <span class="where">· A.S. Engineering Science</span></h3>
+              <span class="meta num">2025</span>
+            </div>
+            <p>GPA 3.90/4.00 · Phi Theta Kappa · USDA 3SP Scholar ($3,000).</p>
+          </article>
+          <article class="entry reveal">
+            <div class="entry-head">
+              <h3>Bilkent University <span class="where">· Economics coursework, Ankara</span></h3>
+              <span class="meta num">2018 &ndash; 2020</span>
+            </div>
+            <p>Full scholarship covering tuition and stipend · national university entrance rank <strong>1,085 of 2.5 million</strong> candidates.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================== contact -->
+  <footer class="colophon" id="contact">
+    <div class="links">
+      <a class="u" href="mailto:16omerkilic@gmail.com">Email</a>
+      <a class="u" href="https://www.linkedin.com/in/omer-kilic16">LinkedIn</a>
+      <a class="u" href="https://github.com/omerkilicdev">GitHub</a>
+      <a class="u" href="https://flapping-wings.vercel.app">Research hub</a>
+      <a class="u" href="Omer_Kilic_CV.pdf">CV (PDF)</a>
+    </div>
+    <p class="fine">North Jersey · Open to Summer 2027 aerospace internships.</p>
+  </footer>
+
+</div>
+
+<script>
+  // Reveal on first entry only. No scroll handler, no layout reads per frame.
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+
+<!-- ==========================================================================
+     Artifact registry.
+     One place to add figures and documents. Drop the file under media/<key>/
+     or docs/<key>/ and add a line here. Nothing else to edit.
+       image: { "type":"image", "src":..., "w":..., "h":..., "alt":..., "caption":... }
+       doc:   { "type":"doc", "href":..., "kind":"PDF", "title":..., "note":... }
+     Keys match data-artifacts on each entry: research, tusas, njit, hitech, ev, propulsion.
+     ========================================================================== -->
+<script type="application/json" id="artifact-data">
+{
+  "research": [
+    { "type": "image", "src": "media/research/multipole-hierarchy.svg", "w": 760, "h": 320,
+      "alt": "Monopole, dipole, quadrupole and octupole contributions to the field of a vortex ring.",
+      "caption": "The multipole hierarchy for a vortex ring: each order adds a faster-decaying correction to the far field." },
+    { "type": "image", "src": "media/research/far-field-convergence.svg", "w": 760, "h": 540,
+      "alt": "Difference between the closed-form moments and direct quadrature, falling to machine precision as the quadrature is refined.",
+      "caption": "Verification: the closed-form ring moments agree with direct quadrature to machine precision." }
+  ],
+  "tusas": [],
+  "njit": [],
+  "hitech": [],
+  "ev": [],
+  "service": [],
+  "propulsion": []
+}
+</script>
+
+<dialog class="lightbox" id="lightbox" aria-label="Figure viewer">
+  <img id="lightbox-img" alt="">
+  <div class="bar">
+    <span id="lightbox-cap"></span>
+    <button type="button" id="lightbox-close">Close</button>
+  </div>
+</dialog>
+
+<script>
+  // Render the artifact registry into each entry, then wire a single lightbox.
+  (function () {
+    var node = document.getElementById('artifact-data');
+    if (!node) return;
+    var data;
+    try { data = JSON.parse(node.textContent); } catch (e) { return; }
+
+    var dlg = document.getElementById('lightbox');
+    var dlgImg = document.getElementById('lightbox-img');
+    var dlgCap = document.getElementById('lightbox-cap');
+    var canModal = dlg && typeof dlg.showModal === 'function';
+
+    function open(src, alt, caption) {
+      if (!canModal) { window.open(src, '_blank'); return; }
+      dlgImg.src = src;
+      dlgImg.alt = alt || '';
+      dlgCap.textContent = caption || '';
+      dlg.showModal();
+    }
+
+    if (canModal) {
+      document.getElementById('lightbox-close').addEventListener('click', function () { dlg.close(); });
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+      dlg.addEventListener('close', function () { dlgImg.removeAttribute('src'); });
+    }
+
+    function figure(item) {
+      var fig = document.createElement('figure');
+      fig.className = 'art-fig';
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Enlarge: ' + (item.caption || item.alt || 'figure'));
+
+      var img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.alt || '';
+      if (item.w) img.width = item.w;
+      if (item.h) img.height = item.h;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+
+      btn.appendChild(img);
+      btn.addEventListener('click', function () { open(item.src, item.alt, item.caption); });
+      fig.appendChild(btn);
+
+      if (item.caption) {
+        var cap = document.createElement('figcaption');
+        cap.textContent = item.caption;
+        fig.appendChild(cap);
+      }
+      return fig;
+    }
+
+    function docRow(item) {
+      var a = document.createElement('a');
+      a.className = 'art-doc';
+      a.href = item.href;
+
+      var kind = document.createElement('span');
+      kind.className = 'kind';
+      kind.textContent = item.kind || 'PDF';
+
+      var title = document.createElement('span');
+      title.className = 'title';
+      title.textContent = item.title || item.href;
+
+      a.appendChild(kind);
+      a.appendChild(title);
+
+      if (item.note) {
+        var note = document.createElement('span');
+        note.className = 'note';
+        note.textContent = item.note;
+        a.appendChild(note);
+      }
+      return a;
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('[data-artifacts]'), function (host) {
+      var items = data[host.getAttribute('data-artifacts')];
+      if (!items || !items.length) return;
+
+      var images = items.filter(function (i) { return i.type === 'image'; });
+      var docs = items.filter(function (i) { return i.type === 'doc'; });
+
+      var label = document.createElement('span');
+      label.className = 'art-label';
+      label.textContent = 'Material';
+      host.appendChild(label);
+
+      if (images.length) {
+        var grid = document.createElement('div');
+        grid.className = 'art-figs';
+        images.forEach(function (i) { grid.appendChild(figure(i)); });
+        host.appendChild(grid);
+      }
+      if (docs.length) {
+        var list = document.createElement('div');
+        list.className = 'art-docs';
+        docs.forEach(function (i) { list.appendChild(docRow(i)); });
+        host.appendChild(list);
+      }
+    });
+  })();
+</script>
+
 </body>
 </html>
