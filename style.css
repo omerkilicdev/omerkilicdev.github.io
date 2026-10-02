@@ -43,7 +43,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper:      #0E1113;
     --paper-sunk: #151A1D;
     --ink:        #E9E7E2;
@@ -52,6 +52,16 @@
     --hair:       #2C333A;
     --hair-soft:  #20262B;
   }
+}
+
+:root[data-theme="dark"] {
+  --paper:    #0E1113;
+  --paper-sunk: #151A1D;
+  --ink:    #E9E7E2;
+  --slate:    #9CA2A9;
+  --accent:   #93B8E2;
+  --hair:     #2C333A;
+  --hair-soft:  #20262B;
 }
 
 /* ==========================================================================
@@ -575,4 +585,99 @@ dialog.lightbox .bar button {
   font-weight: 600;
   cursor: pointer;
   padding: 0;
+}
+
+
+/* ==========================================================================
+   theme toggle
+   ========================================================================== */
+
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border: 1px solid var(--hair);
+  background: none;
+  color: var(--slate);
+  cursor: pointer;
+  transition: color var(--duration-fast) linear, border-color var(--duration-fast) linear;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.theme-toggle svg { width: 0.95rem; height: 0.95rem; }
+
+/* ==========================================================================
+   hero: text column plus portrait
+   ========================================================================== */
+
+.hero-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 1rem + 3vw, 3.5rem);
+  align-items: start;
+}
+
+@media (min-width: 52rem) {
+  .hero-cols { grid-template-columns: minmax(0, 1fr) 13.5rem; }
+}
+
+.portrait { margin: 0; display: grid; gap: 0.9rem; justify-items: start; }
+.portrait[hidden] { display: none; }
+
+.portrait img {
+  display: block;
+  width: 100%;
+  max-width: 13.5rem;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--hair);
+  background: var(--paper-sunk);
+}
+
+.portrait p { line-height: 1.6; }
+
+/* availability: the one thing a recruiter should not have to look for */
+.availability {
+  max-width: 46ch;
+  margin: 0 0 1.9rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--accent);
+  border-left-width: 3px;
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.availability strong { color: var(--accent); }
+
+/* ==========================================================================
+   recent: a dated timeline
+   ========================================================================== */
+
+.news { display: grid; }
+
+.news li {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 0.25rem 1.5rem;
+  padding: 1.05rem 0;
+  border-bottom: 1px solid var(--hair-soft);
+  max-width: var(--measure);
+}
+.news li:first-child { padding-top: 0; }
+
+.news .when {
+  font-family: var(--sans);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.news .what strong { font-weight: 700; }
+
+@media (max-width: 40rem) {
+  .news li { grid-template-columns: minmax(0, 1fr); gap: 0.3rem; }
 }
