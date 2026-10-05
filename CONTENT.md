@@ -49,9 +49,15 @@ and optional link buttons.
 ## Files
 
 ```
-media/<key>/   images      .svg for plots, .webp for photographs
+media/<key>/   images      .svg for plots, .webp for photographs and video posters
+               video       .mp4 (H.264, yuv420p) with a .webp poster frame
 docs/<key>/    documents   .pdf
 ```
+
+A looping video inside a work entry goes in the `showcase` block: `autoplay muted loop
+playsinline` plus a `poster`, and the reduced-motion script at the bottom of `index.html`
+turns autoplay off for users who ask for less motion. A long video uses
+`controls preload="none"` with a poster so nothing downloads until it is played.
 
 Keys in use: `research`, `tusas`, `njit`, `ev`. Add folders as needed.
 
