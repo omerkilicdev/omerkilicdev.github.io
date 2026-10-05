@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; helium in nanoscale cavities</title>
+<meta name="description" content="Grand canonical Monte Carlo of helium confined in nanoscale cavities in zirconium, with an independent reproduction of a published confined-fluid result. NJIT, Summer 2025.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a class="active" href="../index.html#work">work</a></li>
+        <li><a href="../research/">research</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name">Helium in <strong>nanoscale cavities</strong></h1>
+
+    <p class="affil">
+      <span class="lab">Computational Nanomechanics, New Jersey Institute of Technology</span><br>
+      <span class="dept">Research intern &middot; Summer 2025 &middot; grand canonical Monte Carlo</span>
+    </p>
+
+    <p>
+      Neutron irradiation produces helium inside reactor cladding, and the helium collects
+      in nanometre-scale voids where it can drive swelling and embrittlement. The question
+      I worked on is how much helium a void of a given size holds at reactor
+      temperatures. I modelled helium inside a rigid spherical zirconium cavity and swept
+      the chemical potential in the grand canonical ensemble (fixed &mu;, <em>V</em>,
+      <em>T</em>), so that the number of atoms in the cavity is an output of the
+      simulation rather than an input.
+    </p>
+
+    <h2 class="sec" id="validation">First, reproduce a published result</h2>
+    <p>
+      Before trusting any new number, I used the group&rsquo;s in-house GCMC code to
+      reproduce an existing one: the elastic modulus of argon confined in spherical pores
+      at 87.3&nbsp;K (Gor, <em>Poromechanics VI</em>, ASCE, 2017). The modulus comes from
+      particle-number fluctuations alone,
+      <em>K</em>&nbsp;=&nbsp;<em>k</em><sub>B</sub><em>T</em>&thinsp;&lang;<em>N</em>&rang;&sup2;&thinsp;/&thinsp;(<em>V</em>&thinsp;Var&thinsp;<em>N</em>),
+      which makes it a demanding test: the variance converges far more slowly than the
+      mean. Over 2.25&ndash;5.5&nbsp;nm my values follow the published curve to within
+      about two standard errors; for larger pores 5,000 sets are not enough to converge
+      the variance, and the plot says so rather than hiding those points.
+    </p>
+    <div class="figs">
+      <figure>
+        <img class="plate" src="../media/njit/njit-argon.svg"
+             alt="Bulk modulus of confined argon versus pore diameter: red points with error bars from this work follow the black published curve between 2.25 and 5.5 nanometres; three grey open circles at larger pores fall below it"
+             width="760" height="410" loading="lazy" decoding="async">
+        <figcaption>
+          Sixteen GCMC runs, 5,100 sets of 10<sup>4</sup> moves each, first 1,000 sets
+          discarded; error bars are &plusmn;2 standard errors from ten-block averages of
+          the fluctuation estimate. Black line: the published curve, digitised from the
+          paper&rsquo;s figure for the same wall strength.
+        </figcaption>
+      </figure>
+    </div>
+
+    <h2 class="sec" id="helium">Helium in a zirconium cavity</h2>
+    <p>
+      I then built the helium&ndash;zirconium model myself. Helium&ndash;helium interactions
+      use a Lennard-Jones fit to transport data (&epsilon;/<em>k</em><sub>B</sub>&nbsp;=&nbsp;9.87&nbsp;K,
+      &sigma;&nbsp;=&nbsp;2.52&nbsp;&Aring;); zirconium parameters come from the Universal
+      Force Field, combined by Lorentz&ndash;Berthelot rules, with the wall&rsquo;s atom
+      density taken from the close-packed hcp-Zr(0001) plane (0.107&nbsp;&Aring;<sup>&minus;2</sup>).
+      The cavity is a 3.0&nbsp;nm sphere. I ran 28 chemical-potential points at 573&nbsp;K
+      and 973&nbsp;K, the range of cladding operating and transient temperatures, and wrote
+      a Python driver that edits the input deck, launches runs in parallel and collects the
+      logs, so the whole sweep is reproducible from one script.
+    </p>
+    <div class="figs">
+      <figure>
+        <img class="plate" src="../media/njit/njit-gcmc.svg"
+             alt="Left: number of helium atoms versus Monte Carlo set, rising from about 520 to a plateau near 925 within about fifty sets. Right: mean density versus chemical potential at 573 K in red and 973 K in blue, both rising slowly and nearly linearly."
+             width="960" height="400" loading="lazy" decoding="async">
+        <figcaption>
+          Left: the cavity fills within a few dozen sets and then fluctuates about a stable
+          mean; averages are taken only after set 1,000. Right: mean helium density in the
+          cavity against imposed chemical potential at both temperatures (&plusmn;2 standard
+          errors from block averages, smaller than the markers). The loading is already
+          near saturation, 0.10&ndash;0.12&nbsp;mol&nbsp;cm<sup>&minus;3</sup>, and rises by
+          less than ten percent across a 700&nbsp;K span of chemical potential: the confined
+          helium is stiff at these conditions.
+        </figcaption>
+      </figure>
+    </div>
+
+    <h2 class="sec" id="details">At a glance</h2>
+    <table class="facts">
+      <tbody>
+        <tr><th scope="row">Method</th><td>Grand canonical Monte Carlo (&mu;<em>VT</em>): displacement, insertion and deletion moves</td></tr>
+        <tr><th scope="row">Runs</th><td>28 helium runs (573&nbsp;K and 973&nbsp;K) and 92 argon validation runs over six wall strengths</td></tr>
+        <tr><th scope="row">Length</th><td>5,100 sets &times; 10<sup>4</sup> moves per run; 1,000-set equilibration discarded</td></tr>
+        <tr><th scope="row">Statistics</th><td>Block averaging for means and for the fluctuation modulus</td></tr>
+        <tr><th scope="row">My code</th><td>Python run automation (parallel pool) and the analysis pipeline; earlier Metropolis teaching codes written to learn the method</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="sec" id="next">What I would do next</h2>
+    <p>
+      The density results stand on their own, but the pressure of helium this dense should
+      not be read from the ideal-gas law, which is what my first write-up did; the next
+      step is the virial pressure computed inside the simulation, together with a Widom
+      insertion check that the realised chemical potential matches the imposed one, and
+      longer runs so that the fluctuation modulus converges for the larger pores as well.
+    </p>
+
+    <p><a href="../index.html#work">&larr; Back to selected work</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a></span>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>

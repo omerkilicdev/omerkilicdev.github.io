@@ -68,7 +68,7 @@
 
     <!-- Drop a square photo at media/portrait.jpg; without one this block removes itself. -->
     <div class="profile">
-      <img src="media/portrait.jpg" alt="Omer Kilic" width="540" height="540" loading="eager"
+      <img src="media/portrait.jpg" alt="Omer Kilic" width="640" height="640" loading="eager"
            onerror="this.closest('.profile').hidden = true">
       <div class="more-info">
         <p>North Jersey, NJ, USA</p>
@@ -93,8 +93,8 @@
         I spent Aug&ndash;Sep 2026 at <a href="https://www.tusas.com/en">Turkish Aerospace (TUSA&#350;)</a>
         on <strong>KAAN</strong> store-separation aerodynamics, six-degree-of-freedom trajectory
         analysis and rotor-blade manufacturing, and the summer of 2025 at the
-        <a href="https://www.njit.edu/">NJIT</a> Gor Laboratory on Monte Carlo simulation of
-        helium in zirconium nanovoids. I also founded and still run an electrical contracting
+        <a href="https://www.njit.edu/">NJIT</a> on Monte Carlo simulation of helium in
+        nanoscale cavities in zirconium. I also founded and still run an electrical contracting
         company in New Jersey, which has paid for the degree.
       </p>
     </div>
@@ -141,8 +141,9 @@
           </tr>
           <tr>
             <th scope="row">Aug 2026</th>
-            <td><strong>Started the YTB T&uuml;rkiye internship at Turkish Aerospace (TUSA&#350;)</strong>, in UAV
-              Manufacturing and KAAN Aerodynamics.
+            <td><strong>Started as a candidate engineer at Turkish Aerospace (TUSA&#350;)</strong>
+              in the SKY Global T&uuml;rk internship programme (through YTB&rsquo;s T&uuml;rkiye
+              Internship Programme), in UAV Manufacturing and KAAN Aerodynamics.
               <ul>
                 <li>KAAN store separation: meshing, solver runs, 6-DOF trajectory analysis</li>
                 <li>First-principles flight-dynamics study of the KAAN fighter</li>
@@ -168,8 +169,8 @@
           </tr>
           <tr>
             <th scope="row">Jun 2025</th>
-            <td>Research intern at the <strong>NJIT Gor Laboratory</strong>, running grand canonical
-              Monte Carlo simulations of helium confined in zirconium nanovoids.</td>
+            <td>Research intern in computational nanomechanics at <strong>NJIT</strong>, running
+              grand canonical Monte Carlo simulations of helium confined in nanoscale cavities.</td>
           </tr>
         </tbody>
       </table>
@@ -188,7 +189,7 @@
         </div>
         <div>
           <div class="title">A ring-native fast multipole method for flapping-wing wakes</div>
-          <div class="where">Rutgers MAE, with Prof. Mitsunori Denda</div>
+          <div class="where">Denda Lab, Rutgers MAE, with Prof. Mitsunori Denda; co-advised by Prof. Onur Bilgen</div>
           <div class="when">2026 &ndash; present</div>
           <p class="blurb">
             Closed-form multipole moments for vortex rings and polygonal panels, translation
@@ -246,17 +247,23 @@
         <div class="aside">
           <span class="badge">Monte Carlo</span>
           <span class="badge">Python</span>
+          <img class="preview" src="media/njit/njit-argon.svg" alt="" width="760" height="410" loading="lazy" decoding="async">
         </div>
         <div>
-          <div class="title">Helium in zirconium nanovoids</div>
-          <div class="where">NJIT Gor Laboratory, Computational Nanomechanics</div>
+          <div class="title">Helium in nanoscale cavities: grand canonical Monte Carlo</div>
+          <div class="where">NJIT, Computational Nanomechanics</div>
           <div class="when">Summer 2025</div>
           <p class="blurb">
-            Grand canonical Monte Carlo simulations at 573 K and 973 K on the Mezcal cluster,
-            establishing thermodynamic baselines against the nuclear-irradiation literature,
-            with Python and Jupyter workflows automating the runs, equilibrium assessment and
-            density- and pressure-versus-chemical-potential analysis.
+            Reproduced a published result first: the elastic modulus of argon in spherical
+            nanopores from particle-number fluctuations, matching the published curve within
+            two standard errors over 2.25&ndash;5.5&nbsp;nm. Then built a helium&ndash;zirconium
+            model and ran 28 chemical-potential points at 573&nbsp;K and 973&nbsp;K in a
+            3.0&nbsp;nm cavity, with a Python driver that runs the sweep in parallel and
+            block-averaged statistics throughout.
           </p>
+          <div class="links">
+            <a href="njit/">project page</a>
+          </div>
         </div>
       </li>
 
@@ -264,15 +271,23 @@
         <div class="aside">
           <span class="badge">CAN bus</span>
           <span class="badge">Embedded</span>
+          <img class="preview" src="media/ev/battery-pack-preview.webp" alt="" width="960" height="600" loading="lazy" decoding="async">
         </div>
         <div>
-          <div class="title">Electric vehicle conversion</div>
-          <div class="where">Bergen Community College STEM Research Center</div>
+          <div class="title">Instrumenting an electric pickup truck</div>
+          <div class="where">Bergen Community College STEM Research Center, nine-student team</div>
           <div class="when">2024 &ndash; 2025</div>
           <p class="blurb">
-            Converted a 1998 Chevrolet to an electric drivetrain and built a CAN bus sensor
-            monitoring and fault-diagnostic system for it.
+            A 1998 Chevrolet K1500 converted to electric drive, with a 117&nbsp;V, 41&nbsp;kWh
+            LiFePO<sub>4</sub> pack. With a teammate I wrote the CAN bus decoder for the
+            battery-management system&rsquo;s frames, then the first in-cab logger around it:
+            GPS, SD-card logging and a live display of pack current, voltage, weakest cell and
+            the discharge limit that decides when the truck shuts down.
           </p>
+          <div class="links">
+            <a href="ev/">project page</a>
+            <a href="https://github.com/omerkilicdev/EV-programs-BCC" target="_blank" rel="noopener">code</a>
+          </div>
         </div>
       </li>
 
