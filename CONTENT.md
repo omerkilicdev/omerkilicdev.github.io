@@ -54,10 +54,12 @@ media/<key>/   images      .svg for plots, .webp for photographs and video poste
 docs/<key>/    documents   .pdf
 ```
 
-A looping video inside a work entry goes in the `showcase` block: `autoplay muted loop
-playsinline` plus a `poster`, and the reduced-motion script at the bottom of `index.html`
-turns autoplay off for users who ask for less motion. A long video uses
-`controls preload="none"` with a poster so nothing downloads until it is played.
+Videos, figures and the interactive demonstration live on `research/index.html`, not on
+the front page — the front page stays in the sober al-folio register. A looping video
+uses `autoplay muted loop playsinline` plus a `poster` (the research page's
+reduced-motion script turns autoplay off for users who ask for less motion); a long
+video uses `controls preload="none"` with a poster so nothing downloads until played.
+`sim/` is a redirect kept for old links.
 
 Keys in use: `research`, `tusas`, `njit`, `ev`. Add folders as needed.
 
