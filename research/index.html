@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; research</title>
+<meta name="description" content="Fast multipole methods for flapping-wing wakes — Denda Lab, Mechanical &amp; Aerospace Engineering, Rutgers University. Interactive demonstration, verification figures and explainer video.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+<style>
+  .affil {
+    font-size: 1.02rem;
+    line-height: 1.55;
+    margin: -0.6rem 0 0.4rem;
+  }
+  .affil .lab { font-weight: 500; }
+  .affil .dept { color: var(--text-light); }
+  h2.sec {
+    font-size: 1.35rem;
+    margin-top: 3rem;
+  }
+  .lab-stage {
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+    background: var(--card);
+  }
+  #lab-canvas { display: block; width: 100%; height: auto; touch-action: manipulation; }
+  .lab-hud {
+    position: absolute;
+    left: 0.9rem; bottom: 0.65rem;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+    user-select: none;
+  }
+  .lab-controls {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 0.8rem 1.6rem;
+    align-items: center;
+  }
+  .lab-controls label {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.15rem 0.6rem;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+  .lab-controls label output { color: var(--text-light); font-variant-numeric: tabular-nums; }
+  .lab-controls input[type="range"] {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: var(--theme);
+    margin: 0;
+  }
+  .lab-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .lab-buttons button {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.28rem 0.85rem;
+    border: 1px solid var(--theme);
+    border-radius: 3px;
+    background: none;
+    color: var(--theme);
+    cursor: pointer;
+  }
+  .lab-buttons button:hover { background: var(--theme); color: var(--bg); }
+  .lab-buttons button[aria-pressed="true"] { background: var(--theme); color: var(--bg); }
+  .figure-block { margin: 1.4rem 0 0; }
+  .figure-block figure { margin: 0 0 1.4rem; }
+  .figure-block video,
+  .figure-block img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    background: #fcfbf9;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+  }
+  .figure-block .plate { padding: 0.75rem 0.9rem; }
+  .figure-block figcaption {
+    margin-top: 0.45rem;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--text-light);
+  }
+  .fig-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+    align-items: start;
+  }
+  @media (max-width: 36rem) { .fig-grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a class="active" href="./">research</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/>
+              <circle cx="12" cy="12" r="9"/>
+            </svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4.4"/>
+              <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/>
+            </svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name">Fast multipole methods for <strong>flapping-wing wakes</strong></h1>
+
+    <p class="affil">
+      <span class="lab">Denda Lab &middot; Bio-Inspired Micro Aerial Vehicles</span><br>
+      <span class="dept">Mechanical &amp; Aerospace Engineering, Rutgers University &middot;
+      Aresty Research Scholar, with Prof. Mitsunori Denda &middot;
+      co-advised by Prof. Onur Bilgen &middot; 2026&thinsp;&ndash;&thinsp;present</span>
+    </p>
+
+    <p>
+      Discrete-vortex solvers for flapping flight spend almost all of their time on one
+      operation: every vortex element inducing velocity on every other, an
+      <em>O</em>(<em>N</em>&sup2;) sum repeated at each time step. This project derives
+      closed-form multipole moments for vortex rings and polygonal panels, the translation
+      operators between them, and a-priori far-field error bounds, and assembles them into
+      a fast multipole method verified against direct summation across an automated suite
+      of 40 test groups and 274 checks. Integrated into the group&rsquo;s MATLAB
+      three-dimensional wake code as a replacement velocity kernel, a 15-step run went
+      from 1,783&nbsp;s to 50&nbsp;s. The solver is differentiable throughout, so flapping
+      strokes can be designed by gradient ascent. A follow-on proposal with
+      Prof.&nbsp;Onur Bilgen extends the method toward reduced-order wake models for
+      aeroelastic analysis and design.
+    </p>
+
+    <h2 class="sec" id="demo">Interactive demonstration</h2>
+    <p>
+      The demonstration below reproduces the structure of the method in two dimensions,
+      live in the browser. A flat plate pitches and heaves in a free stream; a quasi-steady
+      Kutta condition converts the rate of change of bound circulation into shed vorticity,
+      and the wake convects itself through a Krasny-regularised Biot&ndash;Savart kernel.
+      <strong>Direct summation</strong> evaluates all <em>N</em>&sup2; pairs.
+      <strong>Multipole far field</strong> organises the wake in a quadtree and replaces
+      each well-separated group by its circulation, dipole, quadrupole and octupole
+      moments &mdash; the same moment hierarchy the research builds for three-dimensional
+      vortex rings &mdash; accepting a group as far when its measured radius is below a
+      fraction &theta; of its distance. The counter reports the measured cost and the
+      measured error against direct summation; the outlined boxes show the groups serving
+      one highlighted target vortex.
+    </p>
+
+    <div class="lab-wrap">
+      <div class="lab-stage">
+        <canvas id="lab-canvas" width="1600" height="1000"
+                aria-label="Live simulation: a flapping flat plate shedding a vortex street, with a multipole far-field approximation that can be toggled against direct summation"></canvas>
+        <div class="lab-hud" id="lab-hud" aria-live="off"></div>
+      </div>
+
+      <div class="lab-controls">
+        <label>free stream <output id="o-u">1.0</output>
+          <input id="s-u" type="range" min="0.5" max="2.0" step="0.05" value="1.0">
+        </label>
+        <label>flap frequency <output id="o-f">0.50</output>
+          <input id="s-f" type="range" min="0.25" max="0.9" step="0.01" value="0.5">
+        </label>
+        <label>heave amplitude <output id="o-h">0.62</output>
+          <input id="s-h" type="range" min="0.1" max="1.1" step="0.02" value="0.62">
+        </label>
+        <label>pitch amplitude <output id="o-p">24&deg;</output>
+          <input id="s-p" type="range" min="0" max="40" step="1" value="24">
+        </label>
+        <label>far-field acceptance &theta; <output id="o-t">0.25</output>
+          <input id="s-t" type="range" min="0.15" max="0.6" step="0.05" value="0.25">
+        </label>
+      </div>
+
+      <div class="lab-buttons">
+        <button id="b-mode" type="button" aria-pressed="false">multipole far field</button>
+        <button id="b-field" type="button" aria-pressed="false">velocity field</button>
+        <button id="b-pause" type="button" aria-pressed="false">pause</button>
+        <button id="b-reset" type="button">reset wake</button>
+      </div>
+
+      <p style="font-size:0.9rem; margin-top:1rem;">
+        Switching to the multipole far field replaces the <em>N</em>&sup2; pair sum with
+        several-fold fewer evaluations at this modest <em>N</em>, at a measured error at
+        the 10<sup>&minus;3</sup> level &mdash; tighten &theta; and the error falls,
+        loosen it and the cost does, and the gap between <em>N</em>&sup2; and the
+        tree&rsquo;s near-linear count widens as the wake grows. At demonstration scale
+        the honest measure is the operation count; the wall-clock payoff arrives at the
+        scale of the group&rsquo;s three-dimensional wakes, where this same trade,
+        made rigorous by closed-form ring moments, translation operators and a-priori
+        error bounds, turned 1,783&nbsp;s into 50&nbsp;s.
+      </p>
+    </div>
+
+    <h2 class="sec" id="verification">Verification and timing</h2>
+    <div class="figure-block">
+      <div class="fig-grid">
+        <figure>
+          <img class="plate" src="../media/research/far-field-convergence.svg" alt="Log-log plot: quadrature error versus points per edge; dipole and quadrupole sit at machine precision, the octupole curve falls as N to the minus two"
+               width="760" height="540" loading="lazy" decoding="async">
+          <figcaption>
+            Verification of the closed-form polygon moments: the exact dipole and
+            quadrupole forms sit at machine precision for any resolution, and the
+            second-order octupole quadrature converges to the closed form as
+            <em>N</em><sup>&minus;2</sup>.
+          </figcaption>
+        </figure>
+        <figure>
+          <img class="plate" src="../media/research/speedup.svg" alt="Bar chart on a log time axis: direct summation 1,783 seconds versus the accelerated kernel at 50 seconds for the same 15-step wake run"
+               width="760" height="410" loading="lazy" decoding="async">
+          <figcaption>
+            The same 15-step three-dimensional wake run takes 1,783&nbsp;s by direct
+            summation and 50&nbsp;s with the replacement velocity kernel.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h2 class="sec" id="animation">Wake animation</h2>
+    <div class="figure-block">
+      <figure>
+        <video autoplay muted loop playsinline preload="metadata"
+               width="1600" height="1000" poster="../media/research/wake-poster.webp"
+               aria-label="Animation: a flat plate pitching and heaving in a free stream sheds a vortex street that rolls up into alternating red and blue clusters">
+          <source src="../media/research/wake-street.mp4" type="video/mp4">
+        </video>
+        <figcaption>
+          A rendered discrete-vortex sequence of the same configuration: the shed vortex
+          sheet rolls up into the alternating clusters of a reverse K&aacute;rm&aacute;n
+          street, the signature of a thrust-producing stroke. Red is positive circulation,
+          blue negative.
+        </figcaption>
+      </figure>
+    </div>
+
+    <h2 class="sec" id="explainer">Explainer video</h2>
+    <div class="figure-block">
+      <figure>
+        <video controls preload="none" width="1920" height="1080"
+               poster="../media/research/explainer-poster.webp"
+               aria-label="Explainer video: closed-form multipole moments for polygonal vortex loops">
+          <source src="../media/research/explainer.mp4" type="video/mp4">
+        </video>
+        <figcaption>
+          A 1:40 animated explainer of the first theory result of the project: dipole,
+          quadrupole and octupole moments of a polygonal vortex loop in closed form
+          &mdash; the moments the fast summation is built on. Also on the
+          <a href="https://flapping-wings.vercel.app" target="_blank" rel="noopener">group hub</a>.
+        </figcaption>
+      </figure>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a></span>
+  </div>
+</footer>
+
+<script>
+  // Theme toggle, same cycle as the main page.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('light-toggle');
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var next = cur === 'light' ? 'dark' : (cur === 'dark' ? null : 'light');
+      if (next) { root.setAttribute('data-theme', next); } else { root.removeAttribute('data-theme'); }
+      try { next ? localStorage.setItem('theme', next) : localStorage.removeItem('theme'); } catch (e) {}
+    });
+  })();
+
+  // Reading progress.
+  (function () {
+    var bar = document.getElementById('progress-bar');
+    var ticking = false;
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(h.scrollTop / max, 1) : 0) + ')';
+      ticking = false;
+    }
+    addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  })();
+
+  // Respect reduced motion on the looping wake video.
+  (function () {
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[autoplay]').forEach(function (v) {
+      v.removeAttribute('autoplay');
+      v.pause();
+      v.controls = true;
+    });
+  })();
+
+  // --------------------------------------------------- the live demonstration
+  (function () {
+    'use strict';
+
+    var canvas = document.getElementById('lab-canvas');
+    var ctx = canvas.getContext('2d');
+    var hud = document.getElementById('lab-hud');
+
+    // World coordinates: x in [-1.6, 8.4], y in [-3.125, 3.125]  (16:10).
+    var XMIN = -1.6, XMAX = 8.4, YHALF = 3.125;
+    var W = 1600, H = 1000;
+    var TWO_PI = 2 * Math.PI;
+
+    // Parameters (sliders write these).
+    var P = { U: 1.0, f: 0.5, h0: 0.62, th0: 24 * Math.PI / 180 };
+    var CHORD = 1.0;
+    var DELTA2 = 0.01;          // Krasny core squared
+    var DT = 1 / 60;             // one physics step per frame: real time at 60 fps
+    var NMAX = 1000;             // oldest vortices are dropped past this
+
+    // Multipole far field.
+    var THETA = 0.25;            // group is far when radius/distance < theta
+    var LEAF = 8;
+    var mode = 'direct';         // 'direct' | 'fmm'
+
+    // Wake state.
+    var xs = [], ys = [], gs = [];
+    var t = 0;
+
+    function plateState(tt) {
+      var w = TWO_PI * P.f;
+      return {
+        h: P.h0 * Math.sin(w * tt),
+        hdot: P.h0 * w * Math.cos(w * tt),
+        th: P.th0 * Math.cos(w * tt)
+      };
+    }
+    function gammaBound(tt) {
+      var s = plateState(tt);
+      var a = s.th - Math.atan2(s.hdot, P.U);
+      return -Math.PI * CHORD * P.U * Math.sin(a);
+    }
+
+    // ---- quadtree with circulation, dipole and quadrupole moments ----------
+    function newNode(x, y, s) {
+      return { x: x, y: y, s: s, cx: x + s / 2, cy: y + s / 2,
+               kids: null, idx: [], n: 0, r2max: 0,
+               m0: 0, m1r: 0, m1i: 0, m2r: 0, m2i: 0, m3r: 0, m3i: 0 };
+    }
+    function quadOf(nd, x, y) {
+      var h = nd.s / 2;
+      return (x > nd.x + h ? 1 : 0) + (y > nd.y + h ? 2 : 0);
+    }
+    function insert(nd, i, depth) {
+      var dx = xs[i] - nd.cx, dy = ys[i] - nd.cy, g = gs[i];
+      nd.m0 += g; nd.m1r += g * dx; nd.m1i += g * dy;
+      nd.m2r += g * (dx * dx - dy * dy); nd.m2i += 2 * g * dx * dy;
+      nd.m3r += g * (dx * dx * dx - 3 * dx * dy * dy);
+      nd.m3i += g * (3 * dx * dx * dy - dy * dy * dy);
+      var r2 = dx * dx + dy * dy;
+      if (r2 > nd.r2max) nd.r2max = r2;
+      nd.n++;
+      if (nd.kids) { insert(nd.kids[quadOf(nd, xs[i], ys[i])], i, depth + 1); return; }
+      nd.idx.push(i);
+      if (nd.idx.length > LEAF && depth < 10) {
+        var h = nd.s / 2;
+        nd.kids = [newNode(nd.x, nd.y, h), newNode(nd.x + h, nd.y, h),
+                   newNode(nd.x, nd.y + h, h), newNode(nd.x + h, nd.y + h, h)];
+        for (var k = 0; k < nd.idx.length; k++) {
+          var j = nd.idx[k];
+          insert(nd.kids[quadOf(nd, xs[j], ys[j])], j, depth + 1);
+        }
+        nd.idx = [];
+      }
+    }
+    function buildTree() {
+      var root = newNode(-2.2, -7, 14);
+      for (var i = 0; i < xs.length; i++) insert(root, i, 0);
+      return root;
+    }
+
+    // Velocity at (px,py): far cells via moments, near cells directly.
+    // Complex velocity u - iv = (-i/2pi) [ M0/z + M1/z^2 + M2/z^3 ], z from cell centre.
+    function evalTree(root, px, py, self, rec) {
+      var u = 0, v = 0, evals = 0;
+      var th2 = THETA * THETA;
+      var stack = [root];
+      while (stack.length) {
+        var nd = stack.pop();
+        if (!nd.n) continue;
+        var dx = px - nd.cx, dy = py - nd.cy;
+        var d2 = dx * dx + dy * dy;
+        // A group is far when its measured radius is below theta times its
+        // distance (the criterion acts on the actual spread of the elements,
+        // not the box size), with a floor of several core radii so the
+        // regularised and point kernels agree. A cell containing the target
+        // has r_max >= d, so it can never be accepted for theta < 1.
+        if (nd.r2max < th2 * d2 && d2 > 9 * DELTA2) {
+          var i1r = dx / d2, i1i = -dy / d2;
+          var i2r = i1r * i1r - i1i * i1i, i2i = 2 * i1r * i1i;
+          var i3r = i2r * i1r - i2i * i1i, i3i = i2r * i1i + i2i * i1r;
+          var i4r = i3r * i1r - i3i * i1i, i4i = i3r * i1i + i3i * i1r;
+          // Monopole through the same regularised kernel the near field uses.
+          var b2 = d2 + DELTA2;
+          var wr = nd.m0 * dx / b2 + nd.m1r * i2r - nd.m1i * i2i +
+                   nd.m2r * i3r - nd.m2i * i3i + nd.m3r * i4r - nd.m3i * i4i;
+          var wi = nd.m0 * (-dy) / b2 + nd.m1r * i2i + nd.m1i * i2r +
+                   nd.m2r * i3i + nd.m2i * i3r + nd.m3r * i4i + nd.m3i * i4r;
+          u += wi / TWO_PI; v += wr / TWO_PI;
+          evals++;
+          if (rec) rec.push(nd);
+        } else if (nd.kids) {
+          stack.push(nd.kids[0], nd.kids[1], nd.kids[2], nd.kids[3]);
+        } else {
+          for (var k = 0; k < nd.idx.length; k++) {
+            var j = nd.idx[k];
+            if (j === self) continue;
+            var ax = px - xs[j], ay = py - ys[j];
+            var kk = gs[j] / (TWO_PI * (ax * ax + ay * ay + DELTA2));
+            u -= kk * ay; v += kk * ax;
+            evals++;
+          }
+        }
+      }
+      return [u, v, evals];
+    }
+
+    function directAll(un, vn) {
+      var n = xs.length;
+      for (var i = 0; i < n; i++) {
+        var u = 0, v = 0, xi = xs[i], yi = ys[i];
+        for (var j = 0; j < n; j++) {
+          var dx = xi - xs[j], dy = yi - ys[j];
+          var k = gs[j] / (TWO_PI * (dx * dx + dy * dy + DELTA2));
+          u -= k * dy; v += k * dx;
+        }
+        un[i] = u; vn[i] = v;
+      }
+    }
+
+    // Velocity at a free point from all vortices (for the field view).
+    function inducedAt(px, py) {
+      var u = 0, v = 0;
+      for (var j = 0; j < xs.length; j++) {
+        var dx = px - xs[j], dy = py - ys[j];
+        var k = gs[j] / (TWO_PI * (dx * dx + dy * dy + DELTA2));
+        u -= k * dy; v += k * dx;
+      }
+      return [u, v];
+    }
+
+    // ---- time stepping -----------------------------------------------------
+    var evalCount = 0;          // interactions actually evaluated this step
+    var errDisp = null;          // latest measured max error vs direct
+    var tree = null;
+    var frameNo = 0;
+
+    function step() {
+      var dG = -(gammaBound(t + DT) - gammaBound(t));
+      var s = plateState(t + DT);
+      xs.push(0.75 * CHORD * Math.cos(s.th) + 0.05);
+      ys.push(s.h - 0.75 * CHORD * Math.sin(s.th));
+      gs.push(dG);
+
+      var n = xs.length;
+      var un = new Float64Array(n), vn = new Float64Array(n);
+      if (mode === 'fmm') {
+        tree = buildTree();
+        evalCount = 0;
+        for (var i = 0; i < n; i++) {
+          var r = evalTree(tree, xs[i], ys[i], i, null);
+          un[i] = r[0]; vn[i] = r[1]; evalCount += r[2];
+        }
+      } else {
+        directAll(un, vn);
+        evalCount = n * n;
+        tree = null;
+      }
+
+      for (i = 0; i < n; i++) {
+        xs[i] += (P.U + un[i]) * DT;
+        ys[i] += vn[i] * DT;
+      }
+      for (i = xs.length - 1; i >= 0; i--) {
+        if (xs[i] > XMAX + 1.6) { xs.splice(i, 1); ys.splice(i, 1); gs.splice(i, 1); }
+      }
+      while (xs.length > NMAX) { xs.shift(); ys.shift(); gs.shift(); }
+      t += DT;
+    }
+
+    // Every few seconds in multipole mode, measure the true error against a
+    // full direct pass on the frozen wake.
+    function probe() {
+      var n = xs.length;
+      if (!n) return;
+      var ud = new Float64Array(n), vd = new Float64Array(n);
+      directAll(ud, vd);
+      var rt = buildTree();
+      var maxd = 0, maxv = 0;
+      for (var i = 0; i < n; i++) {
+        var r = evalTree(rt, xs[i], ys[i], i, null);
+        var d = Math.hypot(r[0] - ud[i], r[1] - vd[i]);
+        var m = Math.hypot(ud[i], vd[i]);
+        if (d > maxd) maxd = d;
+        if (m > maxv) maxv = m;
+      }
+      errDisp = maxv > 0 ? maxd / maxv : 0;
+    }
+
+    // ---- rendering ---------------------------------------------------------
+    var COL = {};
+    function readTheme() {
+      var dark = (document.documentElement.getAttribute('data-theme') === 'dark') ||
+        (!document.documentElement.getAttribute('data-theme') &&
+          matchMedia('(prefers-color-scheme: dark)').matches);
+      COL.bg = dark ? '#212529' : '#fcfbf9';
+      COL.plate = dark ? '#e8e8e8' : '#1c1c1d';
+      COL.red = dark ? '#ef5350' : '#b71c1c';
+      COL.blue = dark ? '#6ab0e8' : '#1a5fb4';
+      COL.arrow = dark ? 'rgba(232,232,232,0.28)' : 'rgba(28,28,29,0.22)';
+      COL.box = dark ? 'rgba(232,232,232,0.4)' : 'rgba(28,28,29,0.3)';
+      ctx.fillStyle = COL.bg;
+      ctx.fillRect(0, 0, W, H);
+    }
+    readTheme();
+    document.getElementById('light-toggle').addEventListener('click', readTheme);
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readTheme);
+
+    function sx(x) { return (x - XMIN) / (XMAX - XMIN) * W; }
+    function sy(y) { return (0.5 - y / (2 * YHALF)) * H; }
+
+    var showField = false;
+    var gmax = 0.09;
+
+    function fmt(x) { return x.toLocaleString('en-US'); }
+
+    function drawHud() {
+      var n = xs.length;
+      if (mode === 'fmm') {
+        var line = n + ' vortices · multipole far field: ' + fmt(evalCount) +
+          ' evaluations instead of ' + fmt(n * n) + ' pairs';
+        if (evalCount > 0) line += ' (' + (n * n / evalCount).toFixed(1) + '× fewer)';
+        if (errDisp !== null) line += ' · max error vs direct ' + errDisp.toExponential(1);
+        line += ' · θ = ' + THETA.toFixed(2);
+        hud.textContent = line;
+      } else {
+        hud.textContent = n + ' vortices · direct Biot–Savart: ' + fmt(n * n) +
+          ' pair interactions per step';
+      }
+    }
+
+    function draw() {
+      ctx.globalAlpha = 0.26;
+      ctx.fillStyle = COL.bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalAlpha = 1;
+
+      if (showField) {
+        ctx.strokeStyle = COL.arrow;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath();
+        for (var gx = 0; gx < 25; gx++) {
+          for (var gy = 0; gy < 15; gy++) {
+            var wx = XMIN + (gx + 0.5) / 25 * (XMAX - XMIN);
+            var wy = -YHALF + (gy + 0.5) / 15 * 2 * YHALF;
+            var uv = inducedAt(wx, wy);
+            var u = uv[0] + P.U, v = uv[1];
+            var m = Math.hypot(u, v) + 1e-9;
+            var L = 14 * Math.min(m, 2.2) / 2.2;
+            var px = sx(wx), py = sy(wy);
+            ctx.moveTo(px, py);
+            ctx.lineTo(px + L * u / m, py - L * v / m);
+          }
+        }
+        ctx.stroke();
+      }
+
+      for (var i = 0; i < xs.length; i++) {
+        var wgt = Math.min(Math.abs(gs[i]) / gmax, 1);
+        ctx.fillStyle = gs[i] > 0 ? COL.red : COL.blue;
+        ctx.globalAlpha = 0.25 + 0.6 * Math.sqrt(wgt);
+        ctx.beginPath();
+        ctx.arc(sx(xs[i]), sy(ys[i]), 1.6 + 4.6 * Math.sqrt(wgt), 0, 6.2832);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // In multipole mode, show the far-field groups serving one target vortex.
+      if (mode === 'fmm' && tree && xs.length) {
+        var best = 0, bd = Infinity;
+        for (i = 0; i < xs.length; i++) {
+          var dd = (xs[i] - 3.4) * (xs[i] - 3.4) + (ys[i] - 0.6) * (ys[i] - 0.6);
+          if (dd < bd) { bd = dd; best = i; }
+        }
+        var rec = [];
+        evalTree(tree, xs[best], ys[best], best, rec);
+        ctx.strokeStyle = COL.box;
+        ctx.lineWidth = 1;
+        for (var b = 0; b < rec.length; b++) {
+          var nd = rec[b];
+          ctx.strokeRect(sx(nd.x), sy(nd.y + nd.s),
+                         nd.s / (XMAX - XMIN) * W, nd.s / (2 * YHALF) * H);
+        }
+        ctx.beginPath();
+        ctx.arc(sx(xs[best]), sy(ys[best]), 10, 0, 6.2832);
+        ctx.stroke();
+      }
+
+      var s = plateState(t);
+      ctx.strokeStyle = COL.plate;
+      ctx.lineWidth = 11;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(sx(-0.25 * Math.cos(s.th)), sy(s.h + 0.25 * Math.sin(s.th)));
+      ctx.lineTo(sx(0.75 * Math.cos(s.th)), sy(s.h - 0.75 * Math.sin(s.th)));
+      ctx.stroke();
+
+      drawHud();
+    }
+
+    // ---- controls ----------------------------------------------------------
+    function bind(id, out, fmtv, set) {
+      var el = document.getElementById(id), o = document.getElementById(out);
+      el.addEventListener('input', function () {
+        set(parseFloat(el.value));
+        o.textContent = fmtv(parseFloat(el.value));
+      });
+    }
+    bind('s-u', 'o-u', function (v) { return v.toFixed(1); }, function (v) { P.U = v; });
+    bind('s-f', 'o-f', function (v) { return v.toFixed(2); }, function (v) { P.f = v; });
+    bind('s-h', 'o-h', function (v) { return v.toFixed(2); }, function (v) { P.h0 = v; });
+    bind('s-p', 'o-p', function (v) { return v + '°'; }, function (v) { P.th0 = v * Math.PI / 180; });
+    bind('s-t', 'o-t', function (v) { return v.toFixed(2); }, function (v) { THETA = v; errDisp = null; });
+
+    var bMode = document.getElementById('b-mode');
+    bMode.addEventListener('click', function () {
+      mode = (mode === 'fmm') ? 'direct' : 'fmm';
+      bMode.setAttribute('aria-pressed', String(mode === 'fmm'));
+      errDisp = null;
+      if (mode === 'fmm') probe();
+    });
+
+    var paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var bPause = document.getElementById('b-pause');
+    function setPaused(p) {
+      paused = p;
+      bPause.setAttribute('aria-pressed', String(p));
+      bPause.textContent = p ? 'run' : 'pause';
+    }
+    setPaused(paused);
+    bPause.addEventListener('click', function () { setPaused(!paused); });
+
+    var bField = document.getElementById('b-field');
+    bField.addEventListener('click', function () {
+      showField = !showField;
+      bField.setAttribute('aria-pressed', String(showField));
+    });
+
+    document.getElementById('b-reset').addEventListener('click', function () {
+      xs = []; ys = []; gs = []; t = 0;
+      errDisp = null; tree = null;
+      readTheme();
+    });
+
+    var visible = true;
+    new IntersectionObserver(function (entries) {
+      visible = entries[0].isIntersecting;
+    }, { threshold: 0.05 }).observe(canvas);
+
+    function frame() {
+      if (!paused && visible && !document.hidden) {
+        step();
+        frameNo++;
+        if (mode === 'fmm' && frameNo % 150 === 0) probe();
+        draw();
+      }
+      requestAnimationFrame(frame);
+    }
+    if (!paused) { for (var k = 0; k < 620; k++) step(); }
+    draw();
+    requestAnimationFrame(frame);
+  })();
+</script>
+
+</body>
+</html>
