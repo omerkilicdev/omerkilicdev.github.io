@@ -35,6 +35,7 @@
         <li><a class="active" href="index.html">about</a></li>
         <li><a href="#news">news</a></li>
         <li><a href="#work">work</a></li>
+        <li><a href="sim/">wake&nbsp;lab</a></li>
         <li><a href="Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
         <li>
           <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
@@ -127,6 +128,13 @@
       <table>
         <tbody>
           <tr>
+            <th scope="row">Oct 2026</th>
+            <td>This site gained a visual tour of the research &mdash; a discrete-vortex
+              wake animation, verification and timing figures, the 1:40
+              <a href="#work">explainer video</a> &mdash; and the <a href="sim/">wake
+              lab</a>: the same simulation running live in your browser.</td>
+          </tr>
+          <tr>
             <th scope="row">Sep 2026</th>
             <td>Launched the research hub for the Bio-Inspired Micro Aerial Vehicles group,
               <a href="https://flapping-wings.vercel.app" target="_blank" rel="noopener">flapping-wings.vercel.app</a>.</td>
@@ -190,8 +198,64 @@
             The solver is differentiable, so flapping strokes can be designed by gradient ascent.
           </p>
           <div class="links">
+            <a href="sim/">live simulation</a>
             <a href="https://flapping-wings.vercel.app" target="_blank" rel="noopener">group hub</a>
           </div>
+        </div>
+
+        <div class="showcase">
+          <figure>
+            <video autoplay muted loop playsinline preload="metadata"
+                   width="1600" height="1000" poster="media/research/wake-poster.webp"
+                   aria-label="Animation: a flat plate pitching and heaving in a free stream sheds a vortex street that rolls up into alternating red and blue clusters">
+              <source src="media/research/wake-street.mp4" type="video/mp4">
+            </video>
+            <figcaption>
+              The kind of flow this work accelerates: a flat plate pitching and heaving in a
+              free stream, computed as a discrete-vortex simulation. Every frame the plate
+              sheds a point vortex at the trailing edge, and the whole wake convects itself
+              by Biot&ndash;Savart summation over all pairs &mdash; exactly the
+              <em>O</em>(<em>N</em>&sup2;) interaction that the fast multipole method collapses.
+              Red is positive circulation, blue negative.
+              <a href="sim/">Run this simulation live, with the stroke under your control&nbsp;&rarr;</a>
+            </figcaption>
+          </figure>
+
+          <div class="fig-grid">
+            <figure>
+              <img class="plate" src="media/research/far-field-convergence.svg" alt="Log-log plot: quadrature error versus points per edge; dipole and quadrupole sit at machine precision, the octupole curve falls as N to the minus two"
+                   width="760" height="540" loading="lazy" decoding="async">
+              <figcaption>
+                Verification of the closed-form polygon moments: the exact dipole and
+                quadrupole forms sit at machine precision for any resolution, and the
+                second-order octupole quadrature converges to the closed form as
+                <em>N</em><sup>&minus;2</sup>.
+              </figcaption>
+            </figure>
+            <figure>
+              <img class="plate" src="media/research/speedup.svg" alt="Bar chart on a log time axis: direct summation 1,783 seconds versus the accelerated kernel at 50 seconds for the same 15-step wake run"
+                   width="760" height="410" loading="lazy" decoding="async">
+              <figcaption>
+                The headline number: the same 15-step three-dimensional wake run takes
+                1,783&nbsp;s by direct summation and 50&nbsp;s with the replacement
+                velocity kernel.
+              </figcaption>
+            </figure>
+          </div>
+
+          <figure>
+            <video controls preload="none" width="1920" height="1080"
+                   poster="media/research/explainer-poster.webp"
+                   aria-label="Explainer video: closed-form multipole moments for polygonal vortex loops">
+              <source src="media/research/explainer.mp4" type="video/mp4">
+            </video>
+            <figcaption>
+              A 1:40 animated explainer of the first theory result of the project:
+              dipole, quadrupole and octupole moments of a polygonal vortex loop in
+              closed form &mdash; the moments the fast summation is built on. Also on the
+              <a href="https://flapping-wings.vercel.app" target="_blank" rel="noopener">group hub</a>.
+            </figcaption>
+          </figure>
         </div>
       </li>
 
@@ -290,6 +354,16 @@
       var next = cur === 'light' ? 'dark' : (cur === 'dark' ? null : 'light');
       if (next) { root.setAttribute('data-theme', next); } else { root.removeAttribute('data-theme'); }
       try { next ? localStorage.setItem('theme', next) : localStorage.removeItem('theme'); } catch (e) {}
+    });
+  })();
+
+  // Respect reduced motion: stop looping autoplay and hand the user controls.
+  (function () {
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('video[autoplay]').forEach(function (v) {
+      v.removeAttribute('autoplay');
+      v.pause();
+      v.controls = true;
     });
   })();
 
