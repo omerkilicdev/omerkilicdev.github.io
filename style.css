@@ -328,6 +328,47 @@ h2 {
   .work .preview { grid-column: 1 / -1; }
 }
 
+/* ------------------------------------------------------ project pages ---- */
+
+.affil { font-size: 1.02rem; line-height: 1.55; margin: -0.6rem 0 1rem; }
+.affil .lab { font-weight: 500; }
+.affil .dept { color: var(--text-light); }
+h2.sec { font-size: 1.35rem; margin-top: 2.6rem; }
+
+.figs { margin: 1.2rem 0 0; }
+.figs figure { margin: 0 0 1.4rem; }
+.figs img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  background: #fcfbf9;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+}
+.figs .plate { padding: 0.75rem 0.9rem; }
+.figs figcaption { margin-top: 0.45rem; font-size: 0.85rem; line-height: 1.55; color: var(--text-light); }
+.figs .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem; align-items: start; }
+.figs .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: start; }
+.figs .crop img { aspect-ratio: 4 / 3; object-fit: cover; }
+@media (max-width: 36rem) {
+  .figs .two, .figs .three { grid-template-columns: minmax(0, 1fr); }
+}
+
+a.btn {
+  display: inline-block;
+  padding: 0.12rem 0.5rem;
+  border: 1px solid var(--theme);
+  border-radius: 3px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+a.btn:hover { background: var(--theme); color: var(--bg); text-decoration: none; }
+
+.facts { width: 100%; border-collapse: collapse; font-size: 0.93rem; margin: 0.6rem 0 1rem; }
+.facts th, .facts td { text-align: left; vertical-align: top; padding: 0.4rem 0.8rem 0.4rem 0; border-bottom: 1px solid var(--divider); }
+.facts th { font-weight: 500; white-space: nowrap; width: 11rem; }
+@media (max-width: 36rem) { .facts th { white-space: normal; width: auto; } }
+
 /* ------------------------------------------------------------- footer ---- */
 
 footer {

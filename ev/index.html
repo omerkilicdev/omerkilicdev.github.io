@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; electric truck instrumentation</title>
+<meta name="description" content="CAN bus decoding and in-cab data logging for a student-built electric pickup truck. Bergen Community College STEM Research Center, 2024-2025.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a class="active" href="../index.html#work">work</a></li>
+        <li><a href="../research/">research</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name">Instrumenting an <strong>electric pickup truck</strong></h1>
+
+    <p class="affil">
+      <span class="lab">STEM Research Center, Bergen Community College</span><br>
+      <span class="dept">Member of a nine-student team &middot; 2024&thinsp;&ndash;&thinsp;2025 &middot; CAN bus and data logging</span>
+    </p>
+
+    <p>
+      The vehicle is a 1998 Chevrolet K1500 pickup converted to electric drive: an HPEVS
+      AC-51 induction motor coupled to the original transmission, a Curtis 1238SE motor
+      controller, and a 35-cell series pack of 180&nbsp;Ah lithium iron phosphate cells
+      watched over by an Orion battery-management system (BMS). In 2024&ndash;25 our team
+      doubled the pack to two cells in parallel per series position (117&nbsp;V nominal,
+      41&nbsp;kWh) and set out to measure what the truck was actually doing on the road.
+      My part was the measurement chain: getting data off the vehicle&rsquo;s CAN bus and
+      onto a screen and a log file.
+    </p>
+
+    <div class="figs">
+      <div class="two crop">
+        <figure>
+          <img src="../media/ev/battery-pack.webp" alt="Open battery box in the truck bed: rows of prismatic lithium iron phosphate cells with bus bars and sense wiring"
+               width="1200" height="1600" loading="lazy" decoding="async">
+          <figcaption>The pack in the truck bed: 35 series positions of 180&nbsp;Ah LiFePO<sub>4</sub> cells, before the parallel upgrade.</figcaption>
+        </figure>
+        <figure>
+          <img src="../media/ev/wiring-diagram.webp" alt="Framed system wiring diagram showing battery bank, battery-management system, motor controller, motor, charger, contactors and DC-DC converter"
+               width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>The team&rsquo;s high-voltage and control wiring diagram, kept on the shop wall and revised with each change.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h2 class="sec" id="can">Decoding the CAN bus</h2>
+    <p>
+      The BMS and motor controller report on a 125&nbsp;kbit/s CAN bus, but only as raw
+      eight-byte frames. With a teammate I wrote a sniffer for an Arduino Mega with an
+      MCP2515 CAN shield that listens to the bus and decodes the frames we needed: pack
+      current and voltage, the lowest cell voltage and which cell it is, state of charge,
+      and the charge and discharge current limits the BMS is enforcing at that moment.
+      That last pair matters most, because a falling discharge limit is what shuts the
+      truck down. I then wrote the first version of the in-cab logger around the same
+      decoder, adding GPS position and speed, an SD-card log and a 20&times;4 character
+      display. The logger was also my entry in the HackBCC 2025 hackathon, Smart
+      Transportation track.
+    </p>
+
+    <div class="figs">
+      <div class="three crop">
+        <figure>
+          <img src="../media/ev/bms-bench.webp" alt="Bench with the battery-management system, CAN wiring and a laptop running BMS software"
+               width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>BMS bench during the upgrade.</figcaption>
+        </figure>
+        <figure>
+          <img src="../media/ev/dash-logger.webp" alt="Truck dashboard with the radio slot replaced by an Arduino stack and a red-framed character display"
+               width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Logger and display in the dash (team repository photo).</figcaption>
+        </figure>
+        <figure>
+          <img src="../media/ev/lcd.webp" alt="Character display showing speed, motor speed, battery temperature, current, voltage and energy"
+               width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Display layout under test (team repository photo).</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h2 class="sec" id="tests">What the measurements showed</h2>
+    <p>
+      The team ran four instrumented road tests in the summer of 2025. Before the upgrade
+      the BMS cut power near 360&nbsp;A; after it, the truck drew 450&nbsp;A without a
+      shutdown. The logs also explained the remaining shutdowns: the BMS temperature
+      sensors had been left coiled on top of the BMS unit instead of on the cells,
+      reading about 10&nbsp;&deg;C hot, and above 40&nbsp;&deg;C the BMS derates the
+      discharge limit to under 300&nbsp;A. A wrong reading in one sensor, a conservative
+      rule in the controller, and a stalled truck: the kind of failure that only shows up
+      once the data is on the screen.
+    </p>
+
+    <table class="facts">
+      <tbody>
+        <tr><th scope="row">Vehicle</th><td>1998 Chevrolet K1500, original transmission and four-wheel drive retained</td></tr>
+        <tr><th scope="row">Drive</th><td>HPEVS AC-51 induction motor (88&nbsp;hp), Curtis 1238SE controller</td></tr>
+        <tr><th scope="row">Pack</th><td>LiFePO<sub>4</sub>, 180&nbsp;Ah cells, 35S &rarr; 2P35S, 117&nbsp;V, 41&nbsp;kWh</td></tr>
+        <tr><th scope="row">Bus</th><td>CAN at 125&nbsp;kbit/s; BMS frames for current, voltage, lowest cell, state of charge, current limits</td></tr>
+        <tr><th scope="row">Logger</th><td>Arduino Mega 2560, MCP2515 CAN shield, EM-506 GPS, microSD, 20&times;4 I<sup>2</sup>C display</td></tr>
+      </tbody>
+    </table>
+
+    <div class="links" style="display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.6rem;">
+      <a class="btn" href="https://github.com/omerkilicdev/EV-programs-BCC" target="_blank" rel="noopener">my code</a>
+      <a class="btn" href="https://github.com/bccevc/evc-programs" target="_blank" rel="noopener">team repository</a>
+    </div>
+
+    <p style="margin-top:2rem;"><a href="../index.html#work">&larr; Back to selected work</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a></span>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>
