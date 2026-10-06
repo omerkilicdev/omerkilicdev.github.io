@@ -123,7 +123,6 @@
         <li><a href="../index.html#work">work</a></li>
         <li><a class="active" href="./">research</a></li>
         <li><a href="../workshop/">workshop</a></li>
-        <li><a href="../visuals/">visuals</a></li>
         <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
         <li>
           <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
@@ -239,9 +238,10 @@
 
       <p style="font-size:0.9rem; margin-top:1rem;">
         Switching to the multipole far field replaces the <em>N</em>&sup2; pair sum with
-        several-fold fewer evaluations at this modest <em>N</em>, at a measured error at
-        the 10<sup>&minus;3</sup> level &mdash; tighten &theta; and the error falls,
-        loosen it and the cost does, and the gap between <em>N</em>&sup2; and the
+        several-fold fewer evaluations at this modest <em>N</em>; at the default
+        &theta;&nbsp;=&nbsp;0.25 the measured error is a few parts in a thousand, and the
+        counter above reports it for whatever &theta; you set &mdash; tighten &theta; and
+        the error falls, loosen it and the cost does, and the gap between <em>N</em>&sup2; and the
         tree&rsquo;s near-linear count widens as the wake grows. At demonstration scale
         the honest measure is the operation count; the wall-clock payoff of the tree arrives only
         at wakes of several thousand rings. Below that, an exact vectorized kernel wins,
@@ -250,6 +250,21 @@
         ring moments, translation operators and a-priori error bounds, is the next
         step beyond it.
       </p>
+    </div>
+
+    <div class="figs">
+      <figure>
+        <img src="../media/visuals/wake-cost.webp"
+             alt="Left: fourteen wake rings with every pair connected by a line. Right: the number of ring-to-ring interactions rising as a parabola over twelve time steps to about 230,000"
+             width="1200" height="477" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Why a fast summation is needed.</strong> Each wake ring feels every other
+          ring, so K rings cost K(K&minus;1) interactions. In this run the wake gains 40 rings
+          a step; after twelve steps it holds 480 rings and 229,920 ring pairs, and the cost
+          keeps growing with the square of the step count. This is the cost the
+          multipole far field above removes.
+        </figcaption>
+      </figure>
     </div>
 
     <h2 class="sec" id="verification">Verification and timing</h2>
@@ -291,6 +306,72 @@
           sheet rolls up into the alternating clusters of a reverse K&aacute;rm&aacute;n
           street, the signature of a thrust-producing stroke. Red is positive circulation,
           blue negative.
+        </figcaption>
+      </figure>
+    </div>
+
+    <h2 class="sec" id="wake-code">Inside the wake code</h2>
+    <p>
+      Before changing the group&rsquo;s three-dimensional panel code I drew what each block
+      of it computes, from one run of four wings over twelve time steps. The interactive
+      version lets you play and rotate the wake and step through forty-two diagrams in
+      five groups: geometry, kinematics, wake, solving and velocity.
+    </p>
+    <div class="figs">
+      <figure>
+        <a href="panel-code/"><img src="../media/visuals/wake-gallery.webp"
+             alt="Three-dimensional wake of four flapping wings after twelve time steps: a dense tangle of shed vortex rings coloured from blue to purple behind the body"
+             width="1200" height="500" loading="lazy" decoding="async"></a>
+        <figcaption>The wake after twelve steps, 480 rings. Open the interactive version to play it step by step.</figcaption>
+      </figure>
+    </div>
+    <p><a class="btn" href="panel-code/">open the interactive diagrams</a></p>
+    <p>Four of the diagrams that hold up without the code next to them:</p>
+    <div class="figs">
+      <figure>
+        <img src="../media/visuals/stroke.webp"
+             alt="Front view of a wing root: the wing swings from 80 degrees above horizontal to 45 degrees below along a dashed downstroke arc, with the stroke law printed beside it"
+             width="1200" height="628" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Stroke angle.</strong> Seen from the front with the body axis into the
+          screen, the wing sweeps from &phi;<sub>T</sub>&nbsp;=&nbsp;80&deg; to
+          &phi;<sub>B</sub>&nbsp;=&nbsp;&minus;45&deg; on the downstroke and back on the
+          upstroke, following &phi;(t)&nbsp;=&nbsp;&frac12;(&phi;<sub>T</sub>&nbsp;&minus;&nbsp;&phi;<sub>B</sub>)(cos&nbsp;&pi;t&nbsp;+&nbsp;e).
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/kinematics-curves.webp"
+             alt="Flapping angle and pitch angle over one full period, with small chord sections below showing the wing tilting and flipping at the ends of each stroke"
+             width="1200" height="663" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Flapping and pitch over one period.</strong> Flapping is smooth, close to
+          a cosine; pitch is a smoothed step that flips sign quickly at the top and bottom of
+          the stroke. The chord sections underneath show the same thing as a wing would: the
+          leading edge (orange dot) leads in both directions.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/biot-savart-segment.webp"
+             alt="A straight vortex segment from end 1 to end 2, a field point above it, the vectors r1 and r2 from the ends to the point, the perpendicular distance d and the angles alpha 1 and alpha 2"
+             width="1200" height="614" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Velocity induced by one straight vortex segment.</strong> Every panel edge
+          and every wake ring is built from these. The speed at the point is
+          &Gamma;/(4&pi;d)(cos&nbsp;&alpha;<sub>1</sub>&nbsp;&minus;&nbsp;cos&nbsp;&alpha;<sub>2</sub>),
+          directed along r<sub>1</sub>&nbsp;&times;&nbsp;r<sub>2</sub>; the code computes the
+          same number from cross and dot products without any angles. Derivation:
+          <a href="https://flapping-wings.vercel.app/assets/talks/study-notes/biot-savart-from-scratch.pdf" target="_blank" rel="noopener">Biot&ndash;Savart from scratch</a>.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/smoothed-core.webp"
+             alt="Speed against distance from a vortex segment: with a hard cutoff the speed is zero inside a band and then jumps to a large peak and falls like one over d; with a smoothed core it rises gently from zero and joins the same curve far away"
+             width="1200" height="539" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Why the near field needs care.</strong> The segment formula grows like
+          1/d as a point approaches the line. A hard cutoff sets the velocity to zero inside
+          a thin band and leaves a tall spike just outside it; a smoothed core brings the
+          speed to zero gradually and agrees with the exact formula a few core radii away.
         </figcaption>
       </figure>
     </div>
