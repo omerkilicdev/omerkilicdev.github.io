@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; visuals</title>
+<meta name="description" content="Pictures made to understand a method: flapping kinematics, vortex-segment velocity, near-field regularisation, wake cost, and an interactive spin-aerodynamics lesson.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../research/">research</a></li>
+        <li><a href="../workshop/">workshop</a></li>
+        <li><a class="active" href="./">visuals</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name"><strong>visuals</strong></h1>
+    <p>
+      Pictures I made to understand something, kept because they might help the next
+      person. None of them is a research result; the results are on the
+      <a href="../research/">research</a> and project pages.
+    </p>
+
+    <!-- ===================================================== vortex -->
+    <h2 class="sec" id="vortex">Reading a vortex-panel flapping-wing code</h2>
+    <p>
+      Before changing a panel code I drew what each block of it computes, one picture per
+      block. These are the ones that hold up without the code next to them.
+    </p>
+
+    <div class="figs">
+      <figure>
+        <img src="../media/visuals/stroke.webp"
+             alt="Front view of a wing root: the wing swings from 80 degrees above horizontal to 45 degrees below along a dashed downstroke arc, with the stroke law printed beside it"
+             width="1200" height="628" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Stroke angle.</strong> Seen from the front with the body axis into the
+          screen, the wing sweeps from &phi;<sub>T</sub>&nbsp;=&nbsp;80&deg; to
+          &phi;<sub>B</sub>&nbsp;=&nbsp;&minus;45&deg; on the downstroke and back on the
+          upstroke, following &phi;(t)&nbsp;=&nbsp;&frac12;(&phi;<sub>T</sub>&nbsp;&minus;&nbsp;&phi;<sub>B</sub>)(cos&nbsp;&pi;t&nbsp;+&nbsp;e).
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/kinematics-curves.webp"
+             alt="Flapping angle and pitch angle over one full period, with small chord sections below showing the wing tilting and flipping at the ends of each stroke"
+             width="1200" height="663" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Flapping and pitch over one period.</strong> Flapping is smooth, close to
+          a cosine; pitch is a smoothed step that flips sign quickly at the top and bottom of
+          the stroke. The chord sections underneath show the same thing as a wing would: the
+          leading edge (orange dot) leads in both directions.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/biot-savart-segment.webp"
+             alt="A straight vortex segment from end 1 to end 2, a field point above it, the vectors r1 and r2 from the ends to the point, the perpendicular distance d and the angles alpha 1 and alpha 2"
+             width="1200" height="614" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Velocity induced by one straight vortex segment.</strong> Every panel edge
+          and every wake ring is built from these. The speed at the point is
+          &Gamma;/(4&pi;d)(cos&nbsp;&alpha;<sub>1</sub>&nbsp;&minus;&nbsp;cos&nbsp;&alpha;<sub>2</sub>),
+          directed along r<sub>1</sub>&nbsp;&times;&nbsp;r<sub>2</sub>; the code computes the
+          same number from cross and dot products without any angles. Derivation:
+          <a href="https://flapping-wings.vercel.app/assets/talks/study-notes/biot-savart-from-scratch.pdf" target="_blank" rel="noopener">Biot&ndash;Savart from scratch</a>.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/smoothed-core.webp"
+             alt="Speed against distance from a vortex segment: with a hard cutoff the speed is zero inside a band and then jumps to a large peak and falls like one over d; with a smoothed core it rises gently from zero and joins the same curve far away"
+             width="1200" height="539" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Why the near field needs care.</strong> The segment formula grows like
+          1/d as a point approaches the line. A hard cutoff sets the velocity to zero inside
+          a thin band and leaves a tall spike just outside it; a smoothed core brings the
+          speed to zero gradually and agrees with the exact formula a few core radii away.
+        </figcaption>
+      </figure>
+      <figure>
+        <img src="../media/visuals/wake-cost.webp"
+             alt="Left: fourteen wake rings with every pair connected by a line. Right: the number of ring-to-ring interactions rising as a parabola over twelve time steps to about 230,000"
+             width="1200" height="477" loading="lazy" decoding="async">
+        <figcaption>
+          <strong>Why a fast summation is needed.</strong> Each wake ring feels every other
+          ring, so K rings cost K(K&minus;1) interactions. In this run the wake gains 40 rings
+          a step; after twelve steps it holds 480 rings and 229,920 ring pairs, and the cost
+          keeps growing with the square of the step count. This is the cost the
+          <a href="../research/">multipole method</a> removes.
+        </figcaption>
+      </figure>
+    </div>
+
+    <!-- ===================================================== spin -->
+    <h2 class="sec" id="spin">Aircraft spin aerodynamics &middot; interactive lesson, in Turkish</h2>
+    <p>
+      Why predicting a spin needs a rotary-balance wind-tunnel test and not only the usual
+      static derivatives, built up in 21 steps. Each step has its own 3D scene of one
+      model jet in the browser, a symbol table, a units check, a worked number and a
+      question, and the later steps derive the local angle of attack along the span and
+      the strip-theory roll damping C<sub>l<sub>p</sub></sub>&nbsp;=&nbsp;&minus;C<sub>L<sub>&alpha;</sub></sub>/6.
+      I wrote it while teaching myself flight dynamics; the force curves in it are
+      qualitative models that carry the argument, not data for a real aircraft.
+    </p>
+    <div class="figs">
+      <figure>
+        <a href="https://rotary-balance.vercel.app" target="_blank" rel="noopener"><img src="../media/visuals/rotary-balance.webp"
+             alt="Lesson page: a step with a units check and a worked example on the left, and on the right a 3D model jet with its body axes and the roll, pitch and yaw rates drawn as arrows"
+             width="1200" height="750" loading="lazy" decoding="async"></a>
+        <figcaption>Step 0: the model jet, its body axes and the three rotation rates p, q, r. Context: Bihrle and Barnhart, <em>Spin Prediction Techniques</em>, AIAA Paper 80-1564, later in the Journal of Aircraft.</figcaption>
+      </figure>
+    </div>
+    <p><a class="btn" href="https://rotary-balance.vercel.app" target="_blank" rel="noopener">open the lesson</a></p>
+
+    <!-- ===================================================== video -->
+    <h2 class="sec" id="video">Animation</h2>
+    <table class="facts">
+      <tbody>
+        <tr>
+          <th scope="row"><a href="../research/#explainer">Explainer video</a></th>
+          <td>1:40 animation of the polygon-moment result, on the research page</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="margin-top:2rem;"><a href="../workshop/">&larr; Workshop: notes, code and reading</a></p>
+  </div>
+</main>
+
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a></span>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>

@@ -119,6 +119,16 @@ strong { font-weight: 700; }
   justify-content: flex-end;
 }
 
+@media (max-width: 36rem) {
+  /* seven items do not fit at phone width: one row that scrolls sideways */
+  .navbar ul {
+    flex-wrap: nowrap; justify-content: flex-start; gap: 1rem;
+    width: 100%; overflow-x: auto; scrollbar-width: none; font-size: 0.95rem;
+  }
+  .navbar ul::-webkit-scrollbar { display: none; }
+  .navbar li { flex: none; }
+}
+
 .navbar a { color: var(--text); font-weight: 400; }
 .navbar a:hover { color: var(--theme); text-decoration: none; }
 .navbar a.active { color: var(--theme); font-weight: 500; }
