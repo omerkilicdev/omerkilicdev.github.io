@@ -207,8 +207,9 @@
           <p class="blurb">
             Closed-form multipole moments for vortex rings and polygonal panels, translation
             operators, and a-priori far-field error bounds, verified against direct summation
-            across an automated suite of 40 test groups and 274 checks. Dropped into the group&rsquo;s MATLAB 3-D wake code as a
-            replacement velocity kernel: a 15-step run went from <strong>1,783 s to 50 s</strong>.
+            across an automated suite of 40 test groups and 274 checks. Along the way the group&rsquo;s MATLAB 3-D wake code got an exact, fully vectorized
+            velocity kernel that took a 15-step run from <strong>1,783 s to 50 s</strong>; the
+            multipole method overtakes that exact kernel at wakes roughly ten times larger.
             The solver is differentiable, so flapping strokes can be designed by gradient ascent.
           </p>
           <div class="links">
