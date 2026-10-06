@@ -127,25 +127,27 @@
     </div>
 
     <!-- ===================================================== spin -->
-    <h2 class="sec" id="spin">Aircraft spin aerodynamics &middot; interactive lesson, in Turkish</h2>
+    <h2 class="sec" id="spin">Aircraft spin aerodynamics &middot; interactive lesson</h2>
     <p>
       Why predicting a spin needs a rotary-balance wind-tunnel test and not only the usual
-      static derivatives, built up in 21 steps. Each step has its own 3D scene of one
-      model jet in the browser, a symbol table, a units check, a worked number and a
-      question, and the later steps derive the local angle of attack along the span and
-      the strip-theory roll damping C<sub>l<sub>p</sub></sub>&nbsp;=&nbsp;&minus;C<sub>L<sub>&alpha;</sub></sub>/6.
-      I wrote it while teaching myself flight dynamics; the force curves in it are
-      qualitative models that carry the argument, not data for a real aircraft.
+      static derivatives, built up in 21 steps. Each step is a tab with its own 3D scene of
+      one model jet that you can orbit and play, and beside it the step&rsquo;s definitions,
+      equations, units check and a worked number; the later steps derive the local angle of
+      attack along the span and the strip-theory roll damping
+      C<sub>l<sub>p</sub></sub>&nbsp;=&nbsp;&minus;C<sub>L<sub>&alpha;</sub></sub>/6.
+      I wrote it in Turkish while teaching myself flight dynamics and rebuilt it here in
+      English; the force curves in it are qualitative models that carry the argument, not
+      data for a real aircraft.
     </p>
     <div class="figs">
       <figure>
-        <a href="https://rotary-balance.vercel.app" target="_blank" rel="noopener"><img src="../media/visuals/rotary-balance.webp"
-             alt="Lesson page: a step with a units check and a worked example on the left, and on the right a 3D model jet with its body axes and the roll, pitch and yaw rates drawn as arrows"
+        <a href="spin/"><img src="../media/visuals/spin-lesson.webp"
+             alt="Lesson page: the 3D rotary-balance rig turning a model jet in a wind tunnel, with step tabs below and the step's equations and units check beside it"
              width="1200" height="750" loading="lazy" decoding="async"></a>
-        <figcaption>Step 0: the model jet, its body axes and the three rotation rates p, q, r. Context: Bihrle and Barnhart, <em>Spin Prediction Techniques</em>, AIAA Paper 80-1564, later in the Journal of Aircraft.</figcaption>
+        <figcaption>Step 14: the rotary-balance rig, with p = &Omega;&nbsp;cos&nbsp;&alpha; and r = &Omega;&nbsp;sin&nbsp;&alpha; on the model. Context: Bihrle and Barnhart, <em>Spin Prediction Techniques</em>, AIAA Paper 80-1564, later in the Journal of Aircraft.</figcaption>
       </figure>
     </div>
-    <p><a class="btn" href="https://rotary-balance.vercel.app" target="_blank" rel="noopener">open the lesson</a></p>
+    <p style="display:flex; gap:0.4rem; flex-wrap:wrap;"><a class="btn" href="spin/">open the lesson</a> <a class="btn" href="https://rotary-balance.vercel.app" target="_blank" rel="noopener">Turkish original</a></p>
 
     <!-- ===================================================== video -->
     <h2 class="sec" id="video">Animation</h2>
@@ -153,7 +155,7 @@
       <tbody>
         <tr>
           <th scope="row"><a href="../research/#explainer">Explainer video</a></th>
-          <td>1:40 animation of the polygon-moment result, on the research page</td>
+          <td>1:44 animation of the polygon-moment result, on the research page</td>
         </tr>
       </tbody>
     </table>
