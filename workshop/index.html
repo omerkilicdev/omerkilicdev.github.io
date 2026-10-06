@@ -119,6 +119,26 @@
       </tbody>
     </table>
 
+    <p class="refgroup">Aircraft spin aerodynamics &middot; interactive lesson, in Turkish</p>
+    <p style="font-size:0.93rem;">
+      Why predicting a spin needs a rotary-balance wind-tunnel test and not only the usual
+      static derivatives, built up in 21 steps. Each step has its own 3D scene of one
+      model jet in the browser, a symbol table, a units check, a worked number and a
+      question, and the later steps derive the local angle of attack along the span and
+      the strip-theory roll damping C<sub>l<sub>p</sub></sub>&nbsp;=&nbsp;&minus;C<sub>L<sub>&alpha;</sub></sub>/6.
+      I wrote it while teaching myself flight dynamics; the force curves in it are
+      qualitative models that carry the argument, not data for a real aircraft.
+    </p>
+    <div class="figs">
+      <figure>
+        <a href="https://rotary-balance.vercel.app" target="_blank" rel="noopener"><img src="../media/workshop/rotary-balance.webp"
+             alt="Lesson page: a step with a units check and a worked example on the left, and on the right a 3D model jet with its body axes and the roll, pitch and yaw rates drawn as arrows"
+             width="1200" height="750" loading="lazy" decoding="async"></a>
+        <figcaption>Step 0: the model jet, its body axes and the three rotation rates p, q, r. Context: Bihrle and Barnhart, <em>Spin Prediction Techniques</em>, AIAA Paper 80-1564, later in the Journal of Aircraft.</figcaption>
+      </figure>
+    </div>
+    <p><a class="btn" href="https://rotary-balance.vercel.app" target="_blank" rel="noopener">open the lesson</a></p>
+
     <!-- ===================================================== code -->
     <h2 class="sec" id="code">Code and data</h2>
     <table class="facts">
