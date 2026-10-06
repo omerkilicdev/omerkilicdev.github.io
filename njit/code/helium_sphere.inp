@@ -1,0 +1,42 @@
+# Input script for MC simulations — Confined Helium in Spherical Nanovoid
+
+ProjectName He_Spherical_Nanovoid_Realistic;
+
+EquilibriumSets 1e2;           
+ProductionSets 5e3;
+StepsPerSet 1e4;
+PrintEveryNSets 1;
+
+ExternalTemperature 973.0;          # K — 973 K template; the 573 K runs differ only here
+
+ExternalPressure 101325;           # Pa — standard atmosphere (not directly used in GCMC)
+
+FluidName He;
+MolarMass 4.0026;                  # g/mol for Helium
+ChemicalPotential 700.0;          # K — first point of the sweep: 700–1300 K at 973 K, 800–1500 K at 573 K
+
+# Fluid-fluid interaction (He–He)
+He He VdWPotential LJ; 
+He He vdwParams 9.8725 2.5238 14;  # ε/K, σ/Å, r_cutoff/Å — Weaver & Alexeenko (2015)
+
+# Confined geometry
+BoxName Box0;
+Geometry Sphere;
+Size 30.0;                         # Å — cavity diameter = 3.0 nm
+SurfaceDensity 0.107;              # atoms/Å² — derived from hcp-Zr (0001) planar density
+
+# Wall-fluid interaction (He–Zr wall)
+Box0 He VdWPotential LJ12-6;
+Box0 He vdwParams 18.50 2.8239;    # ε/K, σ/Å — from Lorentz-Berthelot + UFF (Rappé et al. 1992)
+
+# GCMC sampling control
+PrintTrajectory;
+WidomMethod BAR;
+
+NDisplacementAttempts 1000;
+NVolumeAttempts 0;                 # Fixed pore
+NSwapAttempts 1000;                # GCMC particle insertion/deletion
+
+# Optional analysis tools
+! SampleRDF He He;
+ContinueAfterCrash;

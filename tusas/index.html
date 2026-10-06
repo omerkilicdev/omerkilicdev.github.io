@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; Turkish Aerospace</title>
+<meta name="description" content="Candidate engineer at Turkish Aerospace (TUSAŞ), Aug-Sep 2026: KAAN store-separation aerodynamics, flight dynamics, and rotor-blade manufacturing.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a class="active" href="../index.html#work">work</a></li>
+        <li><a href="../research/">research</a></li>
+        <li><a href="../workshop/">workshop</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name"><strong>Turkish Aerospace</strong> (TUSA&#350;)</h1>
+
+    <p class="affil">
+      <span class="lab">Candidate engineer &middot; KAAN Aerodynamics and UAV Manufacturing</span><br>
+      <span class="dept">Ankara &middot; 10 August &ndash; 4 September 2026 &middot; SKY Global T&uuml;rk internship programme,
+      through the T&uuml;rkiye Internship Programme of the Presidency for Turks Abroad and Related Communities (YTB)</span>
+    </p>
+
+    <div class="figs">
+      <figure>
+        <img src="../media/tusas/cohort.webp"
+             alt="The internship cohort holding certificates on the steps of the Turkish Aerospace main lobby, with aircraft models on either side"
+             width="2000" height="1333" loading="eager" decoding="async">
+        <figcaption>The SKY Global T&uuml;rk cohort at the close of the programme, Turkish Aerospace headquarters, Ankara (I am on the far right).</figcaption>
+      </figure>
+    </div>
+
+    <p>
+      Four weeks inside the company that builds Turkey&rsquo;s fifth-generation fighter, split
+      between an aerodynamics department and a manufacturing one. Design data, solver
+      outputs and internal reports from both stay with the company; what follows describes
+      the work, not its results.
+    </p>
+
+    <h2 class="sec" id="kaan">KAAN store separation and flight dynamics</h2>
+    <p>
+      I ran store-separation studies end to end: preparing geometry, meshing, running the
+      solver, integrating the six-degree-of-freedom trajectory of the released store, and
+      post-processing the results, and I watched the matching scaled-store wind-tunnel tests
+      across several configurations. Alongside this I worked through the flight dynamics of
+      the aircraft from first principles: the Newton&ndash;Euler equations of motion, the
+      stability derivatives and spin behaviour, and how the aerodynamic database and its
+      surrogate models are assembled from CFD and tunnel data.
+    </p>
+
+    <h2 class="sec" id="rotor">Rotor-blade manufacturing and balancing</h2>
+    <p>
+      In UAV Manufacturing I wrote a technical report on how T129 ATAK main-rotor blades are
+      built and balanced, to evaluate the same route for AKSUNGUR propeller blades: master
+      tooling, tolerances, centre-of-gravity control, and gram-scale tip trim masses whose
+      moment arm sets the residual vibration. I also traced the design-to-production data
+      chain (composite lay-up, ply data, routing and non-conformance handling) across the
+      AKSUNGUR, ANKA-3, Super &#350;im&#351;ek and AYAZ programmes.
+    </p>
+
+    <div class="figs">
+      <div class="two crop">
+        <figure>
+          <img src="../media/tusas/anka-exhibit.webp"
+               alt="Omer standing beside a model of the ANKA III flying-wing unmanned aircraft in the Turkish Aerospace exhibit hall"
+               width="1200" height="1600" loading="lazy" decoding="async">
+          <figcaption>With the ANKA III flying-wing model in the company exhibit hall.</figcaption>
+        </figure>
+        <figure>
+          <img src="../media/tusas/ytb-cohort.webp"
+               alt="Group photo of the T&uuml;rkiye Internship Programme participants holding certificates in front of the YTB emblem"
+               width="1320" height="975" loading="lazy" decoding="async">
+          <figcaption>T&uuml;rkiye Internship Programme closing ceremony, YTB, Ankara.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <p><a href="../index.html#work">&larr; Back to selected work</a></p>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a></span>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>

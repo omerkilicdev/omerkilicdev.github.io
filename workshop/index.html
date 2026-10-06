@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; workshop</title>
+<meta name="description" content="Working material behind the projects: handwritten derivations, study notes, scripts, data and reading lists.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a href="../index.html#work">work</a></li>
+        <li><a href="../research/">research</a></li>
+        <li><a class="active" href="./">workshop</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name"><strong>workshop</strong></h1>
+    <p>
+      The working material behind the projects: what I derived by hand to understand a
+      method, the scripts that ran it, the numbers that came out, and what I read along the
+      way. Finished results live on the project pages; this is the bench they were built on.
+    </p>
+
+    <!-- ===================================================== notes -->
+    <h2 class="sec" id="notes">Derivations and study notes</h2>
+
+    <p class="refgroup">Statistical mechanics for molecular simulation &middot; handwritten, 9 pages</p>
+    <p style="font-size:0.93rem;">
+      From the kinetic theory of an ideal gas to the partition functions of the
+      microcanonical, canonical and isothermal&ndash;isobaric ensembles: the background I
+      worked through before running grand canonical Monte Carlo at NJIT.
+    </p>
+    <div class="notes-strip">
+      <a href="../notes/njit/p01-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p01.webp" alt="Page 1: pressure from molecular motion" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p02-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p02.webp" alt="Page 2: temperature from kinetic energy" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p03-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p03.webp" alt="Page 3: laws of thermodynamics and Gibbs entropy" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p04-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p04.webp" alt="Page 4: Boltzmann distribution by Lagrange multipliers" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p05-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p05.webp" alt="Page 5: microcanonical ensemble" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p06-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p06.webp" alt="Page 6: canonical ensemble averages" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p07-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p07.webp" alt="Page 7: canonical partition function" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p08-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p08.webp" alt="Page 8: isothermal-isobaric ensemble" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p09-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p09.webp" alt="Page 9: isothermal-isobaric ensemble, continued" width="315" height="420" loading="lazy"></a>
+    </div>
+    <p><a class="btn" href="../notes/njit/statistical-mechanics-notes.pdf" target="_blank" rel="noopener">PDF, 9 pages</a></p>
+
+    <p class="refgroup">Vortex dynamics and the fast multipole method &middot; Denda Lab</p>
+    <table class="facts">
+      <tbody>
+        <tr>
+          <th scope="row"><a href="https://flapping-wings.vercel.app/assets/talks/study-notes/biot-savart-from-scratch.pdf" target="_blank" rel="noopener">Biot&ndash;Savart from scratch</a></th>
+          <td>From divergence and curl to the Biot&ndash;Savart law and the induced velocity of a straight vortex segment, in fourteen steps</td>
+        </tr>
+        <tr>
+          <th scope="row">Polygon moments</th>
+          <td>Closed-form multipole moments of a polygonal vortex loop:
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-01/notes.pdf" target="_blank" rel="noopener">notes</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-01/lemma-derivation.pdf" target="_blank" rel="noopener">lemma derivation</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-01/slides.pdf" target="_blank" rel="noopener">slides</a></td>
+        </tr>
+        <tr>
+          <th scope="row">Quadrupole and octupole</th>
+          <td>The same recipe one and two orders higher:
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-02/quad-oct-moments.pdf" target="_blank" rel="noopener">derivation</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-02/quad-oct-studynotes.pdf" target="_blank" rel="noopener">study notes</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-02/quadrupole-hand-check.pdf" target="_blank" rel="noopener">hand check</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-02/quad-oct-slides.pdf" target="_blank" rel="noopener">slides</a></td>
+        </tr>
+        <tr>
+          <th scope="row">Circles, ellipses, coupling</th>
+          <td>Intrinsic moments of smooth loops and the quadrupole coupling term:
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-03/circle-ellipse-intrinsic.pdf" target="_blank" rel="noopener">circle and ellipse</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-03/coupling-defense.pdf" target="_blank" rel="noopener">coupling term</a> &middot;
+            <a href="https://flapping-wings.vercel.app/assets/talks/week-03/coupling-slides.pdf" target="_blank" rel="noopener">slides</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="https://flapping-wings.vercel.app/notes/" target="_blank" rel="noopener">Ten-part FMM tutorial</a></th>
+          <td>The fast multipole method rebuilt from Greengard&rsquo;s thesis in ten short chapters, each checked numerically</td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="../research/#explainer">Explainer video</a></th>
+          <td>1:40 animation of the polygon-moment result</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ===================================================== code -->
+    <h2 class="sec" id="code">Code and data</h2>
+    <table class="facts">
+      <tbody>
+        <tr>
+          <th scope="row"><a href="../research/#demo">Wake demonstration</a></th>
+          <td>Discrete-vortex wake with a quadtree multipole far field, running in the browser; the source is the page itself</td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="../njit/code/run_gcmc_sweep.py">run_gcmc_sweep.py</a></th>
+          <td>Parallel driver for the GCMC pore-size and wall-strength sweeps</td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="../njit/code/argon_modulus.py">argon_modulus.py</a></th>
+          <td>Fluctuation modulus of confined argon with block-averaged errors &middot; <a href="../njit/code/argon_modulus.csv">csv</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="../njit/code/helium_isotherms.py">helium_isotherms.py</a></th>
+          <td>Helium density isotherms and equilibration trace &middot; <a href="../njit/code/helium_isotherms.csv">csv</a></td>
+        </tr>
+        <tr>
+          <th scope="row">Input decks</th>
+          <td><a href="../njit/code/argon_sphere.inp">argon in a silica sphere</a> &middot; <a href="../njit/code/helium_sphere.inp">helium in a zirconium cavity</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="https://github.com/omerkilicdev/computational_chemistry" target="_blank" rel="noopener">computational_chemistry</a></th>
+          <td>First Metropolis Monte Carlo codes, written to learn the method</td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="https://github.com/omerkilicdev/EV-programs-BCC" target="_blank" rel="noopener">EV-programs-BCC</a></th>
+          <td>CAN bus decoder and data logger for the electric truck (Arduino)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ===================================================== reading -->
+    <h2 class="sec" id="reading">Reading</h2>
+
+    <p class="refgroup">Fast multipole methods and vortex dynamics</p>
+    <ol class="refs">
+      <li>L. Greengard, <em>The Rapid Evaluation of Potential Fields in Particle Systems</em> (MIT Press, Cambridge, MA, 1988). ISBN 978-0-262-57112-8.</li>
+      <li>L. Greengard and V. Rokhlin, &ldquo;A fast algorithm for particle simulations,&rdquo; <em>J. Comput. Phys.</em> <strong>73</strong>, 325&ndash;348 (1987). <a href="https://doi.org/10.1016/0021-9991(87)90140-9" target="_blank" rel="noopener">doi:10.1016/0021-9991(87)90140-9</a></li>
+    </ol>
+
+    <p class="refgroup">Molecular simulation and statistical mechanics</p>
+    <ol class="refs" start="3">
+      <li>D. Frenkel and B. Smit, <em>Understanding Molecular Simulation</em>, 2nd ed. (Academic Press, 2002).</li>
+      <li>M. P. Allen and D. J. Tildesley, <em>Computer Simulation of Liquids</em>, 2nd ed. (Oxford University Press, 2017).</li>
+      <li>A. R. Leach, <em>Molecular Modelling: Principles and Applications</em>, 2nd ed. (Prentice Hall, 2001).</li>
+      <li>R. Shankar, <em>Fundamentals of Physics: Mechanics, Relativity, and Thermodynamics</em> (Yale University Press, 2014).</li>
+      <li>The papers behind the confined-fluid work are listed on the <a href="../njit/#references">NJIT project page</a>.</li>
+    </ol>
+
+    <p class="refgroup">Nuclear engineering background</p>
+    <ol class="refs" start="8">
+      <li>J. R. Lamarsh and A. J. Baratta, <em>Introduction to Nuclear Engineering</em>, 3rd ed. (Prentice Hall, 2001).</li>
+      <li>E. E. Lewis, <em>Fundamentals of Nuclear Reactor Physics</em> (Academic Press, 2008).</li>
+    </ol>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:16omerkilic@gmail.com">16omerkilic@gmail.com</a></span>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>
