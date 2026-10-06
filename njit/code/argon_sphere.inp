@@ -1,0 +1,50 @@
+# Input script for MC simulations — Confined Argon in Spherical Nanopore
+
+ProjectName Ar_Spherical_Nanopore;
+
+EquilibriumSets 1e2;           # Increase for better equilibration in confinement
+ProductionSets 5e3;            # 1e2 for quick scans, 5e3 for production
+StepsPerSet 1e4;
+PrintEveryNSets 1;
+
+ExternalTemperature 87.3;      # K — normal boiling point of argon
+ExternalPressure 103211.456712; # Pa — near saturation pressure (not used in GCMC)
+
+FluidName Ar;
+MolarMass 39.948;               # g/mol for Argon
+ChemicalPotential -1139.682556; # K — in reduced units (kT)  "-1148.16" - "-1139.682556"
+
+# Use Buckingham or LJ potential (LJ, as in Gor 2017)
+Ar Ar VdWPotential LJ; 
+Ar Ar vdwParams 119.6 3.405 14; # ε/K, σ/Å, r_cutoff/Å — matches paper
+
+# Define confined geometry
+BoxName Box0;
+Geometry Sphere;
+Size 30.0;                     # Å → Pore diameter = 3.0 nm (same as paper)
+
+SurfaceDensity 0.153;          # Solid density, same as silica
+
+# Solid-fluid interaction: Argon with SiO₂ wall
+Box0 Ar VdWPotential LJ12-6;       
+Box0 Ar vdwParams 171.24 3.0;  # ε/K, σ/Å for Ar–SiO₂ → from paper
+# Darkblue Triangle     - > E sf = E SiO2 = 171.24
+# Red Triangle       - >  = 171.24 * 0.25
+# Blue Diamond       - >  = 171.24 * 0.5
+# Green Square       - >  = 171.24 * 2.0
+# Purple Triangle    - >  = 171.24 * 4.0
+# Turquoise Pentagon - >  = 119.6
+
+Box0 Ar NumberOfParticles 1000;   # Let GCMC determine particle number
+
+PrintTrajectory;
+WidomMethod BAR;               # Compute chemical potential via Widom insertion
+
+NDisplacementAttempts 1000;    # MC displacement moves
+NVolumeAttempts 0;             # No volume moves in fixed spherical pore
+NSwapAttempts 1000;            # GCMC insertion/deletion attempts
+
+# Optional: Output RDF
+! SampleRDF Ar Ar;
+
+# ContinueAfterCrash;          # Enable if running long jobs

@@ -32,6 +32,7 @@
         <li><a href="../index.html#news">news</a></li>
         <li><a class="active" href="../index.html#work">work</a></li>
         <li><a href="../research/">research</a></li>
+        <li><a href="../workshop/">workshop</a></li>
         <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
         <li>
           <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
@@ -66,6 +67,15 @@
       simulation rather than an input.
     </p>
 
+    <div class="figs">
+      <figure>
+        <img src="../media/njit/at-work.webp"
+             alt="Omer at a laptop showing a rendered snapshot of a spherical cluster of atoms, with the equilibration sketch and ensemble list on the whiteboard behind him"
+             width="1600" height="1200" loading="eager" decoding="async">
+        <figcaption>A snapshot of a filled spherical cavity on screen; behind it, the equilibration-then-production picture that every run on this page follows.</figcaption>
+      </figure>
+    </div>
+
     <h2 class="sec" id="validation">First, reproduce a published result</h2>
     <p>
       Before trusting any new number, I used the group&rsquo;s in-house GCMC code to
@@ -95,9 +105,9 @@
     <h2 class="sec" id="helium">Helium in a zirconium cavity</h2>
     <p>
       I then built the helium&ndash;zirconium model myself. Helium&ndash;helium interactions
-      use a Lennard-Jones fit to transport data (&epsilon;/<em>k</em><sub>B</sub>&nbsp;=&nbsp;9.87&nbsp;K,
-      &sigma;&nbsp;=&nbsp;2.52&nbsp;&Aring;); zirconium parameters come from the Universal
-      Force Field, combined by Lorentz&ndash;Berthelot rules, with the wall&rsquo;s atom
+      use the Lennard-Jones parameters of Weaver and Alexeenko
+      (&epsilon;/<em>k</em><sub>B</sub>&nbsp;=&nbsp;9.87&nbsp;K, &sigma;&nbsp;=&nbsp;2.52&nbsp;&Aring;);
+      zirconium parameters come from the Universal Force Field, combined by Lorentz&ndash;Berthelot rules, with the wall&rsquo;s atom
       density taken from the close-packed hcp-Zr(0001) plane (0.107&nbsp;&Aring;<sup>&minus;2</sup>).
       The cavity is a 3.0&nbsp;nm sphere. I ran 28 chemical-potential points at 573&nbsp;K
       and 973&nbsp;K, the range of cladding operating and transient temperatures, and wrote
@@ -121,6 +131,81 @@
       </figure>
     </div>
 
+    <h2 class="sec" id="board">On the whiteboard</h2>
+    <p>
+      Most of the method was worked out at the board before it became an input file. On the
+      left, the life of a GCMC run: a transient while the cavity fills, then production sets
+      whose fluctuations around &lang;<em>N</em>&rang; carry the physics, next to which
+      quantities each ensemble fixes and which it returns. On the right, the energy that
+      every trial move is judged by: a pairwise Lennard-Jones sum over fluid atoms plus a
+      wall term, built up from a single atom over a flat surface to the integrated potential
+      of a spherical cavity.
+    </p>
+    <div class="figs">
+      <div class="two crop">
+        <figure>
+          <img src="../media/njit/whiteboard-gcmc.webp"
+               alt="Whiteboard sketch of particle number versus Monte Carlo sets, with an equilibration transient followed by fluctuations about a mean, and a list of ensembles and their control variables"
+               width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Equilibration versus production, and what each ensemble holds fixed.</figcaption>
+        </figure>
+        <figure>
+          <img src="../media/njit/whiteboard-potential.webp"
+               alt="Whiteboard derivation of the total potential energy as a fluid-fluid Lennard-Jones sum plus a wall term, with sketches going from a flat wall to a spherical cavity"
+               width="1600" height="1200" loading="lazy" decoding="async">
+          <figcaption>Fluid&ndash;fluid plus fluid&ndash;wall energy, from a flat wall to a sphere.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h2 class="sec" id="notes">Notes</h2>
+    <p>
+      I learned the statistical mechanics behind the method by deriving it by hand, from
+      the kinetic theory of an ideal gas to the partition functions of the microcanonical,
+      canonical and isothermal&ndash;isobaric ensembles. Nine pages, in the order I would
+      teach them:
+    </p>
+    <ol class="toc">
+      <li>Pressure from molecular motion</li>
+      <li>Temperature from kinetic energy, and the ideal-gas law recovered</li>
+      <li>The laws of thermodynamics and Gibbs entropy</li>
+      <li>Counting microstates: the Boltzmann distribution by Lagrange multipliers</li>
+      <li>Microcanonical ensemble and the thermodynamic potentials</li>
+      <li>Canonical ensemble: ensemble averages</li>
+      <li>Canonical ensemble: the partition function</li>
+      <li>Isothermal&ndash;isobaric ensemble</li>
+      <li>Isothermal&ndash;isobaric ensemble, continued</li>
+    </ol>
+    <div class="notes-strip">
+      <a href="../notes/njit/p01-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p01.webp" alt="Page 1" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p02-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p02.webp" alt="Page 2" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p03-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p03.webp" alt="Page 3" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p04-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p04.webp" alt="Page 4" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p05-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p05.webp" alt="Page 5" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p06-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p06.webp" alt="Page 6" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p07-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p07.webp" alt="Page 7" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p08-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p08.webp" alt="Page 8" width="315" height="420" loading="lazy"></a>
+      <a href="../notes/njit/p09-full.webp" target="_blank" rel="noopener"><img src="../notes/njit/p09.webp" alt="Page 9" width="315" height="420" loading="lazy"></a>
+    </div>
+    <p><a class="btn" href="../notes/njit/statistical-mechanics-notes.pdf" target="_blank" rel="noopener">all nine pages as one PDF (2&nbsp;MB)</a></p>
+
+    <h2 class="sec" id="code">Code and data</h2>
+    <table class="facts">
+      <tbody>
+        <tr><th scope="row"><a href="code/run_gcmc_sweep.py">run_gcmc_sweep.py</a></th><td>Edits the input deck for each wall strength and pore size, launches the runs on a process pool and collects the logs</td></tr>
+        <tr><th scope="row"><a href="code/argon_sphere.inp">argon_sphere.inp</a></th><td>Input deck for argon in a spherical silica pore (the validation runs)</td></tr>
+        <tr><th scope="row"><a href="code/helium_sphere.inp">helium_sphere.inp</a></th><td>Input deck for helium in a spherical zirconium cavity</td></tr>
+        <tr><th scope="row"><a href="code/argon_modulus.py">argon_modulus.py</a></th><td>Fluctuation modulus with block-averaged errors, compared against the published curve</td></tr>
+        <tr><th scope="row"><a href="code/helium_isotherms.py">helium_isotherms.py</a></th><td>Equilibration trace and density isotherms from the helium logs</td></tr>
+        <tr><th scope="row"><a href="code/argon_modulus.csv">argon_modulus.csv</a>, <a href="code/helium_isotherms.csv">helium_isotherms.csv</a></th><td>The numbers behind both figures</td></tr>
+        <tr><th scope="row"><a href="https://github.com/omerkilicdev/computational_chemistry" target="_blank" rel="noopener">computational_chemistry</a></th><td>The Metropolis codes I wrote first to learn the method: one particle in a well, fifty particles in a box, a temperature sweep</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.88rem; color:var(--text-light);">
+      The simulations themselves ran on the group&rsquo;s in-house GCMC code, which is not
+      public; the scripts above drive it and analyse its output.
+    </p>
+
     <h2 class="sec" id="details">At a glance</h2>
     <table class="facts">
       <tbody>
@@ -140,6 +225,33 @@
       insertion check that the realised chemical potential matches the imposed one, and
       longer runs so that the fluctuation modulus converges for the larger pores as well.
     </p>
+
+    <h2 class="sec" id="references">References</h2>
+    <p class="refgroup">Method</p>
+    <ol class="refs">
+      <li>D. Frenkel and B. Smit, <em>Understanding Molecular Simulation: From Algorithms to Applications</em>, 2nd ed. (Academic Press, San Diego, 2002). ISBN 0-12-267351-4.</li>
+      <li>M. P. Allen and D. J. Tildesley, <em>Computer Simulation of Liquids</em>, 2nd ed. (Oxford University Press, 2017). ISBN 978-0-19-880319-5.</li>
+      <li>A. R. Leach, <em>Molecular Modelling: Principles and Applications</em>, 2nd ed. (Prentice Hall, Harlow, 2001). ISBN 0-582-38210-6.</li>
+      <li>R. Shankar, <em>Fundamentals of Physics: Mechanics, Relativity, and Thermodynamics</em> (Yale University Press, 2014). ISBN 978-0-300-19220-9.</li>
+    </ol>
+    <p class="refgroup">Confined fluids and validation</p>
+    <ol class="refs" start="5">
+      <li>G. Y. Gor, &ldquo;Bulk modulus of not-so-bulk fluid,&rdquo; in <em>Poromechanics VI</em> (ASCE, 2017), pp. 465&ndash;472. <span class="note">The result reproduced above.</span></li>
+      <li>G. Y. Gor, D. W. Siderius, C. J. Rasmussen, W. P. Krekelberg, V. K. Shen and N. Bernstein, &ldquo;Relation between pore size and the compressibility of a confined fluid,&rdquo; <em>J. Chem. Phys.</em> <strong>143</strong>, 194506 (2015). <a href="https://doi.org/10.1063/1.4935430" target="_blank" rel="noopener">doi:10.1063/1.4935430</a></li>
+      <li>C. D. Dobrzanski, M. A. Maximov and G. Y. Gor, &ldquo;Effect of pore geometry on the compressibility of a confined simple fluid,&rdquo; <em>J. Chem. Phys.</em> <strong>148</strong>, 054503 (2018). <a href="https://doi.org/10.1063/1.5008490" target="_blank" rel="noopener">doi:10.1063/1.5008490</a></li>
+      <li>M. S. A. Baksh and R. T. Yang, &ldquo;Model for spherical cavity radii and potential functions of sorbates in zeolites,&rdquo; <em>AIChE J.</em> <strong>37</strong>, 923&ndash;930 (1991). <a href="https://doi.org/10.1002/aic.690370615" target="_blank" rel="noopener">doi:10.1002/aic.690370615</a></li>
+    </ol>
+    <p class="refgroup">Interaction parameters</p>
+    <ol class="refs" start="9">
+      <li>A. K. Rapp&eacute;, C. J. Casewit, K. S. Colwell, W. A. Goddard III and W. M. Skiff, &ldquo;UFF, a full periodic table force field for molecular mechanics and molecular dynamics simulations,&rdquo; <em>J. Am. Chem. Soc.</em> <strong>114</strong>, 10024&ndash;10035 (1992).</li>
+      <li>A. B. Weaver and A. A. Alexeenko, &ldquo;Revised variable soft sphere and Lennard-Jones model parameters for eight common gases up to 2200&nbsp;K,&rdquo; <em>J. Phys. Chem. Ref. Data</em> <strong>44</strong>, 023103 (2015).</li>
+    </ol>
+    <p class="refgroup">Helium in nuclear materials</p>
+    <ol class="refs" start="11">
+      <li>X. W. Zhou, C. S. Y. Hui, D. B. Robinson and J. D. Sugar, &ldquo;Accelerated kinetic Monte Carlo method for simulations of helium bubble formation in metals,&rdquo; <em>J. Comput. Phys.</em> <strong>523</strong>, 113666 (2025). <a href="https://doi.org/10.1016/j.jcp.2024.113666" target="_blank" rel="noopener">doi:10.1016/j.jcp.2024.113666</a></li>
+      <li>J. R. Lamarsh and A. J. Baratta, <em>Introduction to Nuclear Engineering</em>, 3rd ed. (Prentice Hall, Upper Saddle River, NJ, 2001). ISBN 0-201-82498-1.</li>
+      <li>E. E. Lewis, <em>Fundamentals of Nuclear Reactor Physics</em> (Academic Press, 2008).</li>
+    </ol>
 
     <p><a href="../index.html#work">&larr; Back to selected work</a></p>
   </div>
