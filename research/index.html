@@ -179,9 +179,11 @@
       closed-form multipole moments for vortex rings and polygonal panels, the translation
       operators between them, and a-priori far-field error bounds, and assembles them into
       a fast multipole method verified against direct summation across an automated suite
-      of 40 test groups and 274 checks. Integrated into the group&rsquo;s MATLAB
-      three-dimensional wake code as a replacement velocity kernel, a 15-step run went
-      from 1,783&nbsp;s to 50&nbsp;s. The solver is differentiable throughout, so flapping
+      of 40 test groups and 274 checks. Along the way the group&rsquo;s MATLAB
+      three-dimensional wake code received an exact, fully vectorized velocity kernel that
+      took a 15-step run from 1,783&nbsp;s to 50&nbsp;s with machine-precision agreement;
+      at that size the multipole method does not yet beat the exact kernel, and the
+      measured crossover lies at wakes roughly ten times larger, several thousand rings. The solver is differentiable throughout, so flapping
       strokes can be designed by gradient ascent. A follow-on proposal with
       Prof.&nbsp;Onur Bilgen extends the method toward reduced-order wake models for
       aeroelastic analysis and design.
@@ -241,10 +243,12 @@
         the 10<sup>&minus;3</sup> level &mdash; tighten &theta; and the error falls,
         loosen it and the cost does, and the gap between <em>N</em>&sup2; and the
         tree&rsquo;s near-linear count widens as the wake grows. At demonstration scale
-        the honest measure is the operation count; the wall-clock payoff arrives at the
-        scale of the group&rsquo;s three-dimensional wakes, where this same trade,
-        made rigorous by closed-form ring moments, translation operators and a-priori
-        error bounds, turned 1,783&nbsp;s into 50&nbsp;s.
+        the honest measure is the operation count; the wall-clock payoff of the tree arrives only
+        at wakes of several thousand rings. Below that, an exact vectorized kernel wins,
+        and that is what took the group&rsquo;s 15-step three-dimensional run from
+        1,783&nbsp;s to 50&nbsp;s; the multipole method, made rigorous by closed-form
+        ring moments, translation operators and a-priori error bounds, is the next
+        step beyond it.
       </p>
     </div>
 
@@ -262,11 +266,13 @@
           </figcaption>
         </figure>
         <figure>
-          <img class="plate" src="../media/research/speedup.svg" alt="Bar chart on a log time axis: direct summation 1,783 seconds versus the accelerated kernel at 50 seconds for the same 15-step wake run"
+          <img class="plate" src="../media/research/speedup.svg" alt="Bar chart on a log time axis: the original loop-based direct summation at 1,783 seconds versus the exact vectorized kernel at 50 seconds for the same 15-step wake run"
                width="760" height="410" loading="lazy" decoding="async">
           <figcaption>
-            The same 15-step three-dimensional wake run takes 1,783&nbsp;s by direct
-            summation and 50&nbsp;s with the replacement velocity kernel.
+            The same 15-step three-dimensional wake run: 1,783&nbsp;s with the original
+            loop-based direct summation, 50&nbsp;s with the exact vectorized kernel, identical
+            answer to machine precision. The multipole far field is not used at this size; it
+            overtakes the exact kernel at wakes roughly ten times larger.
           </figcaption>
         </figure>
       </div>
