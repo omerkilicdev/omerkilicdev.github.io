@@ -25,3 +25,12 @@
   }, { passive: true });
   update();
 })();
+
+// On narrow screens the nav row scrolls sideways; keep the current page in view.
+(function () {
+  var ul = document.querySelector('.navbar ul'), a = document.querySelector('.navbar a.active');
+  if (ul && a && ul.scrollWidth > ul.clientWidth) {
+    var r = a.getBoundingClientRect(), u = ul.getBoundingClientRect();
+    ul.scrollLeft += (r.left + r.width / 2) - (u.left + u.width / 2);
+  }
+})();
