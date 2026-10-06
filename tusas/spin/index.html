@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; spin and the rotary-balance test</title>
+<meta name="description" content="Why predicting an aircraft spin needs a rotary-balance wind-tunnel test: 21 interactive 3D scenes with the matching equations, units checks and worked numbers.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="spin.css">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], packages: { '[+]': ['ams'] } },
+    svg: { fontCache: 'global' },
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] },
+    startup: {
+      typeset: false,
+      ready: function () {
+        MathJax.startup.defaultReady();
+        MathJax.startup.promise.then(function () {
+          var all = document.documentElement.classList.contains('no-3d');
+          var els = document.querySelectorAll(all ? '.spin-step' : '.spin-step:not([hidden])');
+          return MathJax.typesetPromise(Array.prototype.slice.call(els));
+        });
+      }
+    }
+  };
+</script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../../index.html">about</a></li>
+        <li><a href="../../index.html#news">news</a></li>
+        <li><a class="active" href="../../index.html#work">work</a></li>
+        <li><a href="../../research/">research</a></li>
+        <li><a href="../../workshop/">workshop</a></li>
+        <li><a href="../../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container spin-wide">
+
+    <h1 class="name">Why a spin needs a <strong>rotary-balance test</strong></h1>
+    <p class="affil">
+      <span class="dept">Aircraft spin aerodynamics &middot; interactive lesson in 21 steps &middot; self-study in flight dynamics</span>
+    </p>
+    <div class="spin-intro">
+      <p>
+        If the usual aerodynamic derivatives predict how an aircraft responds to small
+        disturbances, why does a spin need its own wind-tunnel test, in which the model is
+        turned steadily about the flow axis? The steps below build the answer from body
+        axes up. Each tab sets up a 3D scene you can orbit and play, and the column beside
+        it gives that step&rsquo;s definitions, equations, units check and a worked number.
+      </p>
+      <p class="spin-spec">
+        <span>One example aircraft throughout:</span>
+        <span>span <b>b = 10 m</b></span>
+        <span>wing area <b>S = 40 m&sup2;</b></span>
+        <span>speed <b>V = 60 m/s</b></span>
+        <span>air density <b>&rho; = 1.225 kg/m&sup3;</b></span>
+      </p>
+    </div>
+
+    <div class="spin-viewer">
+      <div class="spin-left">
+        <div class="spin-stage" id="stage">
+          <div class="stage-view" id="stage-view">
+            <canvas id="c3d" role="img" aria-label="3D scene for the selected step; drag to orbit, scroll to zoom"></canvas>
+            <div class="stage-overlay" id="overlay"></div>
+            <div class="stage-title" id="stage-title"></div>
+          </div>
+          <div class="controls" id="controls">
+            <div class="grp" role="group" aria-label="View">
+              <button type="button" data-view="iso" aria-pressed="true">Isometric</button>
+              <button type="button" data-view="top">Top</button>
+              <button type="button" data-view="side">Side</button>
+              <button type="button" data-view="front">Front</button>
+            </div>
+            <div class="grp">
+              <button type="button" id="btn-play" aria-pressed="true">Pause</button>
+              <button type="button" id="btn-labels" aria-pressed="true">Labels</button>
+            </div>
+            <label class="sl" data-sl="alpha"><span>&alpha;</span><input type="range" min="0" max="60" step="1" value="5" aria-label="angle of attack"><b>5&deg;</b></label>
+            <label class="sl" data-sl="rhat" hidden><span>r&#770;</span><input type="range" min="0" max="0.4" step="0.01" value="0.1" aria-label="nondimensional yaw rate"><b>0.10</b></label>
+            <label class="sl" data-sl="phat" hidden><span>p&#770;</span><input type="range" min="-0.3" max="0.3" step="0.01" value="0" aria-label="nondimensional roll rate"><b>0.00</b></label>
+            <label class="sl" data-sl="dr" hidden><span>&delta;r</span><input type="range" min="-25" max="25" step="1" value="0" aria-label="rudder deflection"><b>0&deg;</b></label>
+          </div>
+        </div>
+        <p class="stage-caption" id="stage-caption" aria-live="polite"></p>
+        <div class="spin-tabs" id="spin-tabs" role="tablist" aria-label="Steps of the lesson"></div>
+      </div>
+
+      <div class="spin-panel">
+        <div class="spin-panel-inner" id="spin-panel">
+
+<!-- =================================================================== 0 -->
+<section class="spin-step" data-step="0" data-tab="Axes and rates" id="step-0">
+  <p class="kicker">Step 0</p>
+  <h2>The aircraft, its body axes and three rotation rates</h2>
+  <p class="lead">The whole lesson uses one aircraft: a procedural model of a high-agility experimental jet, not any real type. Orbit it with the mouse; the parts are labelled.</p>
+  <ul>
+    <li><b>Fuselage</b>: at high angle of attack it makes lift of its own, and a wake that shields the tail.</li>
+    <li><b>Wing</b> (cropped delta): the main lift source. The lesson turns on the left and right halves seeing different air.</li>
+    <li><b>Canards</b>: small foreplanes for pitch control and for shaping the flow over the wing at high &alpha;.</li>
+    <li><b>Elevons</b>: trailing-edge surfaces; deflected together they act as elevators, opposite as ailerons.</li>
+    <li><b>Fins and rudders</b>: they control and damp yaw, the main actors of steps 3&ndash;5.</li>
+    <li><b>Intakes and nozzles</b>: propulsion is left out of the lesson entirely.</li>
+    <li><b>Centre of gravity (CG)</b>: every rotation is about this point and every moment is taken about it.</li>
+  </ul>
+  <div class="box def"><p class="t">Body axes</p>
+    <table class="syms">
+      <tr><td>\(x\)</td><td>longitudinal, positive towards the nose (ochre arrow)</td><td>&mdash;</td></tr>
+      <tr><td>\(y\)</td><td>lateral, positive towards the right wing (green)</td><td>&mdash;</td></tr>
+      <tr><td>\(z\)</td><td>vertical, positive <b>down</b> (red)</td><td>&mdash;</td></tr>
+    </table>
+  </div>
+  <p><b>Why z points down.</b> Not because of gravity: x forward and y to the right make a right-handed set only with z down. The cross product \(\vec\omega\times\vec r\) used later takes its signs from this convention. The 3D library draws Y up on screen; the lesson always speaks in aircraft axes.</p>
+  <div class="box def"><p class="t">Rotation rates</p>
+    <table class="syms">
+      <tr><td>\(p\)</td><td>roll rate about x; positive = right wing down</td><td>rad/s</td></tr>
+      <tr><td>\(q\)</td><td>pitch rate about y; positive = nose up</td><td>rad/s</td></tr>
+      <tr><td>\(r\)</td><td>yaw rate about z; positive = nose right</td><td>rad/s</td></tr>
+      <tr><td>\(\vec\omega\)</td><td>\(=(p,\,q,\,r)\), the single angular-velocity vector</td><td>rad/s</td></tr>
+    </table>
+  </div>
+  <div class="box units"><p class="t">Units check: why the radian is dimensionless</p>
+    <div class="row"><span>arc length \(=\theta R\)</span><span class="ok">[m] = [&theta;][m] &rArr; [&theta;] = 1</span></div>
+    <div class="row"><span>one turn \(=2\pi\) rad</span><span class="ok">360&deg; = 6.283 rad</span></div>
+    <div class="row"><span>\(r=\Delta\psi/\Delta t\)</span><span class="ok">[rad]/[s] = [1/s]</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>An aircraft completes one turn of a spin in 2 s: \(r\approx 2\pi/2\ \text{s}=3.14\) rad/s. Compared with \(V=60\) m/s later on, this turns out to be large.</p>
+  </div>
+  <p>In a spin, \(p\) and \(r\) matter most: a spin is roll and yaw together and sustained. \(q\) is present but secondary.</p>
+</section>
+
+<!-- =================================================================== 1 -->
+<section class="spin-step" data-step="1" data-tab="Angle of attack" id="step-1" hidden>
+  <p class="kicker">Step 1</p>
+  <h2>Level flight: relative wind and angle of attack</h2>
+  <p class="lead">Side view. The horizontal arrow is the air relative to the aircraft, the dashed ochre line is the wing chord, and the angle between them is &alpha;. Raise &alpha; past about 15&deg; and the flow leaves the upper surface.</p>
+  <div class="box def"><p class="t">Definitions</p>
+    <p><b>Freestream velocity</b> \(V_\infty\): the speed of the aircraft through undisturbed air. <b>Relative wind</b>: the same vector reversed, the air as seen from the cockpit. <b>Chord line</b>: the straight line from leading edge to trailing edge. <b>Angle of attack</b> \(\alpha\): the angle between chord line and relative wind.</p>
+  </div>
+  <p>Lift comes from turning the air downward, and how much it is turned depends on &alpha;. At small angles the relation is nearly linear; thin-aerofoil theory gives</p>
+  \[ C_L \approx 2\pi\alpha \quad(\alpha \text{ in radians}). \]
+  <p>&alpha; is the lift &ldquo;throttle&rdquo;, until it stops working (step 7).</p>
+  <p><b>Not the pitch attitude.</b> The nose angle to the horizon is \(\theta\). &alpha; is measured to the air: an aircraft can have \(\theta=0\) and a very large &alpha;. In a spin the nose can point down while \(\alpha\approx45\)&ndash;\(90^\circ\), because the air comes from below.</p>
+  <div class="box units"><p class="t">Units check: degrees and radians</p>
+    <div class="row"><span>\(\alpha=5^\circ=5\cdot\pi/180\)</span><span class="ok">= 0.0873 rad</span></div>
+    <div class="row"><span>\(\sin 0.0873=0.0872,\ \tan 0.0873=0.0875\)</span><span class="ok">small angle: sin &alpha; &asymp; tan &alpha; &asymp; &alpha;</span></div>
+    <div class="row"><span>formulas always take radians</span><span class="ok">degrees only for talking</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>Cruise at \(V=60\) m/s and \(\alpha=5^\circ\): \(C_L\approx2\pi\cdot0.0873=0.55\). Attached flow, symmetric wings: the reference state for every comparison that follows.</p>
+  </div>
+  <p class="try">Try: <button type="button" data-set="alpha=5" data-view="side">&alpha; = 5&deg;</button><button type="button" data-set="alpha=20" data-view="side">&alpha; = 20&deg;</button><button type="button" data-set="alpha=40" data-view="side">&alpha; = 40&deg;</button></p>
+</section>
+
+<!-- =================================================================== 2 -->
+<section class="spin-step" data-step="2" data-tab="Symmetry" id="step-2" hidden>
+  <p class="kicker">Step 2</p>
+  <h2>Do both wings see the same air?</h2>
+  <p class="lead">The aircraft flies straight at &alpha; = 5&deg;: no roll, no yaw, no pitch rate. Each wing tip carries a wind arrow and an &alpha; arc.</p>
+  <details class="qa"><summary>Question 1: do the left and right wings see the same speed and the same angle? Think, then open.</summary>
+    <p><b>Yes.</b> With \(p=q=r=0\) every point of a rigid body moves with the same velocity \(\vec V\), so every point sees the same relative wind. Add the left&ndash;right symmetry of the aircraft (the green plane) and the two wings have equal speed, equal angle and equal lift.</p>
+  </details>
+  <p>The rest of the lesson is about this symmetry <em>breaking</em>: why, and by how much, the two wings come to see different air. Here the difference is zero.</p>
+  <div class="box def"><p class="t">One more assumption: sideslip</p>
+    <p><b>Sideslip angle</b> \(\beta\): the angle between the relative wind and the plane of symmetry. Here \(\beta=0\); it returns in the sum of step 6.</p>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(V=60\) m/s, \(\alpha=5^\circ\): left tip 60 m/s and 5&deg;, right tip 60 m/s and 5&deg;. Difference 0 m/s and 0&deg;. Both zeros stop being zero in steps 9 and 11.</p>
+  </div>
+</section>
+
+<!-- =================================================================== 3 -->
+<section class="spin-step" data-step="3" data-tab="Yawing moment" id="step-3" hidden>
+  <p class="kicker">Step 3</p>
+  <h2>Rudder input: the yawing moment and its coefficient \(C_n\)</h2>
+  <p class="lead">The rudder is deflected by &delta;<sub>r</sub>. The tail makes a side force (ochre) and a turning tendency about the CG (red arc).</p>
+  <div class="box def"><p class="t">Definitions</p>
+    <p><b>Moment</b>: the turning effect of a force about a point, force times perpendicular distance (the arm). <b>Yawing moment</b> \(N\): the moment about the z axis through the CG; positive turns the nose <em>right</em> (right-hand rule, z down).</p>
+  </div>
+  <div class="box units"><p class="t">Units check: rudder moment</p>
+    <div class="row"><span>\(N=-F_y\,l_t\)</span><span class="ok">[N][m] = [N&middot;m]</span></div>
+    <div class="row"><span>force to the right (+y), arm behind (&minus;x)</span><span class="ok">N &lt; 0: nose left</span></div>
+  </div>
+  <h3>Why a coefficient</h3>
+  <p>\(N\) depends on size, speed and air density. To compare a 1/10-scale tunnel model with the aircraft, divide those out:</p>
+  \[ C_n=\frac{N}{\bar q\,S\,b},\qquad \bar q=\tfrac12\rho V^2 \]
+  <table class="syms">
+    <tr><td>\(C_n\)</td><td>yawing-moment coefficient; subscripts l, m, n are roll, pitch, yaw about x, y, z</td><td>&mdash;</td></tr>
+    <tr><td>\(\bar q\)</td><td>dynamic pressure, kinetic energy of the air per unit volume</td><td>Pa</td></tr>
+    <tr><td>\(\rho\)</td><td>air density</td><td>kg/m&sup3;</td></tr>
+    <tr><td>\(S\)</td><td>wing reference area</td><td>m&sup2;</td></tr>
+    <tr><td>\(b\)</td><td>wingspan, the length scale for lateral moments</td><td>m</td></tr>
+    <tr><td>\(\delta_r\)</td><td>rudder deflection</td><td>deg</td></tr>
+  </table>
+  <div class="box units"><p class="t">Units check: is \(C_n\) dimensionless?</p>
+    <div class="row"><span>\(\bar q=\tfrac12\rho V^2\)</span><span class="ok">[kg/m&sup3;][m&sup2;/s&sup2;] = [N/m&sup2;]</span></div>
+    <div class="row"><span>\(\bar q\,S\,b\)</span><span class="ok">[N/m&sup2;][m&sup2;][m] = [N&middot;m]</span></div>
+    <div class="row"><span>\(C_n=N/(\bar q S b)\)</span><span class="ok">[N&middot;m]/[N&middot;m] = 1</span></div>
+  </div>
+  <p>Forces scale with \(\bar q S\) and arms with a length. For roll and yaw the arms run along the span, so the length is \(b\); pitch uses the mean chord \(\bar c\). It is a convention; what matters is that everyone uses the same one.</p>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(\bar q=0.5\cdot1.225\cdot3600=2205\) Pa and \(\bar q S b=2205\cdot40\cdot10=882\,000\) N&middot;m. A rudder giving \(C_n=-0.02\) produces \(N=-0.02\cdot882\,000=-17\,640\) N&middot;m, about 1.8 tonne-metres turning the nose left.</p>
+  </div>
+  <p>Note the case: \(C_n\) is the yawing <em>moment</em>; \(C_N\) is the normal <em>force</em> coefficient. Papers use both side by side.</p>
+  <p class="try">Try: <button type="button" data-set="dr=-20">&delta;r = &minus;20&deg;</button><button type="button" data-set="dr=0">&delta;r = 0</button><button type="button" data-set="dr=20">&delta;r = +20&deg;</button></p>
+</section>
+
+<!-- =================================================================== 4 -->
+<section class="spin-step" data-step="4" data-tab="Yaw rate r&#770;" id="step-4" hidden>
+  <p class="kicker">Step 4</p>
+  <h2>Once the aircraft yaws: \(\hat r\) and \(C_{n_r}\)</h2>
+  <p class="lead">First turn the yaw rate into a number comparable with \(V\), then derive the moment the rotation produces against itself. The scene has two modes.</p>
+  <p class="try"><button type="button" data-set="mode=0;rhat=0.25">Geometry of r&#770; (circle, A and B)</button><button type="button" data-set="mode=1;rhat=0.15">Tail mechanism</button></p>
+  <h3>1. Velocity of a point on a rotating body</h3>
+  <p>A point at distance \(R\) from the CG moves on a circle; the path length is \(s=\theta R\), so</p>
+  \[ v=\frac{ds}{dt}=\frac{d\theta}{dt}R=rR. \]
+  <p>The rotational speed grows with distance and is largest at the wing tip, \(R=b/2\).</p>
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(v=rR\)</span><span class="ok">[rad/s][m] = [m/s], comparable with V</span></div>
+  </div>
+  <h3>2. Two geometries</h3>
+  <p>The rotational velocity is always perpendicular to the radius. At a <b>wing tip (A)</b> the radius points sideways, so \(r\,b/2\) lies along \(V\) and simply adds: a ratio. At a point <b>on the body axis b/2 ahead of the CG (B)</b> the radius points forward, so \(r\,b/2\) is perpendicular to \(V\): a right triangle and a tangent.</p>
+  <h3>3. Definition of \(\hat r\)</h3>
+  \[ \hat r=\frac{r\,b/2}{V}=\frac{rb}{2V}=\tan\varphi \]
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(\hat r=(r\,b/2)/V\)</span><span class="ok">[m/s]/[m/s] = 1</span></div>
+    <div class="row"><span>\(\tan\varphi=\) opposite/adjacent</span><span class="ok">the same dimensionless number</span></div>
+    <div class="row"><span>small angle \(\tan\varphi\approx\varphi\)</span><span class="ok">r&#770; = 0.25 &asymp; 14&deg;</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked numbers</p>
+    <p><b>Normal flight:</b> \(r=0.5\) rad/s, \(b/2=5\) m, \(r\,b/2=2.5\) m/s, \(\hat r=2.5/60=0.042\). Tips (A): \(60\pm2.5\) m/s. Point B: \(\varphi=2.4^\circ\).</p>
+    <p><b>Spin:</b> \(r=3\) rad/s, \(r\,b/2=15\) m/s, \(\hat r=0.25\). Tips: 75 and 45 m/s. Point B: \(\varphi=14^\circ\).</p>
+  </div>
+  <p>\(\hat r\) is a ratio of two speeds, not a speed. The right triangle appears only where the rotational velocity is normal to \(V\); at the tips the two add along one line. (&ldquo;Helix angle&rdquo; properly belongs to roll, \(\hat p=pb/2V\), where the tip velocity is normal to \(V\).)</p>
+  <h3>4. \(C_{n_r}\), a partial derivative</h3>
+  \[ C_{n_r}=\frac{\partial C_n}{\partial\hat r} \]
+  <p>How much \(C_n\) changes when \(\hat r\) changes slightly with everything else held fixed: a slope. It is called a <b>dynamic derivative</b>, or the <b>yaw-damping derivative</b>.</p>
+  <h3>5. From first principles: why the tail resists</h3>
+  <p><b>(a) The fin is a wing turned 90&deg;.</b> A wing gives \(C_L=C_{L\alpha}\alpha\) at small angles (thin aerofoil \(2\pi\)/rad; real wings 4&ndash;6/rad; short, broad fins 2&ndash;3/rad). Swap the roles &alpha; &rarr; \(\beta_t\), \(L\) &rarr; \(F_y\), \(S\) &rarr; \(S_v\), \(C_{L\alpha}\) &rarr; \(C_{L\alpha,v}\):</p>
+  \[ L=\bar q\,S\,C_{L\alpha}\,\alpha\ \longrightarrow\ F_y=\bar q\,S_v\,C_{L\alpha,v}\,\beta_t \]
+  <p><b>(b) The angle the fin sees.</b> The fin sits \(l_t\) behind the CG, on the body axis (geometry B). Yawing right, it sweeps <b>left</b> at \(r\,l_t\), so the air reaches it from the left:</p>
+  \[ \tan\beta_t=\frac{r\,l_t}{V}\ \Rightarrow\ \beta_t\approx\frac{r\,l_t}{V}. \]
+  <p><b>(c) Direction and arm.</b> Air from the left pushes the fin right (+y), \(l_t\) behind the CG, so the nose turns left: \(N=-F_y\,l_t\). The rotation makes its own brake, whatever started it.</p>
+  <p><b>(d) Algebra.</b> Substituting (a) and (b) into (c), writing \(r/V=2\hat r/b\) and dividing by \(\bar q S b\):</p>
+  \[ N=-\bar q\,S_v\,C_{L\alpha,v}\,l_t^2\,\frac{r}{V}=-\bar q\,S_v\,C_{L\alpha,v}\,l_t^2\,\frac{2\hat r}{b} \]
+  \[ C_n=-2\,C_{L\alpha,v}\,\frac{S_v}{S}\left(\frac{l_t}{b}\right)^2\hat r,\qquad C_{n_r}=\frac{\partial C_n}{\partial\hat r}=-2\,C_{L\alpha,v}\,\frac{S_v}{S}\left(\frac{l_t}{b}\right)^2 \]
+  <p>Three factors, three reasons: how sensitive the fin is to angle, how large it is relative to the wing, and the tail arm <em>squared</em> (one \(l_t\) sets the sweep speed, the other the moment arm; double the arm, four times the damping). The minus sign: the brake opposes the rotation.</p>
+  <div class="box units"><p class="t">Units check along the chain</p>
+    <div class="row"><span>\(\beta_t=r\,l_t/V\)</span><span class="ok">[1/s][m]/[m/s] = 1 (rad)</span></div>
+    <div class="row"><span>\(F_y=\bar q S_v C_{L\alpha,v}\beta_t\)</span><span class="ok">[N/m&sup2;][m&sup2;][1/rad][rad] = [N]</span></div>
+    <div class="row"><span>\(N=-F_y l_t\)</span><span class="ok">[N&middot;m]</span></div>
+    <div class="row"><span>\(C_{n_r}\)</span><span class="ok">[1/rad], in practice dimensionless</span></div>
+  </div>
+  <table class="syms">
+    <tr><td>\(l_t\)</td><td>tail arm, CG to the fin&rsquo;s aerodynamic centre</td><td>m</td></tr>
+    <tr><td>\(S_v\)</td><td>fin area</td><td>m&sup2;</td></tr>
+    <tr><td>\(C_{L\alpha,v}\)</td><td>fin lift-curve slope (side-force slope in \(\beta_t\))</td><td>1/rad</td></tr>
+    <tr><td>\(\beta_t\)</td><td>local sideslip angle at the fin</td><td>rad</td></tr>
+    <tr><td>\(F_y\)</td><td>fin side force, +y to the right</td><td>N</td></tr>
+  </table>
+  <div class="box ex"><p class="t">Worked number: the same chain in numbers</p>
+    <p>\(\bar q=2205\) Pa, \(b=10\) m, \(S=40\) m&sup2;; fin \(l_t=4.5\) m, \(S_v=4.8\) m&sup2;, \(C_{L\alpha,v}=2.5\)/rad; normal flight \(r=0.5\) rad/s.</p>
+    <p>\(r\,l_t=2.25\) m/s, \(\beta_t=2.25/60=0.0375\) rad \(=2.1^\circ\). \(C_Y=2.5\cdot0.0375=0.094\), \(F_y=2205\cdot4.8\cdot0.094=995\) N to the right. \(N=-995\cdot4.5=-4\,480\) N&middot;m. \(C_n=-4\,480/882\,000=-0.0051\).</p>
+    <p>Check with the formula: \(\hat r=0.5\cdot10/120=0.0417\); \(C_{n_r}=-2\cdot2.5\cdot0.12\cdot0.2025=-0.12\); \(C_n=-0.12\cdot0.0417=-0.0050\). Both routes agree.</p>
+  </div>
+  <p>The derivative is taken with respect to \(\hat r\), not \(r\), so it carries no seconds and transfers between model and aircraft. Behind every \(C_{n_r}\) in a book is \(rb/2V\).</p>
+</section>
+
+<!-- =================================================================== 5 -->
+<section class="spin-step" data-step="5" data-tab="Yaw damping" id="step-5" hidden>
+  <p class="kicker">Step 5</p>
+  <h2>Damping: why the good news has a minus sign</h2>
+  <p class="lead">The aircraft is given a yaw rate and released. Ochre arc: the rotation. Green arc: the aerodynamic moment. The rate falls with time.</p>
+  <details class="qa"><summary>Question 2: once the nose starts turning right, should the aerodynamic moment add to the rotation or oppose it?</summary>
+    <p><b>Oppose it.</b> A rotation that grew by itself would turn every gust into a spin. With \(r&gt;0\) we want \(N&lt;0\); since \(N=C_{n_r}\hat r\,\bar q S b\) and \(\hat r&gt;0\), that needs \(C_{n_r}&lt;0\). This is <b>yaw damping</b>, and \(C_{n_r}&lt;0\) is normally good news.</p>
+  </details>
+  <p>Newton&rsquo;s second law for rotation about z:</p>
+  \[ I_z\frac{dr}{dt}=N=\bar q S b\,C_{n_r}\frac{rb}{2V} \]
+  <p>The right side is proportional to \(r\), so \(dr/dt=-r/\tau\) with</p>
+  \[ \tau=\frac{2VI_z}{\bar q\,S\,b^2\,|C_{n_r}|},\qquad r(t)=r_0\,e^{-t/\tau}. \]
+  <p>\(\tau\) is the time constant, the time to lose 63% of the rate. The animation plays exactly this equation.</p>
+  <div class="box units"><p class="t">Units check: is \(\tau\) in seconds?</p>
+    <div class="row"><span>numerator \(2VI_z\)</span><span class="ok">[m/s][kg&middot;m&sup2;] = [kg&middot;m&sup3;/s]</span></div>
+    <div class="row"><span>denominator \(\bar q S b^2|C_{n_r}|\)</span><span class="ok">[kg/(m&middot;s&sup2;)][m&sup2;][m&sup2;] = [kg&middot;m&sup3;/s&sup2;]</span></div>
+    <div class="row"><span>ratio</span><span class="ok">[s]</span></div>
+  </div>
+  <table class="syms">
+    <tr><td>\(I_z\)</td><td>mass moment of inertia about z</td><td>kg&middot;m&sup2;</td></tr>
+    <tr><td>\(\tau\)</td><td>time constant</td><td>s</td></tr>
+    <tr><td>\(r_0\)</td><td>initial yaw rate</td><td>rad/s</td></tr>
+  </table>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(I_z=60\,000\) kg&middot;m&sup2;, \(|C_{n_r}|=0.12\): \(\tau=\dfrac{2\cdot60\cdot60\,000}{2205\cdot40\cdot100\cdot0.12}=\dfrac{7.2\times10^6}{1.06\times10^6}\approx6.8\) s. A gust falls to a third in about 7 s and is nearly gone in 20 s.</p>
+  </div>
+  <p>The sign means direction relative to the motion: negative is a brake, positive is a throttle. Step 16 shows this sign reversing: \(C_{n_r,\text{eff}}&gt;0\) is the engine of the spin.</p>
+</section>
+
+<!-- =================================================================== 6 -->
+<section class="spin-step" data-step="6" data-tab="Superposition" id="step-6" hidden>
+  <p class="kicker">Step 6</p>
+  <h2>The classical approach: add the contributions</h2>
+  <p class="lead">Three arcs: sideslip (ochre), yaw rate (green, a brake), rudder (red). The dark arc is their sum. Classical aerodynamics measures each effect separately and adds.</p>
+  \[ C_n=C_{n_0}+C_{n_\beta}\beta+C_{n_r}\frac{rb}{2V}+C_{n_p}\frac{pb}{2V}+C_{n_{\delta_r}}\delta_r+\cdots \]
+  <table class="syms">
+    <tr><td>\(C_{n_0}\)</td><td>moment with everything at zero (&asymp; 0 for a symmetric aircraft)</td><td>&mdash;</td></tr>
+    <tr><td>\(C_{n_\beta}\)</td><td>weathercock stability; positive wanted</td><td>1/rad</td></tr>
+    <tr><td>\(C_{n_r}\)</td><td>yaw damping (steps 4&ndash;5); negative wanted</td><td>1/rad</td></tr>
+    <tr><td>\(C_{n_p}\)</td><td>cross-coupling from roll rate into yaw</td><td>1/rad</td></tr>
+    <tr><td>\(C_{n_{\delta_r}}\)</td><td>rudder effectiveness</td><td>1/rad</td></tr>
+    <tr><td>\(\hat p=pb/2V\)</td><td>nondimensional roll rate</td><td>&mdash;</td></tr>
+  </table>
+  <h3>Where it comes from: a Taylor expansion</h3>
+  <p>\(C_n=f(\alpha,\beta,\hat p,\hat r,\delta_r,\dots)\) is unknown, but near a reference point a smooth function is close to its tangent plane:</p>
+  \[ f(x_1,x_2,\dots)\approx f(0)+\frac{\partial f}{\partial x_1}x_1+\frac{\partial f}{\partial x_2}x_2+\cdots \]
+  <p>Each partial derivative is an <b>aerodynamic derivative</b>, and the formula is the first-order expansion: <b>linear superposition</b>. It works in normal flight because (1) the disturbances are small (&beta; a few degrees, \(\hat r&lt;0.05\)) and (2) the flow is attached, so the effects do not alter one another: 1 + 1 = 2.</p>
+  <div class="box units"><p class="t">Units check: every term dimensionless</p>
+    <div class="row"><span>\(C_{n_\beta}\beta\)</span><span class="ok">[1/rad][rad] = 1 (&beta; in radians)</span></div>
+    <div class="row"><span>\(C_{n_r}\hat r\)</span><span class="ok">[1/rad]&middot;1 = 1</span></div>
+    <div class="row"><span>\(C_{n_{\delta_r}}\delta_r\)</span><span class="ok">degrees here would be a factor 57 error</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(C_{n_\beta}=0.10\), \(\beta=8^\circ=0.14\) rad; \(C_{n_r}=-0.12\), \(\hat r=0.15\); \(C_{n_{\delta_r}}=-0.08\), \(\delta_r=10^\circ=0.175\) rad:</p>
+    \[ C_n=0.10\cdot0.14+(-0.12)(0.15)+(-0.08)(0.175)=0.014-0.018-0.014=-0.018 \]
+    <p>The net moment turns the nose left. The arcs in the scene follow this sum as you move the sliders.</p>
+  </div>
+  <div class="box warn"><p class="t">Watch this</p><p>Here \(C_{n_r}\) is a <em>constant</em>: the moment grows in proportion to the rotation however fast it turns. Step 15 tests that assumption.</p></div>
+  <p class="try">Try: <button type="button" data-set="rhat=0.05;dr=0">mostly &beta;</button><button type="button" data-set="rhat=0.3;dr=0">&beta; + strong brake</button><button type="button" data-set="rhat=0.15;dr=25">all three</button></p>
+</section>
+
+<!-- =================================================================== 7 -->
+<section class="spin-step" data-step="7" data-tab="Separation" id="step-7" hidden>
+  <p class="kicker">Step 7</p>
+  <h2>Raise &alpha; to 40&deg;: the flow separates</h2>
+  <p class="lead">The streaks no longer follow the upper surface; a reversed, turbulent region covers the wing and the tail. The wing turns red with separation.</p>
+  <details class="qa"><summary>Question 3: can the flow over the upper surface still follow the wing?</summary>
+    <p><b>Mostly not.</b> Over the upper surface the air first speeds up (pressure falls) and must then slow towards the trailing edge (pressure rises). The thin <b>boundary layer</b> has lost energy to friction and cannot climb the rising pressure, so it leaves the surface: <b>flow separation</b>. As &alpha; grows the &ldquo;hill&rdquo; steepens and separation moves forward; at 40&deg; almost the whole upper surface is separated.</p>
+  </details>
+  <ul>
+    <li><b>Separation</b>: a wide, low-pressure but disorderly region over the wing.</li>
+    <li><b>Vortex</b>: on a delta wing the flow leaving the leading edge rolls into a tight vortex that adds lift at moderate &alpha;.</li>
+    <li><b>Vortex breakdown</b>: at high &alpha; the vortex suddenly swells and bursts and the lift drops. Left and right need not burst together.</li>
+    <li><b>Wake and blanketing</b>: the separated region is carried aft and buries the fin in low-energy air; the tail that made the damping in step 4 loses its effect.</li>
+  </ul>
+  <p>The lift curve rises linearly, peaks and falls; the peak is the <b>stall</b>. For the example aircraft the peak is near 19&deg; with \(C_L\approx1.42\), and \(C_L\approx0.9\) at 40&deg; (chart in step 19). Past the peak \(dC_L/d\alpha&lt;0\): more angle, less lift.</p>
+  <p><b>Why the linear model breaks.</b> Of step 6&rsquo;s two conditions, attached flow is gone. Effects now change one another: sideslip bursts one wing&rsquo;s vortex, that wing&rsquo;s lift drops, the wake reaching the tail changes. \(C_n\) is no longer a sum of separate effects but a <b>nonlinear</b> function to be measured as a whole.</p>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(C_L(19^\circ)=1.42\), \(C_L(40^\circ)=0.90\): at twice the angle the wing makes 63% of the lift. The loss measures the separated region.</p>
+  </div>
+  <p class="try">Try: <button type="button" data-set="alpha=15" data-view="side">&alpha; = 15&deg;</button><button type="button" data-set="alpha=25" data-view="side">25&deg;</button><button type="button" data-set="alpha=40" data-view="side">40&deg;</button><button type="button" data-set="alpha=60" data-view="side">60&deg;</button></p>
+</section>
+
+<!-- =================================================================== 8 -->
+<section class="spin-step" data-step="8" data-tab="Steady rotation" id="step-8" hidden>
+  <p class="kicker">Step 8</p>
+  <h2>Keep it turning: steady \(r&gt;0\)</h2>
+  <p class="lead">The aircraft keeps turning the same way. Red arrow: the angular velocity &omega;, along the body z axis (down). Watch the turn counter.</p>
+  <div class="box def"><p class="t">Definitions</p>
+    <p><b>Steady rotation</b>: the angular velocity is constant in direction and size. In an oscillation the rate changes sign and averages to zero; here it never does. Here \(\vec\omega=(0,0,r)\).</p>
+  </div>
+  <div class="box units"><p class="t">Units check: the period of a turn</p>
+    <div class="row"><span>\(\hat r=0.25\Rightarrow r=\hat r\cdot2V/b=0.25\cdot120/10\)</span><span class="ok">= 3.0 rad/s</span></div>
+    <div class="row"><span>\(T=2\pi/r=6.28/3.0\)</span><span class="ok">= 2.1 s per turn</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>One turn in 2.1 s is 29 turns a minute. Real spins have \(\hat r\) between 0.1 and 0.4, and light aircraft take 1&ndash;3 s per turn. Against the &ldquo;normal&rdquo; \(\hat r=0.04\) of step 4 that is 6 to 10 times larger.</p>
+  </div>
+  <p>The basic equation of rigid-body kinematics, for a point at \(\vec r_{\text{pt}}\) from the CG:</p>
+  \[ \vec V_{\text{pt}}=\vec V_{\text{CG}}+\vec\omega\times\vec r_{\text{pt}} \]
+  <p>\(\vec\omega\times\vec r\) is normal to both vectors, of size \(|\omega||r|\sin\theta\), by the right-hand rule. It is not zero at the tips and has <em>opposite signs</em> at the two tips, so step 2&rsquo;s argument (&ldquo;every point moves with the same \(\vec V\)&rdquo;) no longer holds. The formula of step 6 includes \(\hat r\), but only linearly: ten times \(\hat r\), ten times the moment. Whether the flow at such a large \(\hat r\) is still the same flow is the real question; steps 9 and 11 say no.</p>
+</section>
+
+<!-- =================================================================== 9 -->
+<section class="spin-step" data-step="9" data-tab="Tip speeds" id="step-9" hidden>
+  <p class="kicker">Step 9</p>
+  <h2>The two wings no longer see the same air</h2>
+  <p class="lead">Top view. Eight wind arrows along the span: long on the left wing (green), short on the right (red), proportional to \(V_\infty\pm r\,y\) with no exaggeration.</p>
+  <p>With \(\vec\omega=(0,0,r)\) and a point on the wing \(\vec r_{\text{pt}}=(0,y,0)\), the cross product</p>
+  \[ \vec a\times\vec b=(a_yb_z-a_zb_y,\ a_zb_x-a_xb_z,\ a_xb_y-a_yb_x) \]
+  <p>gives</p>
+  \[ \vec\omega\times\vec r_{\text{pt}}=(0\cdot0-r\,y,\ r\cdot0-0\cdot0,\ 0\cdot y-0\cdot0)=(-r\,y,\ 0,\ 0). \]
+  <p>So \(\vec V_{\text{pt}}=(V-r\,y,\,0,\,0)\): the <b>right wing</b> (\(y&gt;0\)) sees \(V-r\,y\), slower, on the inside of the turn; the <b>left wing</b> (\(y=-|y|\)) sees \(V+r|y|\), faster, sweeping forward on the outside.</p>
+  \[ V_{\text{left}}\neq V_{\text{right}} \]
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(r\,y\)</span><span class="ok">[rad/s][m] = [m/s]</span></div>
+    <div class="row"><span>\(V-r\,y\)</span><span class="ok">[m/s] &minus; [m/s] = [m/s]</span></div>
+    <div class="row"><span>\(r\,y/V=\hat r\cdot y/(b/2)\)</span><span class="ok">dimensionless; exactly r&#770; at the tip</span></div>
+  </div>
+  <p>The signs depend on the axis choice, the physics does not: the outer wing runs in the outer lane.</p>
+  <div class="box ex"><p class="t">Worked numbers</p>
+    <p><b>Normal flight:</b> \(r=0.5\) rad/s, \(y=\pm5\) m, \(r\,y=2.5\) m/s. Left tip 62.5 m/s, right tip 57.5 m/s: 8% apart.</p>
+    <p><b>Spin:</b> \(\hat r=0.25\Rightarrow r=3\) rad/s, \(r\,y=15\) m/s. Left tip <b>75</b> m/s, right tip <b>45</b> m/s: 50% apart, the right tip at 60% of the left.</p>
+  </div>
+  <p class="try">Try: <button type="button" data-set="rhat=0.04">r&#770; = 0.04 (normal)</button><button type="button" data-set="rhat=0.25">r&#770; = 0.25 (spin)</button><button type="button" data-set="rhat=0.4">r&#770; = 0.40</button></p>
+</section>
+
+<!-- =================================================================== 10 -->
+<section class="spin-step" data-step="10" data-tab="Lift asymmetry" id="step-10" hidden>
+  <p class="kicker">Step 10</p>
+  <h2>Lift goes with the square of the speed</h2>
+  <p class="lead">Two lift arrows, scaled with \((V_{\text{local}}/V_\infty)^2\): long on the left, short on the right. The red arc at the nose is the rolling moment the difference creates.</p>
+  <details class="qa"><summary>Question 4: if \(L=\tfrac12\rho V^2SC_L\) and the wings see different \(V\), can their lift be equal?</summary>
+    <p><b>No, and the difference is larger than the speed difference.</b> \(L\propto V^2\): an 8% speed difference gives \((1.08)^2=1.17\), 17% in lift; a 50% one gives \((75/45)^2=2.8\) times. Squaring magnifies small differences.</p>
+  </details>
+  <p>Bernoulli: \(p+\tfrac12\rho V^2\) is constant along the flow. \(\tfrac12\rho V^2\) is the kinetic energy per unit volume and the pressure recovered when the air is stopped: the dynamic pressure \(\bar q\). The pressure difference across the wing scales with \(\bar q\); times the area it is a force; shape and &alpha; go into \(C_L\):</p>
+  \[ L=\bar q\,S\,C_L=\tfrac12\rho V^2S\,C_L \]
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(\tfrac12\rho V^2\)</span><span class="ok">[kg/m&sup3;][m&sup2;/s&sup2;] = [N/m&sup2;]</span></div>
+    <div class="row"><span>\(\times S\)</span><span class="ok">[N/m&sup2;][m&sup2;] = [N]</span></div>
+    <div class="row"><span>\(\times C_L\)</span><span class="ok">dimensionless</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>Spin case, \(\hat r=0.25\), mid-wing \(y=\pm3.5\) m (0.7 of the semispan): \(V_{\text{left}}=60(1+0.175)=70.5\), \(V_{\text{right}}=60(1-0.175)=49.5\) m/s. Ratio \((70.5/49.5)^2=2.03\): the left wing lifts twice as much as the right, even at the same &alpha; and \(C_L\).</p>
+  </div>
+  <p>More lift on the left rolls the aircraft <em>right</em>, \(p&gt;0\). Yaw alone has produced roll: <b>cross-coupling</b>, represented by the derivative \(C_{l_r}\). A spin is never &ldquo;just yaw&rdquo;, and the lift difference acts with an arm of order \(b/2\).</p>
+</section>
+
+<!-- =================================================================== 11 -->
+<section class="spin-step" data-step="11" data-tab="Local &alpha;" id="step-11" hidden>
+  <p class="kicker">Step 11</p>
+  <h2>Worse in a spin: the local angles of attack differ</h2>
+  <p class="lead">So far only the speed changed. Now the tip arrows come from different <em>directions</em>: a larger &alpha; at the right tip, a smaller one at the left. The colours show two different flow regimes.</p>
+  <p>In a real spin the aircraft also rolls, \(\vec\omega=(p,0,r)\), and the cross product gains a vertical part:</p>
+  \[ \vec\omega\times(0,y,0)=(-r\,y,\ 0,\ p\,y) \]
+  <p>The body components of the air velocity at the tip (forward \(u\), down \(w\)) are</p>
+  \[ u=V\cos\alpha-r\,y,\qquad w=V\sin\alpha+p\,y,\qquad \alpha_{\text{local}}=\arctan\frac{w}{u}. \]
+  <p>Rolling right, the right tip moves <em>down</em>, so it sees the air coming from below: a larger &alpha;. The rising left tip sees the opposite. Yaw changes \(u\): on the slowed right wing \(w/u\) grows and &alpha; rises again. On the right wing both effects push the same way.</p>
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(V\cos\alpha-r\,y\)</span><span class="ok">[m/s] &minus; [rad/s][m] = [m/s]</span></div>
+    <div class="row"><span>\(V\sin\alpha+p\,y\)</span><span class="ok">[m/s]</span></div>
+    <div class="row"><span>\(\arctan(w/u)\)</span><span class="ok">ratio &rarr; angle (rad)</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(\alpha=40^\circ\), \(\hat p=\hat r=0.10\), at the tip: \(u/V=\cos40^\circ-0.10=0.666\), \(w/V=\sin40^\circ+0.10=0.743\), so \(\alpha_{\text{right}}=\arctan(0.743/0.666)=48^\circ\). Left tip: \(u/V=0.866\), \(w/V=0.543\), \(\alpha_{\text{left}}=32^\circ\). A 16&deg; difference, both beyond the 19&deg; stall but to different depths.</p>
+  </div>
+  <ul>
+    <li>Left wing (32&deg;): the vortex may still be partly attached; moderate lift.</li>
+    <li>Right wing (48&deg;): vortex burst, upper surface fully separated; low lift, high drag.</li>
+  </ul>
+  <div class="box warn"><p class="t">The key distinction</p>
+    <p>The aircraft is no longer &ldquo;at 40&deg; with a small yaw correction&rdquo;. It is in a <b>rotating separated-flow state</b>: one wing in one regime, the other in another, their wakes mixing at the tail. That state cannot be built from data on a non-rotating aircraft; it can only be measured. Past the stall \(C_L(\alpha)\) is not linear, so the mean of \(C_L(32^\circ)\) and \(C_L(48^\circ)\) is not \(C_L(40^\circ)\): the average angle does not give the average force.</p>
+  </div>
+  <p class="try">Try: <button type="button" data-set="alpha=40;phat=0;rhat=0">no rotation</button><button type="button" data-set="alpha=40;phat=0.1;rhat=0.1">p&#770; = r&#770; = 0.1</button><button type="button" data-set="alpha=40;phat=0.2;rhat=0.2">p&#770; = r&#770; = 0.2</button></p>
+</section>
+
+<!-- =================================================================== 12 -->
+<section class="spin-step" data-step="12" data-tab="Classical tests" id="step-12" hidden>
+  <p class="kicker">Step 12</p>
+  <h2>The two tests of the classical model: static and forced oscillation</h2>
+  <p class="lead">Two tunnel models: one fixed (test A), one rocked left and right at small amplitude (test B). The classical method adds their results to predict the rotating aircraft.</p>
+  <div class="box def"><p class="t">Test A: static</p>
+    <p>The model is held on a rear <b>sting</b>; &alpha; and &beta; are stepped; an internal six-component <b>balance</b> reads \(C_L, C_D, C_m, C_l, C_n, C_Y\) at each point. The result is a table \(C_n(\alpha,\beta)\) with \(\hat p=\hat r=0\), from which static derivatives such as \(C_{n_\beta}\) follow.</p>
+  </div>
+  <div class="box def"><p class="t">Test B: forced oscillation</p>
+    <p>The model is driven sinusoidally about one axis, \(\psi(t)=\psi_0\sin\omega t\), at small amplitude (&plusmn;2&ndash;8&deg;). The measured moment splits into the part in phase with the motion (position-dependent, a static derivative) and the part 90&deg; out of phase (rate-dependent, a damping derivative).</p>
+  </div>
+  <p>The yaw rate \(r=\dot\psi=\psi_0\,\omega\cos\omega t\) changes sign continuously and averages to zero. What comes out is the combination</p>
+  \[ C_{n_r}-C_{n_{\dot\beta}}\cos\alpha, \]
+  <p>because the oscillating model sees both \(r\) and \(\dot\beta\) and the two cannot be separated. \(C_{n_{\dot\beta}}\) comes from the lag of the flow (step 17).</p>
+  <div class="box units"><p class="t">Units check: how large is r&#770; in test B?</p>
+    <div class="row"><span>\(\psi_0=5^\circ=0.087\) rad, \(\omega=2\pi\cdot1\ \text{Hz}=6.28\) rad/s</span><span class="ok">r<sub>max</sub> = 0.55 rad/s</span></div>
+    <div class="row"><span>model \(b=1\) m, \(V=30\) m/s: \(\hat r_{\max}=0.55\cdot1/60\)</span><span class="ok">= 0.009</span></div>
+    <div class="row"><span>spin \(\hat r\)</span><span class="ok">0.1&ndash;0.4: 10 to 40 times larger</span></div>
+  </div>
+  <p>The engineer then writes</p>
+  \[ C_n(\text{rotating})\approx\underbrace{C_n(\alpha,\beta)}_{\text{test A}}+\underbrace{C_{n_r}}_{\text{test B}}\,\hat r. \]
+  <p>Inside the normal flight envelope this works: small \(\hat r\), attached flow, linear behaviour, and both tests are cheap and standard. The problem is not the method but carrying it outside the range where it holds.</p>
+</section>
+
+<!-- =================================================================== 13 -->
+<section class="spin-step" data-step="13" data-tab="Oscillation vs spin" id="step-13" hidden>
+  <p class="kicker">Step 13</p>
+  <h2>The central question: are these the same physical state?</h2>
+  <p class="lead">One model oscillates: right, stop, left, stop. The other spins: same direction, never stopping, descending along a helix.</p>
+  <details class="qa"><summary><b>State A</b>, forced oscillation, rate changing sign; <b>state B</b>, a spin, steady rotation. Does a number measured in A give the force in B?</summary>
+    <p><b>No.</b> Four concrete differences, all from steps 9&ndash;11:</p>
+    <ol>
+      <li><b>Size.</b> \(\hat r\sim0.01\) in A, 0.1&ndash;0.4 in B. The slope near zero does not give the value far away (step 15).</li>
+      <li><b>Sign.</b> In A, \(r\) reverses every half cycle before an asymmetry can build. In B it keeps its sign: the right wing always slow and at high &alpha;, the left always fast and lower.</li>
+      <li><b>Flow field.</b> In A the separated region keeps breaking down and re-forming: a transient. In B it has <em>settled</em>: vortices, wakes and the shadow on the tail form a lasting structure matched to the rotation.</li>
+      <li><b>Average.</b> Over a cycle of A the mean is near zero and any lasting asymmetric moment is erased. In B the asymmetry is permanent, and it is exactly what is measured.</li>
+    </ol>
+  </details>
+  <p>Knowing that they differ does not tell how much. The only way to know the force is to hold the model in that state, at high &alpha; and finite, constant \(\hat r\), and measure. That is where the rotary balance comes from.</p>
+  <div class="box ex"><p class="t">Worked number: the tip angles over time</p>
+    <p><b>A:</b> the right-tip &alpha; swings between \(40^\circ\pm1^\circ\) once a second, the left tip in antiphase; mean difference 0&deg;.<br><b>B:</b> right tip steadily 48&deg;, left tip steadily 32&deg; (step 11); the 16&deg; difference never goes to zero.</p>
+  </div>
+</section>
+
+<!-- =================================================================== 14 -->
+<section class="spin-step" data-step="14" data-tab="Rotary-balance rig" id="step-14" hidden>
+  <p class="kicker">Step 14</p>
+  <h2>What the rotary balance does</h2>
+  <p class="lead">Inside the tunnel. The model is on an arm that a motor turns at constant &Omega; about the flow axis, with the CG on that axis. At &alpha; = 45&deg; the rotating model performs a spin motion. Try the &alpha; and r&#770; sliders.</p>
+  <div class="box def"><p class="t">Definition</p>
+    <p><b>Rotary balance</b>: a rig that turns the model <em>steadily</em> about an axis parallel to the free stream while an internal balance measures all six force and moment components. The model is set at the wanted &alpha; and &beta; on the rotation axis.</p>
+  </div>
+  <p><b>Why the axis is parallel to the flow.</b> In a real spin the aircraft turns about a vertical axis and falls along it, so relative to the aircraft the air comes along the rotation axis. In the tunnel the rotation axis is aligned with the tunnel flow: for the model the two are the same.</p>
+  <p>Projecting \(\vec\Omega\) (along the flow) onto body axes, with the x axis at &alpha; to the flow:</p>
+  \[ p=\Omega\cos\alpha,\qquad r=\Omega\sin\alpha,\qquad q=0\ (\beta=0). \]
+  <p>This is exactly the \((p,r)\) pair of step 11, produced from one &Omega; in an &alpha;-dependent ratio: mostly roll at low &alpha;, pure yaw at 90&deg;.</p>
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(\hat\Omega=\Omega b/2V\)</span><span class="ok">dimensionless, like r&#770;</span></div>
+    <div class="row"><span>\(\hat p=\hat\Omega\cos\alpha,\ \hat r=\hat\Omega\sin\alpha\)</span><span class="ok">dimensionless</span></div>
+    <div class="row"><span>\(\hat p^2+\hat r^2=\hat\Omega^2\)</span><span class="ok">consistency check</span></div>
+  </div>
+  <table class="syms">
+    <tr><td>\(\Omega\)</td><td>rotation rate of the rig (and of the spin), parallel to the flow</td><td>rad/s</td></tr>
+    <tr><td>\(\hat\Omega\)</td><td>spin-rate parameter \(\Omega b/2V\)</td><td>&mdash;</td></tr>
+    <tr><td>sting</td><td>rod holding the model from behind, on the arm and motor</td><td>&mdash;</td></tr>
+    <tr><td>balance</td><td>six-component force gauge inside the model</td><td>&mdash;</td></tr>
+  </table>
+  <div class="box ex"><p class="t">Worked number: one measurement point</p>
+    <p>\(\alpha=45^\circ\), \(\beta=0\), \(\hat\Omega=0.25\): \(\hat p=0.25\cos45^\circ=0.177\), \(\hat r=0.177\). While the arm turns, the rig reads \(C_n, C_l, C_m, C_L, C_D, C_Y\) directly. The result might be \(C_n=+0.012\): positive, with the rotation (step 16).</p>
+  </div>
+  <p>The engineer no longer estimates \(C_n\approx C_{n,\text{static}}+C_{n_r}\hat r\); the rig measures</p>
+  \[ C_n=f(\alpha,\beta,\hat\Omega)\quad\text{or equivalently}\quad C_n=f(\alpha,\beta,\hat p,\hat r). \]
+  <p>This is not the <b>free-spin test</b>, where a model is released and filmed: that shows the outcome (does it spin, how many turns) but measures no forces. The rotary balance imposes the motion and measures the forces. The two complement each other.</p>
+  <p class="try">Try: <button type="button" data-set="alpha=20;rhat=0.2">&alpha; = 20&deg;</button><button type="button" data-set="alpha=45;rhat=0.2">&alpha; = 45&deg;</button><button type="button" data-set="alpha=70;rhat=0.3">&alpha; = 70&deg;, faster</button></p>
+</section>
+
+<!-- =================================================================== 15 -->
+<section class="spin-step" data-step="15" data-tab="Tangent vs curve" id="step-15" hidden>
+  <p class="kicker">Step 15</p>
+  <h2>Think geometrically: tangent or curve?</h2>
+  <p class="lead">The most important picture of the lesson. Dashed line: the classical derivative, the slope at zero. Ochre curve: \(C_n(\hat r)\) as the rotary balance measures it. Shaded: the error between them. The 3D scene follows the same &alpha; and r&#770;.</p>
+  <figure><div class="chart" data-chart="cn-r"></div>
+    <div class="chart-controls">
+      <label><span>&alpha;</span><input type="range" min="0" max="60" step="1" value="45" data-state="alpha" aria-label="angle of attack"><b>45&deg;</b></label>
+      <label><span>r&#770;</span><input type="range" min="0" max="0.4" step="0.01" value="0.15" data-state="rhat" aria-label="nondimensional yaw rate"><b>0.15</b></label>
+    </div>
+    <figcaption>\(C_n\) against \(\hat r\). The classical dynamic derivative is the tangent at \(\hat r\approx0\); at spin values the curve leaves it and can change sign. A qualitative teaching model, not data for a real aircraft.</figcaption>
+  </figure>
+  <p>Test B measures the slope near zero:</p>
+  \[ C_{n_r}=\left.\frac{\partial C_n}{\partial\hat r}\right|_{\hat r\approx0} \]
+  <p>A tangent represents a curve well near its point, and need not anywhere else. In Taylor form,</p>
+  \[ C_n(\hat r)=C_n(0)+\left.\frac{dC_n}{d\hat r}\right|_0\hat r+\frac12\left.\frac{d^2C_n}{d\hat r^2}\right|_0\hat r^2+\frac16\left.\frac{d^3C_n}{d\hat r^3}\right|_0\hat r^3+\cdots \]
+  <p>The classical model keeps the first two terms. The rest grow with \(\hat r^2\) and above: at \(\hat r=0.01\), \(\hat r^2=10^{-4}\); at \(\hat r=0.3\), \(\hat r^2=0.09\) and \(\hat r^3=0.027\), no longer negligible because the curvature is large at high &alpha;.</p>
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>every term: \([C_n]=1,\ [\hat r^k]=1\)</span><span class="ok">derivatives dimensionless too</span></div>
+    <div class="row"><span>linear model valid &hArr; \(|\tfrac12C_n''\hat r^2|\ll|C_{n_r}\hat r|\)</span><span class="ok">i.e. \(\hat r\ll2|C_{n_r}|/|C_n''|\)</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number: read the chart</p>
+    <p>At \(\alpha=45^\circ\) the tangent slope is \(C_{n_r}=-0.06\). At \(\hat r=0.2\) the tangent predicts \(-0.06\cdot0.2=-0.012\), damping. The curve gives \(0.2\,(-0.06+1.2\cdot0.2-3.0\cdot0.04)=+0.012\). <b>Same size, opposite sign</b>: the classical model says brake where the real flow says throttle.</p>
+    <p>Set \(\alpha=5^\circ\) on the same chart: the curve sits on the line, and the linear model is right there.</p>
+  </div>
+  <p>A more precise forced-oscillation test does not fix this. The problem is not measurement accuracy but the quantity measured: however well the slope at zero is known, it does not give the curve at 0.3.</p>
+</section>
+
+<!-- =================================================================== 16 -->
+<section class="spin-step" data-step="16" data-tab="Autorotation" id="step-16" hidden>
+  <p class="kicker">Step 16</p>
+  <h2>Autorotation: the moment feeds the rotation</h2>
+  <p class="lead">Ochre arc: the rotation. Red arc: the aerodynamic moment, in the <em>same</em> direction, the reverse of step 5. The right wing is fully separated, the left partly attached.</p>
+  <div class="box def"><p class="t">Definition</p>
+    <p><b>Autorotation</b>: a rotation that produces an aerodynamic moment in its own direction and so sustains itself with no outside source.</p>
+  </div>
+  <p>Normal, stable aerodynamics: \(r&gt;0\) gives \(C_n&lt;0\). At high &alpha; the rotary balance measures, in some ranges, \(r&gt;0\) with \(C_n&gt;0\). The mechanism, from steps 9&ndash;11:</p>
+  <ol>
+    <li>Turning right, the right wing is slow and at high local &alpha;, the left fast and at lower &alpha;.</li>
+    <li>At high &alpha; the right wing is more deeply separated: <em>less</em> lift, <em>more</em> drag (step 7).</li>
+    <li>The extra drag on the right wing acts with an arm \(b/2\), pulls that wing back and turns the nose <em>right</em>: \(N&gt;0\), with the rotation.</li>
+    <li>The extra lift on the left wing rolls the aircraft right (step 10), raising the right wing&rsquo;s local &alpha; further; back to 2.</li>
+  </ol>
+  <p>Forcing the measured curve into step 6&rsquo;s form defines an <b>effective derivative</b> \(C_{n_r,\text{eff}}=C_n/\hat r\). If it turns positive at high &alpha;:</p>
+  \[ r&gt;0\ \Rightarrow\ C_n&gt;0\ \Rightarrow\ \text{rotation}\rightarrow\text{moment}\rightarrow\text{more rotation}. \]
+  <h3>Why a spin does not accelerate for ever</h3>
+  <p>In the step 15 curve at 45&deg;, \(C_n\) turns positive near \(\hat r\approx0.06\) and negative again near \(\hat r\approx0.34\). With \(I_z\,dr/dt=\bar q S b\,C_n(\hat r)\) the rotation speeds up between 0.06 and 0.34 and slows above 0.34. Where the curve crosses zero with negative slope, \(\hat r=0.34\), is a stable <b>equilibrium spin</b>: a state the aircraft settles into, not an event. (Inertia moments also take part in the real balance; this lesson shows the aerodynamic side only.)</p>
+  <div class="box units"><p class="t">Units check: the rotation equation</p>
+    <div class="row"><span>\(N=\bar q\,S\,b\,C_n\)</span><span class="ok">[N/m&sup2;][m&sup2;][m] = [N&middot;m]</span></div>
+    <div class="row"><span>\(dr/dt=N/I_z\)</span><span class="ok">[N&middot;m]/[kg&middot;m&sup2;] = [rad/s&sup2;]</span></div>
+  </div>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(\hat r=0.2\), \(\alpha=45^\circ\): \(C_n=+0.012\), \(N=0.012\cdot882\,000=+10\,600\) N&middot;m. With \(I_z=60\,000\) kg&middot;m&sup2;, \(dr/dt=0.18\) rad/s&sup2;: the rotation gains 0.18 rad/s every second until \(\hat r=0.34\) (\(r=4.1\) rad/s, 1.5 s per turn).</p>
+  </div>
+  <p>\(C_{n_r}\) is not a fixed property of the aircraft: it is only the slope near \(\hat r\approx0\), and even that depends on &alpha;. At finite \(\hat r\) the derivative gives way to the whole curve, \(C_n=f(\alpha,\beta,\hat\Omega)\).</p>
+</section>
+
+<!-- =================================================================== 17 -->
+<section class="spin-step" data-step="17" data-tab="Flow memory" id="step-17" hidden>
+  <p class="kicker">Step 17</p>
+  <h2>An important correction: &ldquo;flow memory&rdquo;</h2>
+  <p class="lead">On the oscillating model the grey arrow is the tail motion and the red arrow the force, which arrives <em>late</em>. On the steadily turning model the flow has settled and the asymmetry is fixed.</p>
+  <p>A common sentence: &ldquo;forced oscillation cannot see flow memory, the rotary balance can.&rdquo; That is too strong and partly wrong.</p>
+  <div class="box def"><p class="t">Definitions</p>
+    <p><b>Flow memory</b> (unsteady aerodynamics): the loads depend on the recent past as well as the present &alpha;, &beta; and rates. Separated regions take time to form and decay, so the force follows a change in angle with a delay.</p>
+    <p><b>Phase lag</b> \(\varphi\): the angle between a sinusoidal motion and its response. Zero lag is an instantaneous force; towards 90&deg; the force depends on the rate rather than the position.</p>
+  </div>
+  <p>Test B&rsquo;s output is the in-phase and the 90&deg;-shifted part of the response, and the shifted part is precisely a measure of lag; that is why \(C_{n_{\dot\beta}}\) exists. Testing at several frequencies gives the frequency dependence of the lag. Forced oscillation does say something real about time-dependent aerodynamics. The accurate distinction is</p>
+  \[ \text{forced oscillation}\rightarrow\text{time-dependent response to small or moderate oscillation} \]
+  \[ \text{rotary balance}\rightarrow\text{settled aerodynamics of steady rotation at a finite rate} \]
+  <table class="syms">
+    <tr><td>Static</td><td>\(C_n(\alpha,\beta)\); no rotation</td><td>test A</td></tr>
+    <tr><td>Forced oscillation</td><td>slope at \(\hat r\approx0\) and phase lag; combinations such as \(C_{n_r}-C_{n_{\dot\beta}}\cos\alpha\)</td><td>test B</td></tr>
+    <tr><td>Rotary balance</td><td>\(C_n(\alpha,\beta,\hat\Omega)\); the full curve at steady, finite rotation</td><td>this lesson</td></tr>
+    <tr><td>Large-amplitude, oscillatory coning</td><td>hysteresis, spin entry and recovery, the memory itself</td><td>further tests</td></tr>
+  </table>
+  <div class="box warn"><p class="t">Strength and limit of the rotary balance</p>
+    <p><b>Strength:</b> it measures directly the nonlinear coefficients of steady rotation. <b>Limit:</b> because it is steady, it does not by itself give the moments when the rate is <em>changing</em>: spin entry, recovery, hysteresis. Those need time-dependent models and other unsteady tests. The rotary balance maps the equilibrium spin and the autorotation region; it is not a film of the transitions.</p>
+  </div>
+  <p>The two tests answer different questions. Oscillation: how late does the force follow the motion? Rotary balance: what is the force in steady rotation? A full spin model uses both.</p>
+</section>
+
+<!-- =================================================================== 18 -->
+<section class="spin-step" data-step="18" data-tab="Span &alpha; derivation" id="step-18" hidden>
+  <p class="kicker">Derivation, step 18</p>
+  <h2>How \(p\) and \(r\) change the local &alpha; along the span</h2>
+  <p class="lead">The formula previewed in step 11, built in full. The ochre curve above the wing is \(\alpha_{\text{local}}-\alpha\) along the span; the tip arrows show where the air comes from.</p>
+  <h3>1. Velocity of a point on a rigid body</h3>
+  \[ \vec V_{\text{pt}}=\vec V_{\text{CG}}+\vec\omega\times\vec r_{\text{pt}} \]
+  <p>In body axes \(\vec V_{\text{CG}}=(u_0,v_0,w_0)\) with \(u_0=V\cos\alpha\cos\beta\), \(v_0=V\sin\beta\), \(w_0=V\sin\alpha\cos\beta\). With \(\beta=0\): \(\vec V_{\text{CG}}=(V\cos\alpha,\,0,\,V\sin\alpha)\).</p>
+  <table class="syms">
+    <tr><td>\(u,v,w\)</td><td>body components of velocity: forward, right, <b>down</b></td><td>m/s</td></tr>
+    <tr><td>\(\alpha=\arctan(w/u)\)</td><td>angle of attack from the components, consistent with step 1</td><td>rad</td></tr>
+    <tr><td>\(\eta=y/(b/2)\)</td><td>span position: &minus;1 left tip, 0 root, +1 right tip</td><td>&mdash;</td></tr>
+  </table>
+  <h3>2. The cross product</h3>
+  <p>\(\vec\omega=(p,q,r)\), \(\vec r_{\text{pt}}=(0,y,0)\):</p>
+  \[ \vec\omega\times\vec r_{\text{pt}}=(q\cdot0-r\,y,\ r\cdot0-p\cdot0,\ p\,y-q\cdot0)=(-r\,y,\ 0,\ p\,y) \]
+  <p>\(q\) drops out: pitching does not change the velocity of points level with the CG (zero arm). That is why \(p\) and \(r\) matter for a spin and \(q\) is secondary.</p>
+  <h3>3. Local velocity and local &alpha;</h3>
+  \[ u(y)=V\cos\alpha-r\,y,\qquad w(y)=V\sin\alpha+p\,y \]
+  \[ \alpha_{\text{local}}(y)=\arctan\frac{V\sin\alpha+p\,y}{V\cos\alpha-r\,y} \]
+  <p>Dividing by \(V\), with \(p\,y/V=\hat p\,\eta\) and \(r\,y/V=\hat r\,\eta\):</p>
+  \[ \alpha_{\text{local}}(\eta)=\arctan\frac{\sin\alpha+\hat p\,\eta}{\cos\alpha-\hat r\,\eta} \]
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(p\,y,\ r\,y\)</span><span class="ok">[rad/s][m] = [m/s]</span></div>
+    <div class="row"><span>\(p\,y/V=(pb/2V)\cdot y/(b/2)=\hat p\,\eta\)</span><span class="ok">1&middot;1 = 1</span></div>
+    <div class="row"><span>arctan argument</span><span class="ok">[m/s]/[m/s] = 1</span></div>
+  </div>
+  <h3>4. Linear form for small rotation</h3>
+  <p>For \(\hat p\eta,\hat r\eta\ll1\), to first order:</p>
+  \[ \alpha_{\text{local}}\approx\alpha+\eta\,(\hat p\cos\alpha+\hat r\sin\alpha) \]
+  <p>\(\Delta\alpha\) is linear along the span and weights \(\hat p\) by \(\cos\alpha\) and \(\hat r\) by \(\sin\alpha\): \(\hat p\) dominates at low &alpha;, \(\hat r\) contributes as much at high &alpha;. With the rotary-balance relations \(p=\Omega\cos\alpha\), \(r=\Omega\sin\alpha\) this becomes \(\Delta\alpha=\eta\,\hat\Omega\): in a spin the local-&alpha; difference scales directly with \(\hat\Omega\).</p>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>\(V=60\), \(\alpha=30^\circ\), \(\hat p=0.15\), \(\hat r=0.10\): \(p=0.15\cdot120/10=1.8\) rad/s, \(r=1.2\) rad/s. At the tip \(y=5\) m: \(p\,y=9\) m/s, \(r\,y=6\) m/s.</p>
+    <p><b>Right tip:</b> \(u=60\cdot0.866-6=45.96\), \(w=60\cdot0.5+9=39.0\), \(\alpha=\arctan(39.0/45.96)=40.3^\circ\).<br><b>Left tip:</b> \(u=51.96+6=57.96\), \(w=30-9=21.0\), \(\alpha=19.9^\circ\).</p>
+    <p>Linear form: \(\Delta\alpha=\pm(0.15\cdot0.866+0.10\cdot0.5)=\pm0.18\) rad \(=\pm10.3^\circ\), giving 40.3&deg; and 19.7&deg;, almost exact at these rates. The left tip is <em>below</em> the stall peak and the right tip <em>above</em> it: one aircraft, one instant, two regimes.</p>
+  </div>
+  <p>The difference itself may be linear; the trouble is its effect. \(C_L(\alpha)\) has opposite slopes on either side of the peak, so a 10&deg; difference near the peak reverses the lift difference. Step 19 shows exactly that.</p>
+  <p class="try">Try: <button type="button" data-set="alpha=30;phat=0.15;rhat=0">p&#770; only</button><button type="button" data-set="alpha=30;phat=0;rhat=0.2">r&#770; only</button><button type="button" data-set="alpha=60;phat=0.1;rhat=0.2">&alpha; = 60&deg;</button></p>
+</section>
+
+<!-- =================================================================== 19 -->
+<section class="spin-step" data-step="19" data-tab="Roll damping" id="step-19" hidden>
+  <p class="kicker">Derivation, step 19</p>
+  <h2>\(C_l\)&ndash;\(\hat p\) and \(C_n\)&ndash;\(\hat r\): damping, zero, autorotation</h2>
+  <p class="lead">The aircraft rolls right at p&#770;. At small &alpha; the descending right wing lifts more and brakes the roll (green arc). Take &alpha; past the stall peak: the same wing lifts less and the arc turns red.</p>
+  <figure><div class="chart" data-chart="cl-alpha"></div>
+    <div class="chart-controls">
+      <label><span>&alpha;</span><input type="range" min="0" max="60" step="1" value="12" data-state="alpha" aria-label="angle of attack"><b>12&deg;</b></label>
+      <label><span>p&#770;</span><input type="range" min="-0.3" max="0.3" step="0.01" value="0.15" data-state="phat" aria-label="nondimensional roll rate"><b>0.15</b></label>
+    </div>
+    <figcaption>Two wings on the lift curve: rising (left, lower &alpha;) and descending (right, higher &alpha;). The slope of the ochre segment sets the sign of the rolling moment; past the peak slope and sign reverse.</figcaption>
+  </figure>
+  <h3>1. Strip theory for \(C_{l_p}\)</h3>
+  <p>Cut the wing into thin strips, each seeing its own local &alpha;. With roll only, \(\Delta\alpha(y)=p\,y/V\) (small &alpha;, \(\cos\alpha\approx1\)). The extra lift of a strip, with lift slope \(C_{L\alpha}\):</p>
+  \[ dL=\bar q\,c(y)\,C_{L\alpha}\,\frac{p\,y}{V}\,dy \]
+  <p>It pushes the descending wing up, against the roll, with arm \(y\):</p>
+  \[ L_{\text{roll}}=-\int_{-b/2}^{b/2}y\,dL=-\bar q\,C_{L\alpha}\frac{p}{V}\int_{-b/2}^{b/2}c(y)\,y^2\,dy \]
+  <p>For a rectangular wing (\(c\) constant, \(S=cb\)), \(\int y^2dy=b^3/12\):</p>
+  \[ C_l=\frac{L_{\text{roll}}}{\bar qSb}=-C_{L\alpha}\frac{p}{V}\frac{c\,b^3/12}{c\,b\cdot b}=-C_{L\alpha}\frac{pb}{2V}\cdot\frac16\ \Longrightarrow\ C_{l_p}=-\frac{C_{L\alpha}}{6} \]
+  <div class="box units"><p class="t">Units check</p>
+    <div class="row"><span>\(dL=\bar q\,c\,C_{L\alpha}(py/V)\,dy\)</span><span class="ok">[N/m&sup2;][m][1/rad][rad][m] = [N]</span></div>
+    <div class="row"><span>\(y\,dL\)</span><span class="ok">[N&middot;m]</span></div>
+    <div class="row"><span>\(C_{l_p}=-C_{L\alpha}/6\)</span><span class="ok">[1/rad]</span></div>
+  </div>
+  <p><b>The sign is the whole story.</b> Left of the peak \(C_{L\alpha}&gt;0\) and \(C_{l_p}&lt;0\): <b>roll damping</b>, what keeps an aircraft level by itself. At the peak \(C_{L\alpha}=0\) and the damping vanishes. Right of the peak \(C_{L\alpha}&lt;0\) and \(C_{l_p}&gt;0\): <b>autorotation</b>. Same physics, same wing, same formula, opposite sign.</p>
+  <h3>2. The yaw side: drag asymmetry</h3>
+  <p>The descending, higher-&alpha; wing is deeper in stall and makes more <b>drag</b>. Extra drag on the right wing turns the nose right: \(\Delta C_n\propto+\Delta C_D\cdot\eta\). Rolling right causes yawing right, and yawing right (steps 9&ndash;11) raises the right wing&rsquo;s &alpha;: the loop closes. This is the physical source of \(C_{n_r,\text{eff}}\) turning positive at high &alpha;.</p>
+  <figure><div class="chart" data-chart="deriv-alpha"></div>
+    <figcaption>In the teaching model: \(C_{l_p}\) from strip theory and the effective yaw damping \(C_n/\hat r\) at \(\hat r=0.2\), against &alpha;. Where they cross zero the damping ends; above is the autorotation region.</figcaption>
+  </figure>
+  <div class="box ex"><p class="t">Worked number</p>
+    <p>From the curve: at \(\alpha=10^\circ\), \(C_{L\alpha}\approx0.09\)/&deg; \(=5.2\)/rad, so \(C_{l_p}=-0.86\), a strong brake. At \(19^\circ\), \(C_{L\alpha}\approx0\) and \(C_{l_p}\approx0\). At \(23^\circ\), \(C_{L\alpha}\approx-0.05\)/&deg; \(=-2.9\)/rad, so \(C_{l_p}=+0.48\): the roll feeds itself. Just past the peak is the most dangerous region.</p>
+  </div>
+  <p>Autorotation does not need 60&deg; or more: it starts as soon as \(C_{L\alpha}\) turns negative, around 20&ndash;25&deg;. At very high &alpha; the curve flattens again and autorotation can weaken, as the chart shows.</p>
+  <p class="try">Try: <button type="button" data-set="alpha=10;phat=0.15">&alpha; = 10&deg; (brake)</button><button type="button" data-set="alpha=19;phat=0.15">&alpha; = 19&deg; (zero)</button><button type="button" data-set="alpha=24;phat=0.15">&alpha; = 24&deg; (autorotation)</button></p>
+</section>
+
+<!-- =================================================================== 20 -->
+<section class="spin-step" data-step="20" data-tab="The spin" id="step-20" hidden>
+  <p class="kicker">Step 20</p>
+  <h2>One picture</h2>
+  <p class="lead">High &alpha;, steady rotation, asymmetric separation, a helical path: every step of the lesson in one scene.</p>
+  <p class="thesis">The dynamic derivative gives the <em>slope</em> near \(\hat r\approx0\); the rotary balance measures the <em>actual force</em> at finite \(\hat r\).</p>
+  <div class="recap">
+    <div><div class="k">Steps 0&ndash;2 &middot; language and symmetry</div>Body axes (x forward, y right, z down) and \(p,q,r\); &alpha; between chord and relative wind; with no rotation both wings see the same air.</div>
+    <div><div class="k">Steps 3&ndash;5 &middot; coefficients and damping</div>\(C_n=N/(\bar qSb)\); \(\hat r=rb/2V\), tip rotational speed over flight speed; \(C_{n_r}=\partial C_n/\partial\hat r&lt;0\) is the tail braking the rotation, \(\tau=2VI_z/(\bar qSb^2|C_{n_r}|)\).</div>
+    <div><div class="k">Step 6 &middot; linear model</div>\(C_n=C_{n_\beta}\beta+C_{n_r}\hat r+C_{n_{\delta_r}}\delta_r+\dots\), first-order Taylor; needs small disturbances and attached flow.</div>
+    <div><div class="k">Step 7 &middot; high &alpha;</div>Separation, vortex breakdown, tail blanketing; past the peak the lift slope is negative and effects no longer add.</div>
+    <div><div class="k">Steps 8&ndash;11 &middot; steady rotation</div>\(\vec\omega\times\vec r\) has opposite signs at the tips: \(V\mp r\,y\); lift difference through \(L\propto V^2\); \(\alpha_{\text{local}}=\arctan\frac{V\sin\alpha+py}{V\cos\alpha-ry}\); two wings, two regimes.</div>
+    <div><div class="k">Steps 12&ndash;13 &middot; classical method and its limit</div>Static + forced oscillation at \(\hat r\approx0.01\); a spin is \(\hat r\approx0.1\)&ndash;0.4, steady, with settled flow: not the same physical state.</div>
+    <div><div class="k">Step 14 &middot; rotary balance</div>Model turned at constant &Omega; about an axis parallel to the flow; \(p=\Omega\cos\alpha\), \(r=\Omega\sin\alpha\); \(C_n=f(\alpha,\beta,\hat\Omega)\) measured directly.</div>
+    <div><div class="k">Steps 15&ndash;16 &middot; tangent versus curve, autorotation</div>The derivative is the tangent at zero; at finite \(\hat r\) the curve departs and changes sign; with \(C_n&gt;0\) the rotation feeds itself, and an equilibrium spin sits where the curve crosses zero with negative slope.</div>
+    <div><div class="k">Step 17 &middot; correction</div>Forced oscillation does see phase lag; the distinction is oscillatory response versus steady-rotation aerodynamics. Hysteresis needs other tests.</div>
+    <div><div class="k">Steps 18&ndash;19 &middot; derivations</div>\(\Delta\alpha=\eta(\hat p\cos\alpha+\hat r\sin\alpha)\); \(C_{l_p}=-C_{L\alpha}/6\) reverses sign past the peak; drag asymmetry feeds the yaw.</div>
+  </div>
+  <p style="margin-top:1rem">What this settles: why classical dynamic derivatives such as \(C_{l_p}\) and \(C_{n_r}\) may not be enough to predict a spin. They are the initial slope of a curve in the linear world; the spin lives far along that curve, where it has bent and changed sign. The only way to see it there is to go there: turn the model and measure.</p>
+</section>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="spin-notes">
+      <p>
+        I wrote this lesson in Turkish while teaching myself flight dynamics and rebuilt it
+        here in English. The 3D aircraft is a procedural model and the force curves in
+        steps 15, 16 and 19 come from a qualitative teaching model that carries the
+        argument; they are not data for a real aircraft. Context: Bihrle and Barnhart,
+        <em>Spin Prediction Techniques</em>, AIAA Paper 80-1564, later in the Journal of
+        Aircraft.
+        <a href="https://rotary-balance.vercel.app" target="_blank" rel="noopener">Turkish original</a>.
+      </p>
+      <p><a href="../#kaan">&larr; Turkish Aerospace</a></p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:omer.kilic@rutgers.edu">omer.kilic@rutgers.edu</a></span>
+  </div>
+</footer>
+
+<script src="../../site.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="spin.js"></script>
+</body>
+</html>
