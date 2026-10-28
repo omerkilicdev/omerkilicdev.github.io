@@ -32,6 +32,12 @@
   .lab-buttons button:hover { background: var(--theme); color: var(--bg); }
   .lab-buttons button[aria-pressed="true"] { background: var(--theme); color: var(--bg); }
   .hint { font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem; }
+  .lab-controls { margin-top: 0.8rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.6rem 1.2rem; align-items: center; }
+  .lab-controls label { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.15rem 0.6rem; font-size: 0.85rem; color: var(--text); }
+  .lab-controls label output { color: var(--text-light); font-variant-numeric: tabular-nums; }
+  .lab-controls input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--theme); margin: 0; }
+  .lab-controls .lab-buttons { margin-top: 0; }
+  body.shot #hist { display: none !important; }
   body.shot header, body.shot footer, body.shot #controls, body.shot .hint, body.shot h1, body.shot h2, body.shot p, body.shot .affil, body.shot #progress-bar { display: none !important; }
   body.shot .container { max-width: none; padding: 0; margin: 0; }
   body.shot .lab-stage { border-radius: 0; box-shadow: none; aspect-ratio: auto; width: 1600px; height: 1000px; }
@@ -109,8 +115,14 @@
       <button id="b-sphere" aria-pressed="true">group spheres</button>
       <button id="b-rot" aria-pressed="true">rotate</button>
       <button id="b-reset">reset view</button>
+      <button id="b-hist">step by step</button>
     </div>
-    <p class="hint">Drag to orbit, scroll to zoom, right-drag to pan.</p>
+    <div class="lab-controls" id="hist" hidden>
+      <label>time step <output id="o-step">80</output>
+        <input type="range" id="s-step" min="0" max="0" value="0" step="1"></label>
+      <div class="lab-buttons"><button id="b-play" aria-pressed="false">play</button></div>
+    </div>
+    <p class="hint">Drag to orbit, scroll to zoom, right-drag to pan. <em>Step by step</em> loads the run as it happened, one time step at a time; <em>lump the old wake</em> then applies to the rings older than one period at that step.</p>
 
     <h2 class="sec" id="reading">Reading the two cases</h2>
     <p>
@@ -247,10 +259,12 @@ function rect(verts, color) {
 }
 
 const layers = {};
-function build(d) {
-  scene.remove(world); world = new THREE.Group(); scene.add(world);
+function disposeWorld(g) { g.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) { (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose()); } }); }
+function build(d, keepView) {
+  scene.remove(world); disposeWorld(world); world = new THREE.Group(); scene.add(world);
   const young = [], old = []; let maxM = 0, nY = 0, nO = 0;
-  for (const w of d.wings) for (const r of w.rings) { (r[0] > 3 * d.period_steps ? young : old).push(r); }
+  const stepNow = d.step || 4 * d.period_steps; const oldest = d.period_steps * Math.floor((stepNow - d.period_steps) / d.period_steps);   // whole periods older than one period at this step
+  for (const w of d.wings) for (const r of w.rings) { (r[0] > oldest ? young : old).push(r); }
   nY = young.length; nO = old.length;
   layers.young = quadGeometry(young, () => true); layers.old = quadGeometry(old, () => true);
   for (const L of [layers.young, layers.old]) world.add(L.mesh, L.lines);
@@ -268,14 +282,13 @@ function build(d) {
     wf.position.set(...g.C); layers.spheres.add(wf);
     rhoR.push(g.rho / Math.hypot(...g.C));
   }
-  layers.stats = { nY, nO, nrect, ngroups: d.wings.reduce((s, w) => s + w.groups.length, 0), rhoMin: Math.min(...rhoR), rhoMax: Math.max(...rhoR), label: d.label };
+  layers.stats = { nY, nO, nrect, ngroups: d.wings.reduce((s, w) => s + w.groups.length, 0), rhoMin: rhoR.length ? Math.min(...rhoR) : 0, rhoMax: rhoR.length ? Math.max(...rhoR) : 0, label: d.label, step: stepNow };
   // bounding box for the camera
   // frame the camera on the group spheres and the young wake, not on the longest stretched ring
   const box = new THREE.Box3().setFromObject(layers.young.mesh);
   for (const w of d.wings) for (const g of w.groups) { const c = new THREE.Vector3(...g.C); box.expandByPoint(c.clone().addScalar(g.rho)); box.expandByPoint(c.clone().subScalar(g.rho)); }
   const ctr = box.getCenter(new THREE.Vector3()); const size = box.getSize(new THREE.Vector3()).length() * 1.1;
-  controls.target.copy(ctr); grid.position.set(ctr.x, ctr.y, box.min.z - 0.3);
-  resetView(size);
+  if (!keepView) { controls.target.copy(ctr); grid.position.set(ctr.x, ctr.y, box.min.z - 0.3); resetView(size); }
   applyLump();
 }
 let homeDist = 12;
@@ -291,8 +304,8 @@ function applyLump() {
   layers.lumps.visible = L; layers.spheres.visible = L && state.spheres;
   const s = layers.stats;
   hud.textContent = L
-    ? `${s.label} · ${(s.nY + s.nO).toLocaleString('en-US')} rings → ${s.nY.toLocaleString('en-US')} young rings + ${s.ngroups} groups of 200 (${s.nrect} with an equivalent ring, ${s.ngroups - s.nrect} dipole only) · group radius over distance to the body ${s.rhoMin.toFixed(2)} to ${s.rhoMax.toFixed(2)}`
-    : `${s.label} · step 80 · ${(s.nY + s.nO).toLocaleString('en-US')} vortex rings, ${(s.nY + s.nO) * (s.nY + s.nO) / 1e6 >= 1 ? ((s.nY + s.nO) * (s.nY + s.nO) / 1e6).toFixed(1) + ' million' : (s.nY + s.nO) * (s.nY + s.nO)} ring-on-ring interactions per step`;
+    ? (s.ngroups ? `${s.label} · ${(s.nY + s.nO).toLocaleString('en-US')} rings → ${s.nY.toLocaleString('en-US')} young rings + ${s.ngroups} groups of 200 (${s.nrect} with an equivalent ring, ${s.ngroups - s.nrect} dipole only) · group radius over distance to the body ${s.rhoMin.toFixed(2)} to ${s.rhoMax.toFixed(2)}` : `${s.label} · ${(s.nY + s.nO).toLocaleString('en-US')} rings, none older than one whole period yet: nothing to lump`)
+    : `${s.label}${hist.data ? '' : ' · step ' + s.step} · ${(s.nY + s.nO).toLocaleString('en-US')} vortex rings, ${(s.nY + s.nO) * (s.nY + s.nO) / 1e6 >= 1 ? ((s.nY + s.nO) * (s.nY + s.nO) / 1e6).toFixed(1) + ' million' : (s.nY + s.nO) * (s.nY + s.nO)} ring-on-ring interactions per step`;
   document.getElementById('b-lump').setAttribute('aria-pressed', String(L));
   document.getElementById('b-sphere').setAttribute('aria-pressed', String(state.spheres));
 }
@@ -309,10 +322,129 @@ async function load(name) {
   document.getElementById('b-case').textContent = name === 'forward' ? 'switch to hover' : 'switch to forward flight';
 }
 
+// ---- step-by-step history ------------------------------------------------
+// The same group rule as the exported step-80 data, evaluated in the browser for any step:
+// M = Σ Γ A n (dipole), C = |ΓA|-weighted centre of the ring vertex means, ρ = largest distance of a ring from C,
+// X = signed ΓA centroid, S = Σ Γ (J_c + A x_c x_c') − (Σ ΓA) X X', rectangle from the in-plane eigenvalues of S/ΣΓA.
+const V3 = (a) => new THREE.Vector3(a[0], a[1], a[2]);
+function areaData(v) {            // v: four [x,y,z]; triangle fan from vertex 1 (as in the check scripts)
+  const o = V3(v[0]); const A = new THREE.Vector3(); const G = new THREE.Vector3(); const J = [[0,0,0],[0,0,0],[0,0,0]];
+  for (let e = 1; e < 3; e++) { const p = V3(v[e]).sub(o), q = V3(v[e + 1]).sub(o); A.add(p.clone().cross(q).multiplyScalar(0.5)); }
+  const An = A.length(); if (An < 1e-12) return null; const n = A.clone().divideScalar(An); let Asc = 0;
+  for (let e = 1; e < 3; e++) {
+    const p = V3(v[e]).sub(o), q = V3(v[e + 1]).sub(o); const a2 = p.clone().cross(q).dot(n) / 2; Asc += a2;
+    G.add(p.clone().add(q).multiplyScalar(a2 / 3));
+    const pp = [p.x, p.y, p.z], qq = [q.x, q.y, q.z];
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) J[i][j] += a2 / 6 * (pp[i] * pp[j] + qq[i] * qq[j] + (pp[i] * qq[j] + qq[i] * pp[j]) / 2);
+  }
+  G.divideScalar(Asc); const rc = o.clone().add(G); const gg = [G.x, G.y, G.z];
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) J[i][j] -= Asc * gg[i] * gg[j];
+  return { A: Asc, n, rc, J };
+}
+function eigSym3(M) {             // Jacobi rotations for a symmetric 3x3; returns {values, vectors (columns)}
+  const a = M.map(r => r.slice()); const v = [[1,0,0],[0,1,0],[0,0,1]];
+  for (let sweep = 0; sweep < 50; sweep++) {
+    let off = 0; for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) off += a[i][j] * a[i][j];
+    if (off < 1e-22) break;
+    for (let p = 0; p < 3; p++) for (let q = p + 1; q < 3; q++) {
+      if (Math.abs(a[p][q]) < 1e-300) continue;
+      const th = (a[q][q] - a[p][p]) / (2 * a[p][q]); const t = Math.sign(th || 1) / (Math.abs(th) + Math.sqrt(th * th + 1));
+      const c = 1 / Math.sqrt(t * t + 1), s2 = t * c;
+      for (let k = 0; k < 3; k++) { const akp = a[k][p], akq = a[k][q]; a[k][p] = c * akp - s2 * akq; a[k][q] = s2 * akp + c * akq; }
+      for (let k = 0; k < 3; k++) { const apk = a[p][k], aqk = a[q][k]; a[p][k] = c * apk - s2 * aqk; a[q][k] = s2 * apk + c * aqk; }
+      for (let k = 0; k < 3; k++) { const vkp = v[k][p], vkq = v[k][q]; v[k][p] = c * vkp - s2 * vkq; v[k][q] = s2 * vkp + c * vkq; }
+    }
+  }
+  return { values: [a[0][0], a[1][1], a[2][2]], vectors: v };
+}
+function groupData(rings) {       // rings: [shed, Γ, 12 coords]
+  const AMIN = 2e-4; const M = new THREE.Vector3(); let GA = 0, aGA = 0; const X = new THREE.Vector3(), C = new THREE.Vector3();
+  const S = [[0,0,0],[0,0,0],[0,0,0]]; const pos = []; let used = 0;
+  for (const r of rings) {
+    const v = []; for (let k = 0; k < 4; k++) v.push([r[2 + 3 * k], r[3 + 3 * k], r[4 + 3 * k]]);
+    const ad = areaData(v); if (!ad || Math.abs(ad.A) < AMIN) continue; used++;
+    const G = r[1], A = ad.A; const xm = V3(v[0]).add(V3(v[1])).add(V3(v[2])).add(V3(v[3])).multiplyScalar(0.25);
+    M.add(ad.n.clone().multiplyScalar(G * A)); GA += G * A; aGA += Math.abs(G * A); X.add(ad.rc.clone().multiplyScalar(G * A)); C.add(xm.clone().multiplyScalar(Math.abs(G * A)));
+    const rc = [ad.rc.x, ad.rc.y, ad.rc.z];
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) S[i][j] += G * (ad.J[i][j] + A * rc[i] * rc[j]);
+    pos.push(xm);
+  }
+  if (!used || aGA === 0) return null;
+  X.divideScalar(GA); C.divideScalar(aGA); const xx = [X.x, X.y, X.z];
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) S[i][j] -= GA * xx[i] * xx[j];
+  let rho = 0; for (const p of pos) rho = Math.max(rho, p.distanceTo(C));
+  let rect = null;
+  const Mn = M.length();
+  if (Mn > 0) {
+    const nE = M.clone().divideScalar(Mn); const ne = [nE.x, nE.y, nE.z];
+    const P = [[0,0,0],[0,0,0],[0,0,0]]; for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) P[i][j] = (i === j ? 1 : 0) - ne[i] * ne[j];
+    const SG = S.map(r => r.map(x => x / GA)); const T = [[0,0,0],[0,0,0],[0,0,0]], G2 = [[0,0,0],[0,0,0],[0,0,0]];
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) for (let k = 0; k < 3; k++) T[i][j] += P[i][k] * SG[k][j];
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) for (let k = 0; k < 3; k++) G2[i][j] += T[i][k] * P[k][j];
+    const ev = eigSym3(G2); const idx = [0, 1, 2].sort((a, b) => ev.values[b] - ev.values[a]);
+    const g1 = ev.values[idx[0]], g2 = ev.values[idx[1]];
+    const u = new THREE.Vector3(ev.vectors[0][idx[0]], ev.vectors[1][idx[0]], ev.vectors[2][idx[0]]);
+    const w = new THREE.Vector3(ev.vectors[0][idx[1]], ev.vectors[1][idx[1]], ev.vectors[2][idx[1]]);
+    if (g1 > 0 && g2 > 0 && g2 / g1 > 0.02 && X.distanceTo(C) < rho) {
+      const a = Math.sqrt(12 * g1), b = Math.sqrt(12 * g2); const vs = [];
+      for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const p = X.clone().add(u.clone().multiplyScalar(sx * a / 2)).add(w.clone().multiplyScalar(sy * b / 2)); vs.push([p.x, p.y, p.z]); }
+      const ad = areaData(vs); if (ad && ad.n.dot(nE) < 0) vs.reverse();
+      rect = vs.flat();
+    }
+  }
+  return { n: used, M: [M.x, M.y, M.z], X: [X.x, X.y, X.z], C: [C.x, C.y, C.z], rho, rect };
+}
+const hist = { data: null, frame: 0, playing: false, timer: null };
+function decodeFrame(h, k) {
+  const bin = atob(h.frames[k]); const buf = new ArrayBuffer(bin.length); const u8 = new Uint8Array(buf);
+  for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+  return new Int16Array(buf);
+}
+function makeFrame(h, k) {        // -> the same shape as the exported step-80 data, with groups for that step
+  const s = h.steps[k]; const q = decodeFrame(h, k); const sc = h.scale; const names = ['front right', 'front left', 'rear right', 'rear left'];
+  const counts = h.counts[k]; let off = 0; const wings = [];
+  for (let w = 0; w < 4; w++) {
+    const n = counts[w]; const rings = [];
+    for (let i = 0; i < n; i++) {
+      const r = [Math.ceil((i + 1) / h.nx), h.gamma[w][i]]; for (let c = 0; c < 12; c++) r.push(q[off + 12 * i + c] * sc); rings.push(r);
+    }
+    off += 12 * n;
+    const groups = []; const nper = Math.floor((s - PERIOD) / PERIOD);   // whole periods already older than one period at step s
+    for (let p = 1; p <= nper; p++) {
+      const G = rings.filter(r => r[0] > (p - 1) * PERIOD && r[0] <= p * PERIOD);
+      if (G.length) { const g = groupData(G); if (g) { g.period = p; groups.push(g); } }
+    }
+    wings.push({ name: names[w], rings, groups });
+  }
+  return { label: h.label + ' · step ' + s, period_steps: PERIOD, wings, step: s };
+}
+const PERIOD = 20;
+function showFrame(k, keepView) {
+  hist.frame = k; const d = makeFrame(hist.data, k);
+  build(d, keepView); document.getElementById('o-step').textContent = String(d.step);
+  document.getElementById('s-step').value = String(k);
+}
+async function loadHistory() {
+  const name = state.caseName;
+  if (!(window.__WAKE_HIST && window.__WAKE_HIST[name])) { hud.textContent = 'loading the step-by-step run\u2026'; await loadScript(`data/history_${name}.js`); }
+  hist.data = window.__WAKE_HIST[name]; const n = hist.data.frames.length;
+  const sl = document.getElementById('s-step'); sl.max = String(n - 1); sl.value = String(n - 1);
+  document.getElementById('hist').hidden = false; document.getElementById('b-hist').setAttribute('aria-pressed', 'true');
+  showFrame(n - 1, false);
+}
+function setPlaying(on) {
+  hist.playing = on; document.getElementById('b-play').setAttribute('aria-pressed', String(on)); document.getElementById('b-play').textContent = on ? 'pause' : 'play';
+  if (hist.timer) { clearInterval(hist.timer); hist.timer = null; }
+  if (on) hist.timer = setInterval(() => { const n = hist.data.frames.length; showFrame((hist.frame + 1) % n, true); }, 160);
+}
+document.getElementById('b-hist').addEventListener('click', () => { if (!hist.data) loadHistory().catch(e => { hud.textContent = 'the step-by-step run did not load (' + e.message + ')'; }); else if (document.getElementById('hist').hidden) { document.getElementById('hist').hidden = false; } });
+document.getElementById('s-step').addEventListener('input', (e) => { if (!hist.data) return; setPlaying(false); showFrame(parseInt(e.target.value, 10), true); });
+document.getElementById('b-play').addEventListener('click', () => { if (!hist.data) return; setPlaying(!hist.playing); });
+
 // ---- controls ------------------------------------------------------------
 document.getElementById('b-lump').addEventListener('click', () => { state.lump = !state.lump; applyLump(); });
 document.getElementById('b-sphere').addEventListener('click', () => { state.spheres = !state.spheres; applyLump(); });
-document.getElementById('b-case').addEventListener('click', () => load(state.caseName === 'hover' ? 'forward' : 'hover'));
+document.getElementById('b-case').addEventListener('click', () => { setPlaying(false); hist.data = null; document.getElementById('hist').hidden = true; document.getElementById('b-hist').setAttribute('aria-pressed', 'false'); load(state.caseName === 'hover' ? 'forward' : 'hover'); });
 document.getElementById('b-rot').addEventListener('click', (e) => { controls.autoRotate = !controls.autoRotate; e.currentTarget.setAttribute('aria-pressed', String(controls.autoRotate)); });
 document.getElementById('b-reset').addEventListener('click', () => resetView());
 if (q.get('lump') === '1') state.lump = true;
@@ -326,9 +458,10 @@ function resize() {
 addEventListener('resize', resize);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (reduced) controls.autoRotate = false;
-window.__lw = { setAzimuth(a) { const t = controls.target, d = homeDist; camera.position.set(t.x + d * 0.98 * Math.cos(a), t.y + d * 0.98 * Math.sin(a), t.z + d * 0.45); camera.lookAt(t); controls.update(); renderer.render(scene, camera); }, ready: false };
+window.__lw = { showFrame(k) { showFrame(k, true); renderer.render(scene, camera); }, setLump(on) { state.lump = !!on; applyLump(); renderer.render(scene, camera); }, setAzimuth(a) { const t = controls.target, d = homeDist; camera.position.set(t.x + d * 0.98 * Math.cos(a), t.y + d * 0.98 * Math.sin(a), t.z + d * 0.45); camera.lookAt(t); controls.update(); renderer.render(scene, camera); }, ready: false };
 applyTheme(); resize();
 await load(state.caseName);
+if (q.has('step')) { await loadHistory(); const st = parseInt(q.get('step'), 10); const k = hist.data.steps.indexOf(st); if (k >= 0) showFrame(k, true); }
 if (q.has('az')) window.__lw.setAzimuth(parseFloat(q.get('az')));
 function loop() { controls.update(); renderer.render(scene, camera); window.__lw.ready = true; if (!SHOT) requestAnimationFrame(loop); }
 loop();
