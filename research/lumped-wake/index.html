@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; lumped wake</title>
+<meta name="description" content="The lumped wake in three dimensions: an interactive view of a four-wing flapping run at step 80, where the old wake is replaced by one equivalent vortex ring per wing and period. Denda Lab, Rutgers MAE.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .affil { font-size: 1.02rem; line-height: 1.55; margin: -0.6rem 0 0.4rem; }
+  .affil .lab { font-weight: 500; }
+  .affil .dept { color: var(--text-light); }
+  h2.sec { font-size: 1.35rem; margin-top: 3rem; }
+  .lab-stage { position: relative; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 3px rgb(0 0 0 / 0.18); background: var(--card); aspect-ratio: 16 / 10; }
+  #gl { display: block; width: 100%; height: 100%; touch-action: none; }
+  .lab-hud { position: absolute; left: 0.9rem; bottom: 0.65rem; right: 0.9rem; font-size: 0.78rem; color: var(--text-light); font-variant-numeric: tabular-nums; pointer-events: none; user-select: none; }
+  .lab-buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+  .lab-buttons button { font: inherit; font-size: 0.85rem; font-weight: 500; padding: 0.28rem 0.85rem; border: 1px solid var(--theme); border-radius: 3px; background: none; color: var(--theme); cursor: pointer; }
+  .lab-buttons button:hover { background: var(--theme); color: var(--bg); }
+  .lab-buttons button[aria-pressed="true"] { background: var(--theme); color: var(--bg); }
+  .hint { font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem; }
+  body.shot header, body.shot footer, body.shot #controls, body.shot .hint, body.shot h1, body.shot h2, body.shot p, body.shot .affil, body.shot #progress-bar { display: none !important; }
+  body.shot .container { max-width: none; padding: 0; margin: 0; }
+  body.shot .lab-stage { border-radius: 0; box-shadow: none; aspect-ratio: auto; width: 1600px; height: 1000px; }
+  body.shot .lab-hud { display: none; }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../../index.html">about</a></li>
+        <li><a href="../../index.html#news">news</a></li>
+        <li><a href="../../index.html#work">work</a></li>
+        <li><a class="active" href="../">research</a></li>
+        <li><a href="../../workshop/">workshop</a></li>
+        <li><a href="../../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/>
+              <circle cx="12" cy="12" r="9"/>
+            </svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4.4"/>
+              <path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/>
+            </svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name">The lumped wake in <strong>three dimensions</strong></h1>
+    <p class="affil">
+      <span class="lab">Denda Lab &middot; Bio-Inspired Micro Aerial Vehicles</span><br>
+      <span class="dept">Mechanical &amp; Aerospace Engineering, Rutgers University &middot;
+      part of the <a href="../">research page</a> &middot; October 2026</span>
+    </p>
+
+    <p>
+      Eighty time steps of a four-wing discrete-vortex run, seen from the wake: every quad is one
+      vortex ring, red for positive circulation and blue for negative, brighter for stronger. Each
+      wing sheds ten rings per step and the four wings have shed 3,160 rings by step 80. The
+      velocity each ring induces on every other is the cost of the method, and it grows with the
+      square of this count. Press <em>lump the old wake</em>: the rings older than one flapping
+      period fade, and each group of 200 rings (one wing, one period) is replaced by what the far
+      field sees of it. The arrow is the group&rsquo;s dipole, the sum of circulation times area
+      vector over its rings, which is the impulse the group carries. The sphere is the smallest
+      ball about the group&rsquo;s centre that holds all its rings; the far-field expansion is
+      accurate when this sphere is small compared with the distance to the wing. Where the group
+      is flat enough, the second moment of area also fixes a shape, and the equivalent vortex ring
+      is drawn as a rectangle: it carries the same impulse, sits at the same centre and has the
+      same second moment as the 200 rings it replaces.
+    </p>
+
+    <div class="lab-stage" id="stage">
+      <canvas id="gl" aria-label="Interactive three-dimensional view of the wake of a four-wing flapping run at step 80, with the option to replace the old wake by one equivalent vortex ring per wing and period"></canvas>
+      <div class="lab-hud" id="hud">loading the wake&hellip;</div>
+    </div>
+    <div class="lab-buttons" id="controls">
+      <button id="b-lump" aria-pressed="false">lump the old wake</button>
+      <button id="b-case">switch to hover</button>
+      <button id="b-sphere" aria-pressed="true">group spheres</button>
+      <button id="b-rot" aria-pressed="true">rotate</button>
+      <button id="b-reset">reset view</button>
+    </div>
+    <p class="hint">Drag to orbit, scroll to zoom, right-drag to pan.</p>
+
+    <h2 class="sec" id="reading">Reading the two cases</h2>
+    <p>
+      In <strong>hover</strong> the wake stays under the wings and the rings stretch as they age,
+      to about ten times the size of the forward-flight rings, so the picture is a ball of long
+      thin quads: the group spheres are as large as their distance to the body, no group is far
+      yet, and only eight of the twelve groups are flat enough for a rectangle. The rings of one period are shed while the wing turns, so their
+      normals fan out and their dipoles partly cancel; what is left of the group&rsquo;s impulse is
+      a small fraction of the sum of the rings&rsquo; impulses. In <strong>forward flight</strong>
+      the wake streams away behind the body, every group older than one period is far by the
+      far-field rule, and the groups carry almost no net impulse at all, so one small dipole stands
+      for 200 rings. The rule behind the picture is in the research page; the equivalent ring is
+      chosen so that the force, which is the time derivative of the impulse, has no jump at the
+      moment of lumping.
+    </p>
+    <p class="hint">
+      The two wakes are the step-80 states of the runs used for the first lumped-wake tests
+      (October 2026). Hover: advance ratio 0.20. Forward flight: advance ratio 1.02. Same wings,
+      same stroke, same time step.
+    </p>
+  </div>
+</main>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const q = new URLSearchParams(location.search);
+const SHOT = q.has('shot');
+if (SHOT) document.body.classList.add('shot');
+
+const canvas = document.getElementById('gl');
+const hud = document.getElementById('hud');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: SHOT });
+renderer.setPixelRatio(SHOT ? 2 : Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(36, 16 / 10, 0.1, 200);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = 0.06;
+controls.autoRotate = !SHOT; controls.autoRotateSpeed = 0.55;
+
+// ---- theme ---------------------------------------------------------------
+function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+let isDark = false;
+function applyTheme() {
+  const a = document.documentElement.getAttribute('data-theme');
+  isDark = a === 'dark' || (!a && matchMedia('(prefers-color-scheme: dark)').matches);
+  const bg = new THREE.Color(isDark ? '#1e2227' : '#f7f6f2');
+  scene.background = bg;
+  scene.fog = new THREE.Fog(bg, 22, 60);
+  grid.material.color.set(isDark ? '#3a4047' : '#d9d6cf');
+  grid.material.opacity = isDark ? 0.5 : 0.7;
+  hemi.color.set(isDark ? '#cfd8e3' : '#ffffff'); hemi.groundColor.set(isDark ? '#1a1d22' : '#d8d3c8');
+}
+const tbtn = document.getElementById('light-toggle');
+if (tbtn) tbtn.addEventListener('click', () => setTimeout(applyTheme, 0));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+
+// ---- lights, floor -------------------------------------------------------
+const hemi = new THREE.HemisphereLight('#ffffff', '#d8d3c8', 1.1); scene.add(hemi);
+const key = new THREE.DirectionalLight('#ffffff', 1.6); key.position.set(6, -8, 10); scene.add(key);
+const fill = new THREE.DirectionalLight('#dbe6ff', 0.6); fill.position.set(-8, 6, 4); scene.add(fill);
+const grid = new THREE.GridHelper(40, 40); grid.rotation.x = Math.PI / 2; grid.material.transparent = true; scene.add(grid);
+
+// ---- data and geometry ---------------------------------------------------
+const RED = new THREE.Color('#b3261e'), BLUE = new THREE.Color('#1e5fb3');
+const ACCENT = () => new THREE.Color(isDark ? '#f2c14e' : '#8a5a00');
+const state = { lump: false, spheres: true, caseName: q.get('case') === 'hover' ? 'hover' : 'forward', data: {} };
+let world = new THREE.Group(); scene.add(world);
+
+function quadGeometry(rings, pick) {   // rings: [shed, Γ, 12 coords]; returns fill mesh + outline
+  const pos = [], col = [], lin = [], linFaint = [];
+  // shade by circulation per unit area: a ring stretched thin by the flow carries its circulation spread out and fades
+  const area = (v) => { const a = new THREE.Vector3(...v[1]).sub(new THREE.Vector3(...v[0])), b = new THREE.Vector3(...v[2]).sub(new THREE.Vector3(...v[0])), c2 = new THREE.Vector3(...v[3]).sub(new THREE.Vector3(...v[0])); return 0.5 * (a.clone().cross(b).length() + b.clone().cross(c2).length()); };
+  const dens = rings.map(r => { const v = []; for (let k = 0; k < 4; k++) v.push([r[2 + 3 * k], r[3 + 3 * k], r[4 + 3 * k]]); return Math.abs(r[1]) / Math.max(area(v), 1e-6); });
+  const sorted = dens.slice().sort((a, b) => a - b); const d90 = sorted[Math.floor(0.9 * (sorted.length - 1))] || 1;
+  // longest edge of each ring: a ring stretched by the flow has one long edge whatever its (possibly twisted) area
+  const edge = (v) => { let m = 0; for (let i = 0; i < 4; i++) { const a = v[i], b = v[(i + 1) % 4]; m = Math.max(m, Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2])); } return m; };
+  const edges = rings.map(r => { const v = []; for (let k = 0; k < 4; k++) v.push([r[2 + 3 * k], r[3 + 3 * k], r[4 + 3 * k]]); return edge(v); });
+  const eMed = edges.slice().sort((a, b) => a - b)[Math.floor(0.5 * (edges.length - 1))] || 1;
+  const c = new THREE.Color(); const bgc = new THREE.Color(isDark ? '#2a2f36' : '#ecebe6');
+  rings.forEach((r, idx) => {
+    if (!pick(r)) return;
+    const v = []; for (let k = 0; k < 4; k++) v.push([r[2 + 3 * k], r[3 + 3 * k], r[4 + 3 * k]]);
+    const w = Math.pow(Math.min(dens[idx] / d90, 1), 0.45);
+    c.copy(r[1] > 0 ? RED : BLUE).lerp(bgc, 0.8 * (1 - w));
+        const stretched = edges[idx] > 2.5 * eMed || w < 0.1;   // stretched far beyond the typical ring, or carrying almost no circulation per area
+    if (!stretched) for (const t of [[0, 1, 2], [0, 2, 3]]) for (const i of t) { pos.push(...v[i]); col.push(c.r, c.g, c.b); }
+    const L = (!stretched && w > 0.25) ? lin : linFaint;
+    for (let i = 0; i < 4; i++) { L.push(...v[i], ...v[(i + 1) % 4]); }
+  });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  g.computeVertexNormals();
+  // in hover every ring is stretched to several body lengths (median longest edge ten times the forward-flight one), so the fill is kept lighter there
+  const m = new THREE.MeshPhysicalMaterial({ vertexColors: true, side: THREE.DoubleSide, transparent: true, opacity: eMed > 1 ? 0.32 : 0.62, roughness: 0.38, metalness: 0.05, clearcoat: 0.35, clearcoatRoughness: 0.5, depthWrite: false });
+  const mesh = new THREE.Mesh(g, m); mesh.userData.op = m.opacity;
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(lin, 3));
+  const lines = new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: isDark ? '#dfe3e8' : '#2b2b2d', transparent: true, opacity: 0.28 }));
+  const lg2 = new THREE.BufferGeometry(); lg2.setAttribute('position', new THREE.Float32BufferAttribute(linFaint, 3));
+  const faint = new THREE.LineSegments(lg2, new THREE.LineBasicMaterial({ color: isDark ? '#dfe3e8' : '#2b2b2d', transparent: true, opacity: 0.05 }));
+  lines.add(faint);
+  return { mesh, lines };
+}
+function arrow(from, dir, len, color) {
+  const g = new THREE.Group(); const d = new THREE.Vector3(...dir).normalize();
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, Math.max(len - 0.28, 0.05), 16), new THREE.MeshStandardMaterial({ color, roughness: 0.35, metalness: 0.2 }));
+  const head = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.28, 24), shaft.material);
+  shaft.position.y = Math.max(len - 0.28, 0.05) / 2; head.position.y = Math.max(len - 0.28, 0.05) + 0.14;
+  g.add(shaft, head); g.position.set(...from);
+  g.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d);
+  return g;
+}
+function rect(verts, color) {
+  const g = new THREE.Group();
+  const pos = []; for (const t of [[0, 1, 2], [0, 2, 3]]) for (const i of t) pos.push(verts[3 * i], verts[3 * i + 1], verts[3 * i + 2]);
+  const bg = new THREE.BufferGeometry(); bg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); bg.computeVertexNormals();
+  g.add(new THREE.Mesh(bg, new THREE.MeshPhysicalMaterial({ color, side: THREE.DoubleSide, transparent: true, opacity: 0.55, roughness: 0.25, metalness: 0.1, clearcoat: 0.6, emissive: color, emissiveIntensity: 0.12 })));
+  const em = new THREE.MeshStandardMaterial({ color, roughness: 0.3, metalness: 0.3 });
+  for (let i = 0; i < 4; i++) {
+    const a = new THREE.Vector3(verts[3 * i], verts[3 * i + 1], verts[3 * i + 2]), b = new THREE.Vector3(verts[3 * ((i + 1) % 4)], verts[3 * ((i + 1) % 4) + 1], verts[3 * ((i + 1) % 4) + 2]);
+    const L = a.distanceTo(b); const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, L, 12), em);
+    cyl.position.copy(a).lerp(b, 0.5); cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); g.add(cyl);
+  }
+  return g;
+}
+
+const layers = {};
+function build(d) {
+  scene.remove(world); world = new THREE.Group(); scene.add(world);
+  const young = [], old = []; let maxM = 0, nY = 0, nO = 0;
+  for (const w of d.wings) for (const r of w.rings) { (r[0] > 3 * d.period_steps ? young : old).push(r); }
+  nY = young.length; nO = old.length;
+  layers.young = quadGeometry(young, () => true); layers.old = quadGeometry(old, () => true);
+  for (const L of [layers.young, layers.old]) world.add(L.mesh, L.lines);
+  layers.lumps = new THREE.Group(); layers.spheres = new THREE.Group(); world.add(layers.lumps, layers.spheres);
+  const ac = ACCENT(); let nrect = 0, rhoR = [];
+  for (const w of d.wings) for (const g of w.groups) maxM = Math.max(maxM, Math.hypot(...g.M));
+  for (const w of d.wings) for (const g of w.groups) {
+    const len = 0.5 + 1.6 * Math.hypot(...g.M) / maxM;
+    layers.lumps.add(arrow(g.C, g.M, len, ac));
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 20, 20), new THREE.MeshStandardMaterial({ color: ac, roughness: 0.3 })); dot.position.set(...g.C); layers.lumps.add(dot);
+    if (g.rect) { layers.lumps.add(rect(g.rect, ac)); nrect++; }
+    const sp = new THREE.Mesh(new THREE.SphereGeometry(g.rho, 48, 32), new THREE.MeshPhysicalMaterial({ color: isDark ? '#9fb4cc' : '#5a7ea6', transparent: true, opacity: 0.045, roughness: 0.6, depthWrite: false, side: THREE.DoubleSide }));
+    sp.position.set(...g.C); layers.spheres.add(sp);
+    const wf = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(g.rho, 18, 12)), new THREE.LineBasicMaterial({ color: isDark ? '#9fb4cc' : '#5a7ea6', transparent: true, opacity: 0.06 }));
+    wf.position.set(...g.C); layers.spheres.add(wf);
+    rhoR.push(g.rho / Math.hypot(...g.C));
+  }
+  layers.stats = { nY, nO, nrect, ngroups: d.wings.reduce((s, w) => s + w.groups.length, 0), rhoMin: Math.min(...rhoR), rhoMax: Math.max(...rhoR), label: d.label };
+  // bounding box for the camera
+  // frame the camera on the group spheres and the young wake, not on the longest stretched ring
+  const box = new THREE.Box3().setFromObject(layers.young.mesh);
+  for (const w of d.wings) for (const g of w.groups) { const c = new THREE.Vector3(...g.C); box.expandByPoint(c.clone().addScalar(g.rho)); box.expandByPoint(c.clone().subScalar(g.rho)); }
+  const ctr = box.getCenter(new THREE.Vector3()); const size = box.getSize(new THREE.Vector3()).length() * 1.1;
+  controls.target.copy(ctr); grid.position.set(ctr.x, ctr.y, box.min.z - 0.3);
+  resetView(size);
+  applyLump();
+}
+let homeDist = 12;
+function resetView(size) {
+  if (size) homeDist = size * 0.95;
+  const t = controls.target;
+  camera.position.set(t.x + homeDist * 0.78, t.y - homeDist * 0.62, t.z + homeDist * 0.5);
+  camera.up.set(0, 0, 1); camera.lookAt(t); controls.update();
+}
+function applyLump() {
+  const L = state.lump;
+  layers.old.mesh.material.opacity = L ? 0.08 : layers.old.mesh.userData.op; layers.old.lines.material.opacity = L ? 0.05 : 0.28; layers.old.lines.children[0].material.opacity = L ? 0.015 : 0.05;
+  layers.lumps.visible = L; layers.spheres.visible = L && state.spheres;
+  const s = layers.stats;
+  hud.textContent = L
+    ? `${s.label} · ${(s.nY + s.nO).toLocaleString('en-US')} rings → ${s.nY.toLocaleString('en-US')} young rings + ${s.ngroups} groups of 200 (${s.nrect} with an equivalent ring, ${s.ngroups - s.nrect} dipole only) · group radius over distance to the body ${s.rhoMin.toFixed(2)} to ${s.rhoMax.toFixed(2)}`
+    : `${s.label} · step 80 · ${(s.nY + s.nO).toLocaleString('en-US')} vortex rings, ${(s.nY + s.nO) * (s.nY + s.nO) / 1e6 >= 1 ? ((s.nY + s.nO) * (s.nY + s.nO) / 1e6).toFixed(1) + ' million' : (s.nY + s.nO) * (s.nY + s.nO)} ring-on-ring interactions per step`;
+  document.getElementById('b-lump').setAttribute('aria-pressed', String(L));
+  document.getElementById('b-sphere').setAttribute('aria-pressed', String(state.spheres));
+}
+async function load(name) {
+  if (!state.data[name]) state.data[name] = await (await fetch(`data/wake_${name}.json`)).json();
+  state.caseName = name; build(state.data[name]);
+  document.getElementById('b-case').textContent = name === 'forward' ? 'switch to hover' : 'switch to forward flight';
+}
+
+// ---- controls ------------------------------------------------------------
+document.getElementById('b-lump').addEventListener('click', () => { state.lump = !state.lump; applyLump(); });
+document.getElementById('b-sphere').addEventListener('click', () => { state.spheres = !state.spheres; applyLump(); });
+document.getElementById('b-case').addEventListener('click', () => load(state.caseName === 'hover' ? 'forward' : 'hover'));
+document.getElementById('b-rot').addEventListener('click', (e) => { controls.autoRotate = !controls.autoRotate; e.currentTarget.setAttribute('aria-pressed', String(controls.autoRotate)); });
+document.getElementById('b-reset').addEventListener('click', () => resetView());
+if (q.get('lump') === '1') state.lump = true;
+if (q.get('spheres') === '0') state.spheres = false;
+
+// ---- resize and loop -----------------------------------------------------
+function resize() {
+  const r = canvas.getBoundingClientRect(); const w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (reduced) controls.autoRotate = false;
+window.__lw = { setAzimuth(a) { const t = controls.target, d = homeDist; camera.position.set(t.x + d * 0.98 * Math.cos(a), t.y + d * 0.98 * Math.sin(a), t.z + d * 0.45); camera.lookAt(t); controls.update(); renderer.render(scene, camera); }, ready: false };
+applyTheme(); resize();
+await load(state.caseName);
+if (q.has('az')) window.__lw.setAzimuth(parseFloat(q.get('az')));
+function loop() { controls.update(); renderer.render(scene, camera); window.__lw.ready = true; if (!SHOT) requestAnimationFrame(loop); }
+loop();
+</script>
+
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:omer.kilic@rutgers.edu">omer.kilic@rutgers.edu</a></span>
+  </div>
+</footer>
+
+
+
+</body>
+</html>
