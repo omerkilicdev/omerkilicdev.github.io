@@ -120,7 +120,7 @@
     <div class="lab-controls" id="hist">
       <label>time step <output id="o-step">80</output>
         <input type="range" id="s-step" min="0" max="39" value="39" step="1"></label>
-      <div class="lab-buttons"><button id="b-play" aria-pressed="false">play</button></div>
+      <div class="lab-buttons"><button id="b-play" aria-pressed="false">play</button><button id="b-slow" aria-pressed="false">slow motion</button></div>
     </div>
     <p class="hint">Drag to orbit, scroll to zoom, right-drag to pan. <em>Play</em> or the time step slider shows the run as it happened, one time step at a time (the run loads on first use, about 2 MB); <em>lump the old wake</em> then applies to the rings older than one period at that step.</p>
 
@@ -394,7 +394,7 @@ function groupData(rings) {       // rings: [shed, Γ, 12 coords]
   }
   return { n: used, M: [M.x, M.y, M.z], X: [X.x, X.y, X.z], C: [C.x, C.y, C.z], rho, rect };
 }
-const hist = { data: null, frame: 0, playing: false, timer: null };
+const hist = { data: null, frame: 0, playing: false, timer: null, slow: false };
 function decodeFrame(h, k) {
   const bin = atob(h.frames[k]); const buf = new ArrayBuffer(bin.length); const u8 = new Uint8Array(buf);
   for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
@@ -434,11 +434,12 @@ async function loadHistory() {
 function setPlaying(on) {
   hist.playing = on; document.getElementById('b-play').setAttribute('aria-pressed', String(on)); document.getElementById('b-play').textContent = on ? 'pause' : 'play';
   if (hist.timer) { clearInterval(hist.timer); hist.timer = null; }
-  if (on) hist.timer = setInterval(() => { const n = hist.data.frames.length; showFrame((hist.frame + 1) % n, true); }, 270);
+  if (on) hist.timer = setInterval(() => { const n = hist.data.frames.length; showFrame((hist.frame + 1) % n, true); }, hist.slow ? 320 : 160);
 }
 let loading = null;
 function ensureHistory() { if (hist.data) return Promise.resolve(); if (!loading) loading = loadHistory().catch(e => { hud.textContent = 'the step-by-step run did not load (' + e.message + ')'; loading = null; throw e; }); return loading; }
 document.getElementById('s-step').addEventListener('input', async (e) => { const k = parseInt(e.target.value, 10); setPlaying(false); if (!hist.data) { try { await ensureHistory(); } catch (err) { return; } } showFrame(Math.min(k, hist.data.frames.length - 1), true); });
+document.getElementById('b-slow').addEventListener('click', (e) => { hist.slow = !hist.slow; e.currentTarget.setAttribute('aria-pressed', String(hist.slow)); if (hist.playing) setPlaying(true); });
 document.getElementById('b-play').addEventListener('click', async () => { if (!hist.data) { try { await ensureHistory(); } catch (err) { return; } showFrame(0, true); } setPlaying(!hist.playing); });
 
 // ---- controls ------------------------------------------------------------
