@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Omer Kilic &middot; research</title>
-<meta name="description" content="Fast multipole methods for flapping-wing wakes — Denda Lab, Mechanical &amp; Aerospace Engineering, Rutgers University. Interactive demonstration, verification figures and explainer video.">
+<meta name="description" content="Multipole moments and the lumped wake of flapping-wing vortex rings — Denda Lab, Mechanical &amp; Aerospace Engineering, Rutgers University. Interactive demonstration, verification figures and explainer video.">
 <meta name="author" content="Omer Kilic">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
 <script>
@@ -148,7 +148,7 @@
 <main id="main">
   <div class="container">
 
-    <h1 class="name">Fast multipole methods for <strong>flapping-wing wakes</strong></h1>
+    <h1 class="name">Multipole moments and the <strong>lumped wake</strong> of flapping-wing vortex rings</h1>
 
     <p class="affil">
       <span class="lab">Denda Lab &middot; Bio-Inspired Micro Aerial Vehicles</span><br>
@@ -174,18 +174,28 @@
     <p>
       Discrete-vortex solvers for flapping flight spend almost all of their time on one
       operation: every vortex element inducing velocity on every other, an
-      <em>O</em>(<em>N</em>&sup2;) sum repeated at each time step. This project derives
-      closed-form multipole moments for vortex rings and polygonal panels, the translation
-      operators between them, and a-priori far-field error bounds, and assembles them into
-      a fast multipole method verified against direct summation across an automated suite
-      of 40 test groups and 274 checks. Along the way the group&rsquo;s MATLAB
-      three-dimensional wake code received an exact, fully vectorized velocity kernel that
-      took a 15-step run from 1,783&nbsp;s to 50&nbsp;s with machine-precision agreement;
-      at that size the multipole method does not yet beat the exact kernel, and the
-      measured crossover lies at wakes roughly ten times larger, several thousand rings. The solver is differentiable throughout, so flapping
-      strokes can be designed by gradient ascent. A follow-on proposal with
-      Prof.&nbsp;Onur Bilgen extends the method toward reduced-order wake models for
-      aeroelastic analysis and design.
+      <em>O</em>(<em>N</em>&sup2;) sum repeated at each time step, over a wake that grows
+      by a row of rings every step and never stops growing. The group&rsquo;s answer in two
+      dimensions is the lumped wake: far vortices are replaced by one vortex with their
+      combined circulation at their mean position. This project gives that practice its
+      three-dimensional form. It derives closed-form multipole moments for vortex rings and
+      polygonal panels (the dipole is the ring&rsquo;s impulse, the quadrupole of a flat ring
+      vanishes about its area centroid, the octupole is its second moment of area), the
+      shift and combination rules between them, and a-priori far-field error bounds. On
+      these, one equivalent vortex ring replaces a group of far-wake rings: it carries the
+      group&rsquo;s impulse, sits where the quadrupole puts it, and takes its shape from the
+      second moment of area, with the residual quadrupole as the known error. The rule is a
+      switch in the group&rsquo;s MATLAB three-dimensional wake code, verified against an
+      independent reference implementation, and the first runs are under way. The same
+      moments assemble into a fast multipole method, verified against direct summation
+      across an automated suite of 40 test groups and 274 checks. Along the way the wake
+      code received an exact, fully vectorized velocity kernel that took a 15-step run from
+      1,783&nbsp;s to 50&nbsp;s with machine-precision agreement; at that size the multipole
+      method does not yet beat the exact kernel, and the measured crossover lies at wakes
+      roughly ten times larger, several thousand rings. A differentiable version of the
+      solver, for gradient-based stroke design, is exploratory work for later. A follow-on
+      proposal with Prof.&nbsp;Onur Bilgen extends the method toward reduced-order wake
+      models for aeroelastic analysis and design.
     </p>
 
     <h2 class="sec" id="demo">Interactive demonstration</h2>
