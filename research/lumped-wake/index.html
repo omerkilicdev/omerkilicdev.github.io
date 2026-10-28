@@ -38,6 +38,7 @@
   .lab-controls input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--theme); margin: 0; }
   .lab-controls .lab-buttons { margin-top: 0; }
   body.shot #hist { display: none !important; }
+  #hist[hidden] { display: none; }
   body.shot header, body.shot footer, body.shot #controls, body.shot .hint, body.shot h1, body.shot h2, body.shot p, body.shot .affil, body.shot #progress-bar { display: none !important; }
   body.shot .container { max-width: none; padding: 0; margin: 0; }
   body.shot .lab-stage { border-radius: 0; box-shadow: none; aspect-ratio: auto; width: 1600px; height: 1000px; }
@@ -115,14 +116,13 @@
       <button id="b-sphere" aria-pressed="true">group spheres</button>
       <button id="b-rot" aria-pressed="true">rotate</button>
       <button id="b-reset">reset view</button>
-      <button id="b-hist">step by step</button>
     </div>
-    <div class="lab-controls" id="hist" hidden>
+    <div class="lab-controls" id="hist">
       <label>time step <output id="o-step">80</output>
-        <input type="range" id="s-step" min="0" max="0" value="0" step="1"></label>
+        <input type="range" id="s-step" min="0" max="39" value="39" step="1"></label>
       <div class="lab-buttons"><button id="b-play" aria-pressed="false">play</button></div>
     </div>
-    <p class="hint">Drag to orbit, scroll to zoom, right-drag to pan. <em>Step by step</em> loads the run as it happened, one time step at a time; <em>lump the old wake</em> then applies to the rings older than one period at that step.</p>
+    <p class="hint">Drag to orbit, scroll to zoom, right-drag to pan. <em>Play</em> or the time step slider shows the run as it happened, one time step at a time (the run loads on first use, about 2 MB); <em>lump the old wake</em> then applies to the rings older than one period at that step.</p>
 
     <h2 class="sec" id="reading">Reading the two cases</h2>
     <p>
@@ -429,22 +429,22 @@ async function loadHistory() {
   if (!(window.__WAKE_HIST && window.__WAKE_HIST[name])) { hud.textContent = 'loading the step-by-step run\u2026'; await loadScript(`data/history_${name}.js`); }
   hist.data = window.__WAKE_HIST[name]; const n = hist.data.frames.length;
   const sl = document.getElementById('s-step'); sl.max = String(n - 1); sl.value = String(n - 1);
-  document.getElementById('hist').hidden = false; document.getElementById('b-hist').setAttribute('aria-pressed', 'true');
-  showFrame(n - 1, false);
+  showFrame(n - 1, true);
 }
 function setPlaying(on) {
   hist.playing = on; document.getElementById('b-play').setAttribute('aria-pressed', String(on)); document.getElementById('b-play').textContent = on ? 'pause' : 'play';
   if (hist.timer) { clearInterval(hist.timer); hist.timer = null; }
   if (on) hist.timer = setInterval(() => { const n = hist.data.frames.length; showFrame((hist.frame + 1) % n, true); }, 160);
 }
-document.getElementById('b-hist').addEventListener('click', () => { if (!hist.data) loadHistory().catch(e => { hud.textContent = 'the step-by-step run did not load (' + e.message + ')'; }); else if (document.getElementById('hist').hidden) { document.getElementById('hist').hidden = false; } });
-document.getElementById('s-step').addEventListener('input', (e) => { if (!hist.data) return; setPlaying(false); showFrame(parseInt(e.target.value, 10), true); });
-document.getElementById('b-play').addEventListener('click', () => { if (!hist.data) return; setPlaying(!hist.playing); });
+let loading = null;
+function ensureHistory() { if (hist.data) return Promise.resolve(); if (!loading) loading = loadHistory().catch(e => { hud.textContent = 'the step-by-step run did not load (' + e.message + ')'; loading = null; throw e; }); return loading; }
+document.getElementById('s-step').addEventListener('input', async (e) => { const k = parseInt(e.target.value, 10); setPlaying(false); if (!hist.data) { try { await ensureHistory(); } catch (err) { return; } } showFrame(Math.min(k, hist.data.frames.length - 1), true); });
+document.getElementById('b-play').addEventListener('click', async () => { if (!hist.data) { try { await ensureHistory(); } catch (err) { return; } showFrame(0, true); } setPlaying(!hist.playing); });
 
 // ---- controls ------------------------------------------------------------
 document.getElementById('b-lump').addEventListener('click', () => { state.lump = !state.lump; applyLump(); });
 document.getElementById('b-sphere').addEventListener('click', () => { state.spheres = !state.spheres; applyLump(); });
-document.getElementById('b-case').addEventListener('click', () => { setPlaying(false); hist.data = null; document.getElementById('hist').hidden = true; document.getElementById('b-hist').setAttribute('aria-pressed', 'false'); load(state.caseName === 'hover' ? 'forward' : 'hover'); });
+document.getElementById('b-case').addEventListener('click', () => { setPlaying(false); hist.data = null; loading = null; document.getElementById('o-step').textContent = '80'; document.getElementById('s-step').value = '39'; load(state.caseName === 'hover' ? 'forward' : 'hover'); });
 document.getElementById('b-rot').addEventListener('click', (e) => { controls.autoRotate = !controls.autoRotate; e.currentTarget.setAttribute('aria-pressed', String(controls.autoRotate)); });
 document.getElementById('b-reset').addEventListener('click', () => resetView());
 if (q.get('lump') === '1') state.lump = true;
