@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Omer Kilic</title>
-<meta name="description" content="Aerospace engineering student at Rutgers. Fast multipole methods, discrete-vortex wake models and differentiable simulation.">
+<meta name="description" content="Aerospace engineering student at Rutgers. Multipole moments of vortex rings, lumped-wake models and discrete-vortex solvers for flapping flight.">
 <meta name="author" content="Omer Kilic">
 <meta property="og:title" content="Omer Kilic">
-<meta property="og:description" content="Aerospace engineering student at Rutgers. Fast multipole methods, discrete-vortex wake models and differentiable simulation.">
+<meta property="og:description" content="Aerospace engineering student at Rutgers. Multipole moments of vortex rings, lumped-wake models and discrete-vortex solvers for flapping flight.">
 <meta property="og:type" content="profile">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
 <script>
@@ -86,9 +86,9 @@
         <a href="https://aresty.rutgers.edu/">Aresty Research Scholar</a> in
         <a href="https://mae.rutgers.edu/mitsunori-mitch-denda">Prof. Mitsunori Denda</a>&rsquo;s
         <a href="https://insectflight.rutgers.edu">Bio-Inspired Micro Aerial Vehicles group</a>, co-advised by
-        <a href="https://mae.rutgers.edu/onur-bilgen">Prof. Onur Bilgen</a>. My work is on making unsteady aerodynamic
-        simulation <strong>fast</strong> and <strong>differentiable</strong>: fast multipole
-        methods for vortex-ring wakes, discrete-vortex solvers, and gradient-based design.
+        <a href="https://mae.rutgers.edu/onur-bilgen">Prof. Onur Bilgen</a>. My work is on the <strong>wake of flapping wings</strong>: the multipole
+        moments of vortex rings, a lumped-wake method built on them for the group&rsquo;s
+        discrete-vortex solver, and the fast multipole method as the tool behind it.
       </p>
 
       <p>
@@ -147,6 +147,19 @@
         <tbody>
           <tr>
             <th scope="row">Oct 2026</th>
+            <td>Formulated the <strong>lumped-wake rule in 3-D</strong> for the group&rsquo;s
+              discrete-vortex solver: one equivalent vortex ring per group of far-wake rings,
+              carrying its impulse, placed by its quadrupole and shaped by its second moment of
+              area. Implemented it as a switch in the solver and ran the first lumped-wake runs.</td>
+          </tr>
+          <tr>
+            <th scope="row">Oct 2026</th>
+            <td>Ran the 80-step comparison of the direct and the multipole wake on Prof. Denda&rsquo;s
+              test case, and became co-author, with Prof. Denda and A. Malhotra, of the
+              group&rsquo;s notes <em>Multipole Expansion for the Vector Potential</em>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Oct 2026</th>
             <td>Published a dedicated <a href="research/">research page</a> for the
               Denda Lab work, project pages for <a href="njit/">NJIT</a>,
               <a href="ev/">the electric truck</a> and <a href="tusas/">Turkish Aerospace</a>,
@@ -203,20 +216,23 @@
       <li>
         <div class="aside">
           <span class="badge">Julia</span>
-          <span class="badge">FMM</span>
+          <span class="badge">lumped wake</span>
           <img class="preview" src="media/research/multipole-hierarchy.svg" alt="" width="760" height="320" loading="lazy" decoding="async">
         </div>
         <div>
-          <div class="title">A ring-native fast multipole method for flapping-wing wakes</div>
+          <div class="title">Multipole moments and the lumped wake of flapping-wing vortex rings</div>
           <div class="where">Denda Lab, Rutgers MAE, with Prof. Mitsunori Denda; co-advised by Prof. Onur Bilgen</div>
           <div class="when">2026 &ndash; present</div>
           <p class="blurb">
-            Closed-form multipole moments for vortex rings and polygonal panels, translation
-            operators, and a-priori far-field error bounds, verified against direct summation
-            across an automated suite of 40 test groups and 274 checks. Along the way the group&rsquo;s MATLAB 3-D wake code got an exact, fully vectorized
-            velocity kernel that took a 15-step run from <strong>1,783 s to 50 s</strong>; the
-            multipole method overtakes that exact kernel at wakes roughly ten times larger.
-            The solver is differentiable, so flapping strokes can be designed by gradient ascent.
+            Closed-form multipole moments of polygonal vortex rings (dipole, quadrupole,
+            octupole), with shift and combination rules and an a-priori far-field error bound;
+            on them, a lumped-wake rule for the group&rsquo;s 3-D discrete-vortex solver: one
+            equivalent vortex ring per group of far-wake rings, carrying its impulse, placed by
+            its quadrupole and shaped by its second moment of area. The library is verified
+            against direct summation across 40 test groups and 274 checks. Along the way the
+            solver&rsquo;s velocity kernel became exact and fully vectorized, taking a 15-step
+            run from <strong>1,783 s to 50 s</strong>; the multipole far field overtakes that
+            kernel at wakes roughly ten times larger.
           </p>
           <div class="links">
             <a href="research/">research page</a>
