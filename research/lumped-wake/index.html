@@ -434,7 +434,7 @@ async function loadHistory() {
 function setPlaying(on) {
   hist.playing = on; document.getElementById('b-play').setAttribute('aria-pressed', String(on)); document.getElementById('b-play').textContent = on ? 'pause' : 'play';
   if (hist.timer) { clearInterval(hist.timer); hist.timer = null; }
-  if (on) hist.timer = setInterval(() => { const n = hist.data.frames.length; showFrame((hist.frame + 1) % n, true); }, 160);
+  if (on) hist.timer = setInterval(() => { const n = hist.data.frames.length; showFrame((hist.frame + 1) % n, true); }, 270);
 }
 let loading = null;
 function ensureHistory() { if (hist.data) return Promise.resolve(); if (!loading) loading = loadHistory().catch(e => { hud.textContent = 'the step-by-step run did not load (' + e.message + ')'; loading = null; throw e; }); return loading; }
