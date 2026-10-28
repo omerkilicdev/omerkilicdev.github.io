@@ -296,8 +296,15 @@ function applyLump() {
   document.getElementById('b-lump').setAttribute('aria-pressed', String(L));
   document.getElementById('b-sphere').setAttribute('aria-pressed', String(state.spheres));
 }
+function loadScript(src) { return new Promise((ok, bad) => { const t = document.createElement('script'); t.src = src; t.onload = ok; t.onerror = () => bad(new Error('could not load ' + src)); document.head.appendChild(t); }); }
 async function load(name) {
-  if (!state.data[name]) state.data[name] = await (await fetch(`data/wake_${name}.json`)).json();
+  if (!state.data[name]) {
+    hud.textContent = 'loading the wake\u2026';
+    try {
+      if (!(window.__WAKE && window.__WAKE[name])) await loadScript(`data/wake_${name}.js`);
+      state.data[name] = window.__WAKE[name];
+    } catch (e) { hud.textContent = 'the wake data did not load (' + e.message + ')'; return; }
+  }
   state.caseName = name; build(state.data[name]);
   document.getElementById('b-case').textContent = name === 'forward' ? 'switch to hover' : 'switch to forward flight';
 }
