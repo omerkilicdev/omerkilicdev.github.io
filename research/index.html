@@ -198,6 +198,50 @@
       models for aeroelastic analysis and design.
     </p>
 
+    <h2 class="sec" id="lumped">The lumped wake in three dimensions</h2>
+    <p>
+      The wake of the four-wing run at step 80, rendered from the solver&rsquo;s own rings:
+      3,160 vortex rings, red for positive circulation and blue for negative. The second
+      picture is the same wake after lumping. Each wing&rsquo;s rings older than one flapping
+      period are replaced by what the far field sees of them: an arrow for the group&rsquo;s
+      dipole, which is the impulse it carries, a sphere for the smallest ball that holds the
+      group, and, where the group is flat enough, a rectangle for the equivalent vortex ring
+      with the same impulse, centre and second moment of area. In forward flight the wake
+      streams away and every group older than one period is far by the far-field rule. The
+      <a href="lumped-wake/">interactive version</a> lets you orbit the wake, switch between
+      hover and forward flight and toggle the lumping.
+    </p>
+    <div class="figs">
+      <div class="two">
+        <figure>
+          <a href="lumped-wake/?case=forward"><img src="../media/research/lumped-wake_forward_rings.webp"
+               alt="Three-dimensional rendering of the forward-flight wake at step 80: a long streak of red and blue vortex rings behind the four wings, the youngest rings at the left end"
+               width="1200" height="750" loading="lazy" decoding="async"></a>
+          <figcaption>Forward flight, step 80: the 3,160 rings as the solver carries them.</figcaption>
+        </figure>
+        <figure>
+          <a href="lumped-wake/?case=forward&amp;lump=1"><img src="../media/research/lumped-wake_forward_lumped.webp"
+               alt="The same forward-flight wake with the old rings faded: twelve translucent spheres along the wake, each with an arrow for the dipole of the 200 rings inside it; the young rings at the wing remain"
+               width="1200" height="750" loading="lazy" decoding="async"></a>
+          <figcaption>The same wake lumped: 790 young rings and twelve dipoles, one per wing and period.</figcaption>
+        </figure>
+      </div>
+      <figure>
+        <video autoplay muted loop playsinline preload="metadata"
+               width="1280" height="800" poster="../media/research/lumped-wake-turntable-poster.webp">
+          <source src="../media/research/lumped-wake-turntable.mp4" type="video/mp4">
+        </video>
+        <figcaption>
+          The lumped forward-flight wake turning once. The arrows are drawn with a length
+          proportional to the impulse of the group; the spheres are the far-field radius of
+          each group. In hover the rings stretch as they age, to about ten times the size
+          of these, and the same spheres sit on top of each other under the wings, as large
+          as their distance to the body: hover does not lump yet. That case is in the
+          interactive version.
+        </figcaption>
+      </figure>
+    </div>
+
     <h2 class="sec" id="demo">Interactive demonstration</h2>
     <p>
       The demonstration below reproduces the structure of the method in two dimensions,
