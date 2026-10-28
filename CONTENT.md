@@ -61,7 +61,7 @@ reduced-motion script turns autoplay off for users who ask for less motion); a l
 video uses `controls preload="none"` with a poster so nothing downloads until played.
 `sim/` is a redirect kept for old links.
 
-Keys in use: `research`, `tusas`, `njit`, `ev`. Add folders as needed.
+Keys in use: `research`, `tusas`, `njit`, `ev`, `rrpl`. Add folders as needed.
 
 `width` and `height` on the image are the real pixel dimensions; without them the page
 reflows while images load. Get them with `sips -g pixelWidth -g pixelHeight <file>`.

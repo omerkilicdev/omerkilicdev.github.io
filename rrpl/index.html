@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Omer Kilic &middot; RRPL solid rocket motors</title>
+<meta name="description" content="Timeline of the Rutgers Rocket Propulsion Lab solid motor programme, 2021-2026: test stands, 38, 54 and 98 mm static fires, Spaceport America Cup, and the road to a first flight.">
+<meta name="author" content="Omer Kilic">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231a5fb4'/%3E%3Cellipse cx='16' cy='16' rx='11' ry='4' fill='none' stroke='%23fff' stroke-width='1.8' transform='rotate(-20 16 16)'/%3E%3C/svg%3E">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="rrpl.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container">
+      <ul>
+        <li><a href="../index.html">about</a></li>
+        <li><a href="../index.html#news">news</a></li>
+        <li><a class="active" href="../index.html#work">work</a></li>
+        <li><a href="../research/">research</a></li>
+        <li><a href="../workshop/">workshop</a></li>
+        <li><a href="../Omer_Kilic_CV.pdf" target="_blank" rel="noopener">cv</a></li>
+        <li>
+          <button id="light-toggle" type="button" title="Change theme" aria-label="Change theme">
+            <svg data-icon="system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="9"/></svg>
+            <svg data-icon="light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 1.6v2.6M12 19.8v2.6M1.6 12h2.6M19.8 12h2.6M4.6 4.6l1.9 1.9M17.5 17.5l1.9 1.9M19.4 4.6l-1.9 1.9M6.5 17.5l-1.9 1.9"/></svg>
+            <svg data-icon="dark" viewBox="0 0 24 24" fill="currentColor"><path d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2z"/></svg>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div id="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+</header>
+
+<main id="main">
+  <div class="container">
+
+    <h1 class="name">From igniters to a <strong>98&nbsp;mm solid rocket motor</strong></h1>
+
+    <p class="affil">
+      <span class="lab">Rutgers Rocket Propulsion Lab (RRPL), Rutgers University</span><br>
+      <span class="dept">Propulsion team &middot; leading role since Jan 2025 &middot; motor design, manufacturing, static testing, data analysis</span>
+    </p>
+
+    <div class="hero">
+      <figure>
+        <video id="hero-video" src="../media/rrpl/v25-fire.mp4" poster="../media/rrpl/v25-fire.webp"
+               width="540" height="960" autoplay muted loop playsinline controls
+               aria-label="Static fire of the 98 mm motor on the test stand: a bright violet exhaust plume rises from the vertical stand for about five seconds"></video>
+        <figcaption>98&nbsp;mm static fire, 13 Dec 2025. Unmute for sound.</figcaption>
+      </figure>
+      <dl class="stats">
+        <div><dt>Static-fire days</dt><dd>5<small>Feb 2024 &ndash; Dec 2025, student-built motors only</small></dd></div>
+        <div><dt>Motor diameters</dt><dd>38 &rarr; 54 &rarr; 98&nbsp;mm<small>each one a new casing and nozzle</small></dd></div>
+        <div><dt>Largest total impulse</dt><dd>&asymp;5,380&nbsp;N&middot;s<small>L/M class boundary, Dec 2025</small></dd></div>
+        <div><dt>Next milestone</dt><dd>First flight<small>on a motor of our own, 2026&ndash;27</small></dd></div>
+      </dl>
+    </div>
+
+    <p>
+      RRPL is Rutgers&rsquo; student rocketry team. Its propulsion group spent five years working towards one goal:
+      flying a rocket on a solid motor the team designed, cast, machined and qualified itself rather than one bought
+      off the shelf. This page follows that path stage by stage, with the photographs, test videos (with sound) and
+      data from each one, and a line on why each stage mattered. I joined the work in January 2025 and have had a
+      leading part in everything from that point on; the earlier stages are the groundwork our motor stands on.
+    </p>
+
+    <h2 class="sec" id="chart">Three motors on one chart</h2>
+    <div class="figs">
+      <figure>
+        <img class="plate" src="../media/rrpl/thrust-curves.svg"
+             alt="Thrust versus time for three static fires: the 54 mm motor in February 2024 peaks near 630 newtons and burns for about 3 seconds; the two 98 mm fires in December 2025 peak near 1,190 and 1,050 newtons and burn for about 5 seconds"
+             width="760" height="380" loading="lazy" decoding="async">
+        <figcaption>
+          Re-plotted from the raw test-stand logs in 20&nbsp;ms bins. In 22 months the motor went from about 1,370 to
+          about 5,380&nbsp;N&middot;s. The 2025 logs carry a zero offset that was never calibrated out, so I subtracted
+          the mean of the first and last samples before integrating; without that step the 98&nbsp;mm totals read about
+          8% higher (5,841 and 5,509&nbsp;N&middot;s).
+        </figcaption>
+      </figure>
+    </div>
+
+    <h2 class="sec" id="timeline">Timeline</h2>
+    <ul class="years" aria-label="Jump to year">
+      <li><a href="#y2021">2021&ndash;23</a></li>
+      <li><a href="#y2024">2024</a></li>
+      <li><a href="#y2025">2025</a></li>
+      <li><a href="#y2026">2026</a></li>
+    </ul>
+    <ul class="legend" aria-label="Legend">
+      <li class="fire">static fire</li>
+      <li class="build">build and test</li>
+      <li class="design">design</li>
+      <li class="comp">competition and goal</li>
+    </ul>
+    <p class="hint">Click any photo to enlarge it; every video plays with sound.</p>
+
+    <ol class="tl">
+      <li class="tl-year" id="y2021"><h2>2021&ndash;2023</h2><p>Groundwork: measuring, lighting and casting a motor before building one.</p></li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Mar &ndash; Sep 2022</span><span class="ev-tag">build and test</span><h3>Test electronics, igniters and casting tooling</h3></div>
+        <p>A 3D-printed black box for the data-acquisition electronics, the first igniter and ejection-charge hardware, and printed tooling for casting propellant grains.</p>
+        <p class="why"><b>Why it matters.</b> Before anyone could design a motor, the team needed a way to measure one, light one and cast one.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/y22-blackbox.webp" class="lb" data-cap="Mar 2022 · Data-acquisition black box"><img src="../media/rrpl/y22-blackbox-t.webp" alt="Data-acquisition black box" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Mar 2022 &middot; Data-acquisition black box</figcaption></figure><figure><a href="../media/rrpl/g-22-ign-a.webp" class="lb" data-cap="Jun 2022 · Early ejection-charge hardware"><img src="../media/rrpl/g-22-ign-a-t.webp" alt="Early ejection-charge hardware" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Jun 2022 &middot; Early ejection-charge hardware</figcaption></figure><figure><a href="../media/rrpl/g-22-ign-b.webp" class="lb" data-cap="Jun 2022 · Igniter prototypes"><img src="../media/rrpl/g-22-ign-b-t.webp" alt="Igniter prototypes" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Jun 2022 &middot; Igniter prototypes</figcaption></figure><figure><a href="../media/rrpl/g-22-tooling.webp" class="lb" data-cap="Sep 2022 · 3D-printed casting tooling"><img src="../media/rrpl/g-22-tooling-t.webp" alt="3D-printed casting tooling" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Sep 2022 &middot; 3D-printed casting tooling</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Jan 2023</span><span class="ev-tag">build and test</span><h3>An ejection-charge stand and a printed nozzle</h3></div>
+        <p>An adjustable stand for ground-testing ejection charges, and a 3D-printed prototype nozzle.</p>
+        <p class="why"><b>Why it matters.</b> Ground tests replace guesswork on launch day, and printing a nozzle first is a cheap check of the geometry before any graphite is cut.</p>
+        <div class="ev-vids"><figure class="land"><video src="../media/rrpl/v23-nozzle-print.mp4" poster="../media/rrpl/v23-nozzle-print.webp" width="960" height="540" controls preload="none" playsinline aria-label="Time-lapse: printing a prototype nozzle"></video><figcaption>Time-lapse: printing a prototype nozzle</figcaption></figure></div>
+        <div class="ev-grid"><figure><a href="../media/rrpl/y23-ejection-stand.webp" class="lb" data-cap="Adjustable ejection-charge test stand"><img src="../media/rrpl/y23-ejection-stand-t.webp" alt="Adjustable ejection-charge test stand" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Adjustable ejection-charge test stand</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Aug 2023</span><span class="ev-tag">build and test</span><h3>First machined motor hardware, and a decision</h3></div>
+        <p>Aluminium closures and a tube for a reusable casing came off the lathe, and the team set its direction: <em>&ldquo;The next step for us is to achieve SRAD status&rdquo;</em> &mdash; student researched and designed motors, not commercial reloads.</p>
+        <p class="why"><b>Why it matters.</b> This is where the programme turned from buying motors to building them.</p>
+        <div class="ev-vids"><figure class="land"><video src="../media/rrpl/v23-launch.mp4" poster="../media/rrpl/v23-launch.webp" width="640" height="360" controls preload="none" playsinline aria-label="A member’s launch, shared the same week"></video><figcaption>A member&rsquo;s launch, shared the same week</figcaption></figure></div>
+        <div class="ev-grid"><figure><a href="../media/rrpl/y23-closures.webp" class="lb" data-cap="Closure with radial ports"><img src="../media/rrpl/y23-closures-t.webp" alt="Closure with radial ports" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Closure with radial ports</figcaption></figure><figure><a href="../media/rrpl/g-23-tube.webp" class="lb" data-cap="Tube and first closures"><img src="../media/rrpl/g-23-tube-t.webp" alt="Tube and first closures" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Tube and first closures</figcaption></figure><figure><a href="../media/rrpl/g-23-disc.webp" class="lb" data-cap="Machined closure disc"><img src="../media/rrpl/g-23-disc-t.webp" alt="Machined closure disc" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Machined closure disc</figcaption></figure><figure><a href="../media/rrpl/g-23-disc2.webp" class="lb" data-cap="Disc with a tapped centre hole"><img src="../media/rrpl/g-23-disc2-t.webp" alt="Disc with a tapped centre hole" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Disc with a tapped centre hole</figcaption></figure></div>
+      </li>
+
+      <li class="ev design" data-kind="design">
+        <div class="ev-head"><span class="ev-date">Oct 2023 &ndash; Jan 2024</span><span class="ev-tag">design</span><h3>A thrust stand</h3></div>
+        <p>The first stand was modelled in CAD and built around a load-cell fixture.</p>
+        <p class="why"><b>Why it matters.</b> Without measured thrust there is no total impulse, no specific impulse and no way to check a simulation.</p>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/g-23-stand-cad.webp" class="lb" data-cap="Oct 2023 · Stand CAD"><img src="../media/rrpl/g-23-stand-cad-t.webp" alt="Stand CAD" width="640" height="387" loading="lazy" decoding="async"></a><figcaption>Oct 2023 &middot; Stand CAD</figcaption></figure><figure><a href="../media/rrpl/g-24-stand-ring.webp" class="lb" data-cap="Jan 2024 · Load fixture"><img src="../media/rrpl/g-24-stand-ring-t.webp" alt="Load fixture" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Jan 2024 &middot; Load fixture</figcaption></figure></div>
+      </li>
+
+      <li class="tl-year" id="y2024"><h2>2024</h2><p>The first student-built motors fire, the team flies at Spaceport, and the 98&nbsp;mm motor is born.</p></li>
+
+      <li class="ev fire" data-kind="fire">
+        <div class="ev-head"><span class="ev-date">3 Feb 2024</span><span class="ev-tag">static fire</span><h3>Characterisation motors</h3></div>
+        <p>Three small motors were fired on the stand to measure how fast the propellant burns at different pressures.</p>
+        <p class="why"><b>Why it matters.</b> The burn-rate law is the input every later motor simulation depends on.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v24-char-1.mp4" poster="../media/rrpl/v24-char-1.webp" width="360" height="640" controls preload="none" playsinline aria-label="Test 1"></video><figcaption>Test 1</figcaption></figure><figure><video src="../media/rrpl/v24-char-2.mp4" poster="../media/rrpl/v24-char-2.webp" width="360" height="640" controls preload="none" playsinline aria-label="Test 2"></video><figcaption>Test 2</figcaption></figure><figure><video src="../media/rrpl/v24-char-3.mp4" poster="../media/rrpl/v24-char-3.webp" width="360" height="480" controls preload="none" playsinline aria-label="Test 3"></video><figcaption>Test 3</figcaption></figure></div>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/y24-char-curve.webp" class="lb" data-cap="Thrust and pressure, test 3 (team plot)"><img src="../media/rrpl/y24-char-curve-t.webp" alt="Thrust and pressure, test 3 (team plot)" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Thrust and pressure, test 3 (team plot)</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Feb 2024</span><span class="ev-tag">build and test</span><h3>The first graphite nozzle and the 54&nbsp;mm casing</h3></div>
+        <p>A graphite nozzle was turned on the lathe and fitted to the first full student-built casing.</p>
+        <p class="why"><b>Why it matters.</b> Graphite survives the throat temperature that aluminium cannot; this casing became the first SRAD motor.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v24-graphite-lathe.mp4" poster="../media/rrpl/v24-graphite-lathe.webp" width="480" height="854" controls preload="none" playsinline aria-label="A new graphite nozzle off the lathe"></video><figcaption>A new graphite nozzle off the lathe</figcaption></figure></div>
+        <div class="ev-grid"><figure><a href="../media/rrpl/g-24-54-noz-a.webp" class="lb" data-cap="Fitting the graphite nozzle"><img src="../media/rrpl/g-24-54-noz-a-t.webp" alt="Fitting the graphite nozzle" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>Fitting the graphite nozzle</figcaption></figure><figure><a href="../media/rrpl/g-24-54-noz-b.webp" class="lb" data-cap="Throat view"><img src="../media/rrpl/g-24-54-noz-b-t.webp" alt="Throat view" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>Throat view</figcaption></figure><figure><a href="../media/rrpl/g-24-54-vise.webp" class="lb" data-cap="54 mm casing in the vise"><img src="../media/rrpl/g-24-54-vise-t.webp" alt="54 mm casing in the vise" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>54&nbsp;mm casing in the vise</figcaption></figure><figure><a href="../media/rrpl/g-24-54-bore.webp" class="lb" data-cap="Down the bore"><img src="../media/rrpl/g-24-54-bore-t.webp" alt="Down the bore" width="640" height="359" loading="lazy" decoding="async"></a><figcaption>Down the bore</figcaption></figure><figure><a href="../media/rrpl/y24-54-casing.webp" class="lb" data-cap="Nozzle seated, the day before the fire"><img src="../media/rrpl/y24-54-casing-t.webp" alt="Nozzle seated, the day before the fire" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>Nozzle seated, the day before the fire</figcaption></figure></div>
+      </li>
+
+      <li class="ev fire ev-big" data-kind="fire">
+        <div class="ev-head"><span class="ev-date">24 Feb 2024</span><span class="ev-tag">static fire</span><h3>First student-built motors: 38&nbsp;mm and 54&nbsp;mm</h3></div>
+        <ul class="ev-num"><li><strong>1,369&nbsp;N&middot;s</strong> 54&nbsp;mm total impulse</li><li><strong>1,100</strong> openMotor prediction</li><li><strong>213&nbsp;s</strong> specific impulse</li></ul>
+        <p>Both motors fired on the same day at a launch field. The 54&nbsp;mm motor beat its simulation by a quarter and started at about twice the predicted thrust, hinting that the propellant burned faster than modelled. Afterwards the graphite nozzle was found cracked, and the pressure transducer had recorded nothing.</p>
+        <p class="why"><b>Why it matters.</b> The first proof the team could build a working motor, and the first data showing where the model was wrong.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v24-first-fire.mp4" poster="../media/rrpl/v24-first-fire.webp" width="392" height="640" controls preload="none" playsinline aria-label="54 mm: violet plume, shock diamonds"></video><figcaption>54&nbsp;mm: violet plume, shock diamonds</figcaption></figure><figure><video src="../media/rrpl/v24-38mm.mp4" poster="../media/rrpl/v24-38mm.webp" width="480" height="852" controls preload="none" playsinline aria-label="38 mm, from the flight line"></video><figcaption>38&nbsp;mm, from the flight line</figcaption></figure></div>
+        <div class="ev-grid"><figure><a href="../media/rrpl/g-24-plume.webp" class="lb" data-cap="Plume still the team used to judge nozzle expansion"><img src="../media/rrpl/g-24-plume-t.webp" alt="Plume still the team used to judge nozzle expansion" width="390" height="640" loading="lazy" decoding="async"></a><figcaption>Plume still the team used to judge nozzle expansion</figcaption></figure></div>
+      </li>
+
+      <li class="ev fire" data-kind="fire">
+        <div class="ev-head"><span class="ev-date">Early Mar 2024</span><span class="ev-tag">static fire</span><h3>Second 54&nbsp;mm fire, and what went wrong</h3></div>
+        <p>The throat had been drilled to 0.455&nbsp;in instead of 0.375&nbsp;in and the liner burned. Rather than requalify the casing, the team later decided to make a new one.</p>
+        <p class="why"><b>Why it matters.</b> Two failure modes found on the ground instead of in flight.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v24-second-54.mp4" poster="../media/rrpl/v24-second-54.webp" width="480" height="852" controls preload="none" playsinline aria-label="Second 54 mm fire"></video><figcaption>Second 54&nbsp;mm fire</figcaption></figure></div>
+        <div class="ev-grid"><figure><a href="../media/rrpl/y24-54-nozzle.webp" class="lb" data-cap="Nozzle after the second fire"><img src="../media/rrpl/y24-54-nozzle-t.webp" alt="Nozzle after the second fire" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Nozzle after the second fire</figcaption></figure><figure><a href="../media/rrpl/g-24-54-fired-a.webp" class="lb" data-cap="Nozzle face"><img src="../media/rrpl/g-24-54-fired-a-t.webp" alt="Nozzle face" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Nozzle face</figcaption></figure><figure><a href="../media/rrpl/g-24-54-fired-b.webp" class="lb" data-cap="Fired throat, 0.455 in"><img src="../media/rrpl/g-24-54-fired-b-t.webp" alt="Fired throat, 0.455 in" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Fired throat, 0.455&nbsp;in</figcaption></figure></div>
+      </li>
+
+      <li class="ev design" data-kind="design">
+        <div class="ev-head"><span class="ev-date">Mar &ndash; Apr 2024</span><span class="ev-tag">design</span><h3>A bigger stand and the 98&nbsp;mm nozzle</h3></div>
+        <p>Thrust Stand 2.0 was sized by finite-element analysis for 2,500&nbsp;lbf. The 98&nbsp;mm nozzle got the architecture it still uses: a phenolic carrier that takes the load and insulates the closure, and a graphite insert at the throat.</p>
+        <p class="why"><b>Why it matters.</b> The stand was proven for the 98&nbsp;mm class before it was built, and the nozzle layout chosen here survived both December 2025 fires.</p>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/y24-stand-fea.webp" class="lb" data-cap="Stand plate FEA"><img src="../media/rrpl/y24-stand-fea-t.webp" alt="Stand plate FEA" width="640" height="463" loading="lazy" decoding="async"></a><figcaption>Stand plate FEA</figcaption></figure><figure class="plate"><a href="../media/rrpl/g-24-fea-plate.webp" class="lb" data-cap="Stand assembly FEA"><img src="../media/rrpl/g-24-fea-plate-t.webp" alt="Stand assembly FEA" width="640" height="363" loading="lazy" decoding="async"></a><figcaption>Stand assembly FEA</figcaption></figure><figure class="plate"><a href="../media/rrpl/y24-nozzle-cad.webp" class="lb" data-cap="Phenolic carrier and graphite insert"><img src="../media/rrpl/y24-nozzle-cad-t.webp" alt="Phenolic carrier and graphite insert" width="613" height="640" loading="lazy" decoding="async"></a><figcaption>Phenolic carrier and graphite insert</figcaption></figure><figure class="plate"><a href="../media/rrpl/g-24-noz-cad.webp" class="lb" data-cap="Nozzle section, second iteration"><img src="../media/rrpl/g-24-noz-cad-t.webp" alt="Nozzle section, second iteration" width="477" height="640" loading="lazy" decoding="async"></a><figcaption>Nozzle section, second iteration</figcaption></figure></div>
+      </li>
+
+      <li class="ev comp ev-big" data-kind="comp">
+        <div class="ev-head"><span class="ev-date">Jun 2024</span><span class="ev-tag">competition</span><h3>Spaceport America Cup: <em>Knightmare</em></h3></div>
+        <ul class="ev-num"><li><strong>30,000&nbsp;ft</strong> category (COTS)</li><li><strong>2</strong> stages, 6&Prime; and 4&Prime;</li><li><strong>M4500 / M1939</strong> booster / sustainer</li></ul>
+        <p>RRPL&rsquo;s two-stage rocket flew at the world&rsquo;s largest intercollegiate rocket engineering competition on commercial motors. The booster flew and the whole vehicle was recovered, but the sustainer never lit: the copper tape carrying current to its igniter tore during assembly or ascent.</p>
+        <p class="why"><b>Why it matters.</b> That single igniter failure is why the next motor got head-end ignition.</p>
+        <figure class="ev-wide"><img src="../media/rrpl/irec-rocket.webp" alt="Knightmare, from the team’s technical report" width="1600" height="265" loading="lazy" decoding="async"><figcaption>Knightmare, from the team&rsquo;s technical report</figcaption></figure>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/irec-profile-t.webp" class="lb" data-cap="Planned flight profile, sustainer apogee near 32,700 ft"><img src="../media/rrpl/irec-profile-t-t.webp" alt="Planned flight profile, sustainer apogee near 32,700 ft" width="640" height="486" loading="lazy" decoding="async"></a><figcaption>Planned flight profile, sustainer apogee near 32,700&nbsp;ft</figcaption></figure><figure class="plate"><a href="../media/rrpl/g-24-rocket-cad.webp" class="lb" data-cap="Mar 2024 · Rocket model: motor mount, centering rings, recovery bay, fins"><img src="../media/rrpl/g-24-rocket-cad-t.webp" alt="Rocket model: motor mount, centering rings, recovery bay, fins" width="640" height="226" loading="lazy" decoding="async"></a><figcaption>Mar 2024 &middot; Rocket model: motor mount, centering rings, recovery bay, fins</figcaption></figure></div>
+        <div class="ev-links"><a class="btn" href="https://www.spaceportamericacup.com/" target="_blank" rel="noopener">Spaceport America Cup</a><a class="btn" href="https://www.soundingrocket.org/" target="_blank" rel="noopener">ESRA, the organiser</a></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Jul &ndash; Oct 2024</span><span class="ev-tag">build and test</span><h3>Machining the 98&nbsp;mm motor</h3></div>
+        <p>Tube stock, closures, threads and a knurled aft closure; the graphite nozzle took nine and a half hours on the lathe.</p>
+        <p class="why"><b>Why it matters.</b> Every part of this motor was turned in-house, so tolerances and threads became the team&rsquo;s problem, and its skill.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v24-98-machining.mp4" poster="../media/rrpl/v24-98-machining.webp" width="480" height="640" controls preload="none" playsinline aria-label="9 Sep · 98 mm manufacturing begins"></video><figcaption>9 Sep &middot; 98&nbsp;mm manufacturing begins</figcaption></figure></div>
+        <div class="ev-grid"><figure><a href="../media/rrpl/g-24-stock.webp" class="lb" data-cap="Jul · Tube stock"><img src="../media/rrpl/g-24-stock-t.webp" alt="Tube stock" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Jul &middot; Tube stock</figcaption></figure><figure><a href="../media/rrpl/y24-aft-closure.webp" class="lb" data-cap="Sep · Aft closure, knurled"><img src="../media/rrpl/y24-aft-closure-t.webp" alt="Aft closure, knurled" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Sep &middot; Aft closure, knurled</figcaption></figure><figure><a href="../media/rrpl/g-24-closure-in.webp" class="lb" data-cap="Sep · Aft closure on the casing"><img src="../media/rrpl/g-24-closure-in-t.webp" alt="Aft closure on the casing" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Sep &middot; Aft closure on the casing</figcaption></figure><figure><a href="../media/rrpl/g-24-threads.webp" class="lb" data-cap="Oct · Closure threads"><img src="../media/rrpl/g-24-threads-t.webp" alt="Closure threads" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Oct &middot; Closure threads</figcaption></figure><figure><a href="../media/rrpl/g-24-closure.webp" class="lb" data-cap="Oct · Forward closure"><img src="../media/rrpl/g-24-closure-t.webp" alt="Forward closure" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Oct &middot; Forward closure</figcaption></figure><figure><a href="../media/rrpl/g-24-throat-a.webp" class="lb" data-cap="Oct · Graphite throat finished"><img src="../media/rrpl/g-24-throat-a-t.webp" alt="Graphite throat finished" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>Oct &middot; Graphite throat finished</figcaption></figure><figure><a href="../media/rrpl/g-24-throat-b.webp" class="lb" data-cap="Throat insert, side"><img src="../media/rrpl/g-24-throat-b-t.webp" alt="Throat insert, side" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>Throat insert, side</figcaption></figure><figure><a href="../media/rrpl/y24-graphite.webp" class="lb" data-cap="Graphite nozzle"><img src="../media/rrpl/y24-graphite-t.webp" alt="Graphite nozzle" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>Graphite nozzle</figcaption></figure><figure><a href="../media/rrpl/g-24-graphite-b.webp" class="lb" data-cap="After a 9.5-hour lathe session"><img src="../media/rrpl/g-24-graphite-b-t.webp" alt="After a 9.5-hour lathe session" width="359" height="640" loading="lazy" decoding="async"></a><figcaption>After a 9.5-hour lathe session</figcaption></figure><figure><a href="../media/rrpl/y24-casing98.webp" class="lb" data-cap="98 mm casing tube"><img src="../media/rrpl/y24-casing98-t.webp" alt="98 mm casing tube" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>98&nbsp;mm casing tube</figcaption></figure><figure><a href="../media/rrpl/g-24-casing-tube.webp" class="lb" data-cap="Casing tube, bore"><img src="../media/rrpl/g-24-casing-tube-t.webp" alt="Casing tube, bore" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Casing tube, bore</figcaption></figure></div>
+      </li>
+
+      <li class="ev fire ev-big" data-kind="fire">
+        <div class="ev-head"><span class="ev-date">19 Oct 2024</span><span class="ev-tag">static fire</span><h3>The first 98&nbsp;mm fire</h3></div>
+        <ul class="ev-num"><li><strong>&asymp;5,170&nbsp;N&middot;s</strong> team&rsquo;s reduction</li><li><strong>260&nbsp;lbf</strong> peak thrust</li><li><strong>670&nbsp;psi</strong> peak pressure</li></ul>
+        <p>Eight months after the first 54&nbsp;mm fire, the 98&nbsp;mm motor ran on the new stand at a launch weekend. A short motor nicknamed &ldquo;Stubby&rdquo; fired the same day.</p>
+        <p class="why"><b>Why it matters.</b> Roughly four times the impulse of the 54&nbsp;mm motor: the jump from a hobby-scale motor to an M-class one.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v24-first-98.mp4" poster="../media/rrpl/v24-first-98.webp" width="400" height="712" controls preload="none" playsinline aria-label="First 98 mm fire"></video><figcaption>First 98&nbsp;mm fire</figcaption></figure><figure><video src="../media/rrpl/v24-stubby.mp4" poster="../media/rrpl/v24-stubby.webp" width="360" height="640" controls preload="none" playsinline aria-label="“Stubby”"></video><figcaption>&ldquo;Stubby&rdquo;</figcaption></figure></div>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/y24-98-curve.webp" class="lb" data-cap="The team’s thrust curve, 5,169 N·s"><img src="../media/rrpl/y24-98-curve-t.webp" alt="s" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>The team&rsquo;s thrust curve, 5,169&nbsp;N&middot;s</figcaption></figure></div>
+      </li>
+
+      <li class="ev design" data-kind="design">
+        <div class="ev-head"><span class="ev-date">Nov &ndash; Dec 2024</span><span class="ev-tag">design</span><h3>Head-end ignition and a hydrostatic rig</h3></div>
+        <p>An igniter fed through a threaded bolt in the forward closure, so the wire never runs up the nozzle; the e-match is dipped in pyrogen and sealed with an O-ring. A hydrostatic set-up with a calibrated transducer was built to proof-test hardware.</p>
+        <p class="why"><b>Why it matters.</b> The direct answer to the Spaceport failure, and the rig that later proved the CT-1 casing.</p>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/g-24-hei-sketch.webp" class="lb" data-cap="HEI concept sketch"><img src="../media/rrpl/g-24-hei-sketch-t.webp" alt="HEI concept sketch" width="640" height="359" loading="lazy" decoding="async"></a><figcaption>HEI concept sketch</figcaption></figure><figure class="plate"><a href="../media/rrpl/y24-hei-cad.webp" class="lb" data-cap="HEI bolt CAD"><img src="../media/rrpl/y24-hei-cad-t.webp" alt="HEI bolt CAD" width="417" height="640" loading="lazy" decoding="async"></a><figcaption>HEI bolt CAD</figcaption></figure><figure><a href="../media/rrpl/y24-hei-build.webp" class="lb" data-cap="Packing pyrogen"><img src="../media/rrpl/y24-hei-build-t.webp" alt="Packing pyrogen" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Packing pyrogen</figcaption></figure><figure><a href="../media/rrpl/g-24-hei-a.webp" class="lb" data-cap="Building the igniter"><img src="../media/rrpl/g-24-hei-a-t.webp" alt="Building the igniter" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Building the igniter</figcaption></figure><figure><a href="../media/rrpl/g-24-hei-b.webp" class="lb" data-cap="Finished housing"><img src="../media/rrpl/g-24-hei-b-t.webp" alt="Finished housing" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Finished housing</figcaption></figure><figure><a href="../media/rrpl/g-24-hydro-a.webp" class="lb" data-cap="Hydrostatic rig"><img src="../media/rrpl/g-24-hydro-a-t.webp" alt="Hydrostatic rig" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Hydrostatic rig</figcaption></figure><figure><a href="../media/rrpl/g-24-hydro-b.webp" class="lb" data-cap="Transducer and calibration sheet"><img src="../media/rrpl/g-24-hydro-b-t.webp" alt="Transducer and calibration sheet" width="640" height="480" loading="lazy" decoding="async"></a><figcaption>Transducer and calibration sheet</figcaption></figure></div>
+      </li>
+
+      <li class="tl-year" id="y2025"><h2>2025</h2><p>New casing, new nozzle, and two static fires in one day.</p><span class="mine">From here on I had a leading role in the work.</span></li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Jan &ndash; Apr 2025</span><span class="ev-tag">build and test</span><h3>CT-1 casing: threads and a 1,200&nbsp;psi proof</h3></div>
+        <p>The new body tube (6061-T6, 3.858&nbsp;in outside, 3.63&nbsp;in bore, 3.715-16 threads at both ends) was released in January. We measured bore and thread depth against the drawing, moved to single-point threading, and hydrostatically tested the casing to <strong>1,200&nbsp;psi with no leaks</strong>. In parallel the throat was sized in openMotor: a Kn of 273 gave 0.41&nbsp;in, 310 gave 0.385&nbsp;in.</p>
+        <p class="why"><b>Why it matters.</b> The casing is the pressure vessel; a proof test well above operating pressure is what makes it safe to fire.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/casing-threads.webp" class="lb" data-cap="Apr · Closure threads, single-point cut"><img src="../media/rrpl/casing-threads-t.webp" alt="Closure threads, single-point cut" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Apr &middot; Closure threads, single-point cut</figcaption></figure><figure><a href="../media/rrpl/g-25-threads2.webp" class="lb" data-cap="Thread flanks and bore"><img src="../media/rrpl/g-25-threads2-t.webp" alt="Thread flanks and bore" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Thread flanks and bore</figcaption></figure><figure class="plate"><a href="../media/rrpl/openmotor-kn.webp" class="lb" data-cap="openMotor throat sizing"><img src="../media/rrpl/openmotor-kn-t.webp" alt="openMotor throat sizing" width="640" height="350" loading="lazy" decoding="async"></a><figcaption>openMotor throat sizing</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Feb 2025</span><span class="ev-tag">build and test</span><h3>Launch preparation: igniters for student and commercial motors</h3></div>
+        <p>For a February launch weekend the team mixed propellant, assembled booster and sustainer motors, and made igniters for both the student-built motor and commercial L2500 and K1999 reloads.</p>
+        <p class="why"><b>Why it matters.</b> Launch-day reliability comes down to small parts; an igniter is what cost the sustainer at Spaceport.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/g-25-igniters-a.webp" class="lb" data-cap="Igniters ready"><img src="../media/rrpl/g-25-igniters-a-t.webp" alt="Igniters ready" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Igniters ready</figcaption></figure><figure><a href="../media/rrpl/g-25-igniters-b.webp" class="lb" data-cap="Bagged and labelled"><img src="../media/rrpl/g-25-igniters-b-t.webp" alt="Bagged and labelled" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Bagged and labelled</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">Sep &ndash; Nov 2025</span><span class="ev-tag">build and test</span><h3>A second casing and stand upgrades</h3></div>
+        <p>A two-grain casing tube was machined for the next fires, and the stand got new strut-channel fittings.</p>
+        <p class="why"><b>Why it matters.</b> A second casing is what made two fires in one day possible.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/g-25-lathe.webp" class="lb" data-cap="Sep · Closure on the lathe"><img src="../media/rrpl/g-25-lathe-t.webp" alt="Closure on the lathe" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Sep &middot; Closure on the lathe</figcaption></figure><figure><a href="../media/rrpl/g-25-stock.webp" class="lb" data-cap="Nov · Casing stock"><img src="../media/rrpl/g-25-stock-t.webp" alt="Casing stock" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Nov &middot; Casing stock</figcaption></figure><figure><a href="../media/rrpl/g-25-stand-fitting.webp" class="lb" data-cap="Oct · Stand fitting"><img src="../media/rrpl/g-25-stand-fitting-t.webp" alt="Stand fitting" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Oct &middot; Stand fitting</figcaption></figure></div>
+      </li>
+
+      <li class="ev design" data-kind="design">
+        <div class="ev-head"><span class="ev-date">Oct 2025</span><span class="ev-tag">design</span><h3>Reading the char, redesigning the nozzle</h3></div>
+        <p>Spent phenolic nozzles were cut in half to see how deep the char went. The redesigned carrier came out with safety factors of 17.3 in bearing, 12.2 for the carrier and 2.8 for the graphite insert, bonded with a 0.010&ndash;0.015&nbsp;in layer of RTV.</p>
+        <p class="why"><b>Why it matters.</b> Measuring the old part told us where material was needed and where it was wasted.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/phenolic-section.webp" class="lb" data-cap="Two spent nozzles, sectioned"><img src="../media/rrpl/phenolic-section-t.webp" alt="Two spent nozzles, sectioned" width="640" height="360" loading="lazy" decoding="async"></a><figcaption>Two spent nozzles, sectioned</figcaption></figure><figure><a href="../media/rrpl/g-25-section-a.webp" class="lb" data-cap="Char layer"><img src="../media/rrpl/g-25-section-a-t.webp" alt="Char layer" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Char layer</figcaption></figure><figure><a href="../media/rrpl/g-25-section-b.webp" class="lb" data-cap="Throat region"><img src="../media/rrpl/g-25-section-b-t.webp" alt="Throat region" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Throat region</figcaption></figure><figure><a href="../media/rrpl/g-25-section-c.webp" class="lb" data-cap="Exit cone"><img src="../media/rrpl/g-25-section-c-t.webp" alt="Exit cone" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Exit cone</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">3 Dec 2025</span><span class="ev-tag">build and test</span><h3>Launch weekend preparation: commercial reloads</h3></div>
+        <p>Alongside our own motor, the team assembled AeroTech RMS-98 reloadable motors for the flight side of the weekend: case, forward seal disc, liner and nozzle, and tested the stand for centering. The static fire moved from 6 to 13 December because of shipping and mixing delays.</p>
+        <p class="why"><b>Why it matters.</b> Every RRPL flight still uses commercial motors, and this hardware is the reference layout our own closures, seal disc and liner follow.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/cots-vise.webp" class="lb" data-cap="RMS-98 case in the vise"><img src="../media/rrpl/cots-vise-t.webp" alt="RMS-98 case in the vise" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>RMS-98 case in the vise</figcaption></figure><figure><a href="../media/rrpl/cots-label.webp" class="lb" data-cap="AeroTech RMS 98/2560 case"><img src="../media/rrpl/cots-label-t.webp" alt="AeroTech RMS 98/2560 case" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>AeroTech RMS 98/2560 case</figcaption></figure><figure><a href="../media/rrpl/cots-case.webp" class="lb" data-cap="Case with knurled closure"><img src="../media/rrpl/cots-case-t.webp" alt="Case with knurled closure" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Case with knurled closure</figcaption></figure><figure><a href="../media/rrpl/cots-nozzle.webp" class="lb" data-cap="Commercial nozzle"><img src="../media/rrpl/cots-nozzle-t.webp" alt="Commercial nozzle" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Commercial nozzle</figcaption></figure><figure><a href="../media/rrpl/cots-seal.webp" class="lb" data-cap="Forward seal disc and O-ring"><img src="../media/rrpl/cots-seal-t.webp" alt="Forward seal disc and O-ring" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Forward seal disc and O-ring</figcaption></figure></div>
+      </li>
+
+      <li class="ev fire ev-big" data-kind="fire">
+        <div class="ev-head"><span class="ev-date">13 Dec 2025</span><span class="ev-tag">static fire</span><h3>Two fires in one day, with our own propellant and casing</h3></div>
+        <ul class="ev-num"><li><strong>&asymp;5,380 / 5,100&nbsp;N&middot;s</strong> total impulse</li><li><strong>&asymp;1,190 / 1,050&nbsp;N</strong> peak thrust</li><li><strong>&asymp;880&ndash;950&nbsp;psi</strong> peak pressure, fire 1</li><li><strong>&asymp;5&nbsp;s</strong> burn</li></ul>
+        <p>Both fires at the Maryland&ndash;Delaware Rocketry Association range, on a load cell and pressure transducers, each with two 6&nbsp;in grains, sat right on the L/M class boundary (5,120&nbsp;N&middot;s). The thrust curves are in the chart near the top of the page.</p>
+        <p class="why"><b>Why it matters.</b> The most powerful student-built motors in the team&rsquo;s history to that date, fired back to back.</p>
+        <div class="ev-vids"><figure><video src="../media/rrpl/v25-fire.mp4" poster="../media/rrpl/v25-fire.webp" width="540" height="960" controls preload="none" playsinline aria-label="Test 1"></video><figcaption>Test 1</figcaption></figure><figure><video src="../media/rrpl/v25-fire2.mp4" poster="../media/rrpl/v25-fire2.webp" width="540" height="960" controls preload="none" playsinline aria-label="Test 2"></video><figcaption>Test 2</figcaption></figure></div>
+      </li>
+
+      <li class="ev build" data-kind="build">
+        <div class="ev-head"><span class="ev-date">16 Dec 2025</span><span class="ev-tag">build and test</span><h3>Teardown: the nozzle survived</h3></div>
+        <p>The phenolic and the graphite both held, the seals had not leaked, and the char was thin enough that we estimate the nozzle can be reused about five times. Next: some RTV was squeezed out and cooked, and the tapered contact needs a smaller area for the larger exit of a four-grain motor.</p>
+        <p class="why"><b>Why it matters.</b> A reusable nozzle turns each fire into a cheaper, faster iteration.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/teardown-nozzle.webp" class="lb" data-cap="Insert still seated"><img src="../media/rrpl/teardown-nozzle-t.webp" alt="Insert still seated" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Insert still seated</figcaption></figure><figure><a href="../media/rrpl/teardown-throat.webp" class="lb" data-cap="Slag on the throat entry"><img src="../media/rrpl/teardown-throat-t.webp" alt="Slag on the throat entry" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Slag on the throat entry</figcaption></figure><figure><a href="../media/rrpl/g-25-teardown.webp" class="lb" data-cap="Second nozzle"><img src="../media/rrpl/g-25-teardown-t.webp" alt="Second nozzle" width="360" height="640" loading="lazy" decoding="async"></a><figcaption>Second nozzle</figcaption></figure></div>
+      </li>
+
+      <li class="tl-year" id="y2026"><h2>2026</h2><p>From our own data to a flight motor.</p></li>
+
+      <li class="ev design" data-kind="design">
+        <div class="ev-head"><span class="ev-date">Feb 2026</span><span class="ev-tag">design</span><h3>A burn-rate law from our own fire data</h3></div>
+        <p>The December pressure trace was turned into a burn-rate law (a&middot;P<sup>n</sup>) with Nakka&rsquo;s method, done independently in MATLAB and in Excel; both gave an exponent of about 0.67.</p>
+        <p class="why"><b>Why it matters.</b> Until now, motors were designed with constants from a reference propellant; this closes the loop with ours.</p>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/g-26-dec-data.webp" class="lb" data-cap="Thrust and pressure, December fire"><img src="../media/rrpl/g-26-dec-data-t.webp" alt="Thrust and pressure, December fire" width="640" height="406" loading="lazy" decoding="async"></a><figcaption>Thrust and pressure, December fire</figcaption></figure><figure class="plate"><a href="../media/rrpl/g-26-fit-a.webp" class="lb" data-cap="Burn rate against pressure"><img src="../media/rrpl/g-26-fit-a-t.webp" alt="Burn rate against pressure" width="640" height="266" loading="lazy" decoding="async"></a><figcaption>Burn rate against pressure</figcaption></figure><figure class="plate"><a href="../media/rrpl/g-26-fit-b.webp" class="lb" data-cap="Fit, second pass"><img src="../media/rrpl/g-26-fit-b-t.webp" alt="Fit, second pass" width="640" height="261" loading="lazy" decoding="async"></a><figcaption>Fit, second pass</figcaption></figure></div>
+      </li>
+
+      <li class="ev design" data-kind="design">
+        <div class="ev-head"><span class="ev-date">Spring 2026</span><span class="ev-tag">design</span><h3>Competition grains and a 75&nbsp;mm sustainer</h3></div>
+        <p>We machined the competition grains and started a 75&nbsp;mm sustainer motor with head-end ignition. A planned spring static fire was called off.</p>
+        <p class="why"><b>Why it matters.</b> A two-stage rocket needs a second motor; this is its start.</p>
+        <div class="ev-grid"><figure><a href="../media/rrpl/g-26-cabinet.webp" class="lb" data-cap="Propellant cabinet, reorganised"><img src="../media/rrpl/g-26-cabinet-t.webp" alt="Propellant cabinet, reorganised" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Propellant cabinet, reorganised</figcaption></figure></div>
+      </li>
+
+      <li class="ev comp" data-kind="goal">
+        <div class="ev-head"><span class="ev-date">2026 &ndash; 27 season</span><span class="ev-tag">goal</span><h3><em>Jersey Devil</em>: the first flight on our own motor</h3></div>
+        <p>Finish the 98&nbsp;mm motor and integrate it into a rocket, alongside a new booster propellant. Every RRPL flight so far has used commercial motors. For the team&rsquo;s openMotor training I modelled two commercial phenolic nozzles from their drawings (0.344 and 0.734&nbsp;in throats): fixed 3.27&nbsp;in grains with a 1.125&nbsp;in core, varying only throat and grain count to match an M1939 under 2,000&nbsp;psi.</p>
+        <p class="why"><b>Why it matters.</b> Flight is the test that everything on this page has been building towards.</p>
+        <div class="ev-grid"><figure class="plate"><a href="../media/rrpl/openmotor-grain.webp" class="lb" data-cap="Training grain"><img src="../media/rrpl/openmotor-grain-t.webp" alt="Training grain" width="624" height="560" loading="lazy" decoding="async"></a><figcaption>Training grain</figcaption></figure><figure class="plate"><a href="../media/rrpl/g-26-openmotor.webp" class="lb" data-cap="Propellant set-up"><img src="../media/rrpl/g-26-openmotor-t.webp" alt="Propellant set-up" width="640" height="397" loading="lazy" decoding="async"></a><figcaption>Propellant set-up</figcaption></figure><figure><a href="../media/rrpl/g-26-airframes.webp" class="lb" data-cap="Oct 2026 · Airframe sections in the shop"><img src="../media/rrpl/g-26-airframes-t.webp" alt="Airframe sections in the shop" width="480" height="640" loading="lazy" decoding="async"></a><figcaption>Oct 2026 &middot; Airframe sections in the shop</figcaption></figure></div>
+      </li>
+    </ol>
+
+    <p style="margin-top:2rem; font-size:0.85rem; color:var(--text-light);">
+      Photographs, videos and team plots by RRPL members; the rocket image and flight profile are from the team&rsquo;s
+      2024 Spaceport America Cup technical report. The three-motor chart is mine, from the raw test-stand logs.
+    </p>
+
+    <p style="margin-top:1.4rem;"><a href="../index.html#work">&larr; Back to selected work</a></p>
+  </div>
+</main>
+
+<dialog id="lightbox" aria-label="Enlarged photo">
+  <form method="dialog"><button class="lb-close" aria-label="Close">&times;</button></form>
+  <img id="lb-img" alt="">
+  <p id="lb-cap"></p>
+</dialog>
+
+<script>
+  // Gallery lightbox: open the full-size photo in a dialog; falls back to the plain link.
+  (function () {
+    var dlg = document.getElementById('lightbox');
+    if (!dlg || typeof dlg.showModal !== 'function') return;
+    var img = document.getElementById('lb-img'), cap = document.getElementById('lb-cap');
+    document.querySelectorAll('a.lb').forEach(function (a) {
+      a.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        img.src = a.getAttribute('href');
+        img.alt = a.querySelector('img').alt;
+        cap.textContent = a.dataset.cap || '';
+        dlg.showModal();
+      });
+    });
+    dlg.addEventListener('click', function (ev) { if (ev.target === dlg) dlg.close(); });
+  })();
+</script>
+
+<script>
+  // Respect reduced-motion: stop the looping hero video.
+  (function () {
+    var v = document.getElementById('hero-video');
+    if (v && window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      v.removeAttribute('autoplay'); v.pause();
+    }
+  })();
+</script>
+
+<footer>
+  <div class="container">
+    <span>&copy; 2026 Omer Kilic</span>
+    <span>North Jersey, NJ &middot; <a href="mailto:omer.kilic@rutgers.edu">omer.kilic@rutgers.edu</a></span>
+  </div>
+</footer>
+
+<script src="../site.js"></script>
+</body>
+</html>
